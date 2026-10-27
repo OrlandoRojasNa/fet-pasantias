@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * Prueba automática de los flujos principales (compromiso del Acta 6, más pasantías).
+ * Prueba automática de los flujos principales de Pasantías FET.
  * Inicia sesión con cada perfil por HTTP, recorre las pantallas y verifica permisos.
  * Los registros que crea llevan el prefijo «[Prueba automática]» y se eliminan al final.
  *
@@ -40,17 +40,19 @@ $run=function(string $id,string $name,string $profile,callable $fn) use(&$flows)
 };
 
 $pages=[
- 'admin'=>['allow'=>['dashboard.php','opportunities.php','internships.php','projects.php','alliances.php','minutes.php','reports.php','quality.php','users.php','guide.php','notifications.php'],'deny'=>[]],
- 'gestor'=>['allow'=>['dashboard.php','opportunities.php','internships.php','projects.php','alliances.php','minutes.php','reports.php','quality.php','guide.php'],'deny'=>['users.php']],
- 'docente'=>['allow'=>['dashboard.php','opportunities.php','internships.php','projects.php','alliances.php','minutes.php','quality.php','guide.php'],'deny'=>['users.php','reports.php']],
- 'estudiante'=>['allow'=>['dashboard.php','opportunities.php','internships.php','projects.php','alliances.php','minutes.php','guide.php','notifications.php'],'deny'=>['users.php','reports.php','quality.php']],
- 'empresa'=>['allow'=>['dashboard.php','opportunities.php','internships.php','guide.php','notifications.php'],'deny'=>['users.php','reports.php','minutes.php','projects.php','alliances.php','quality.php']],
+ 'admin'=>['allow'=>['dashboard.php','internships.php','opportunities.php','alliances.php','reports.php','users.php','guide.php','notifications.php'],'deny'=>[]],
+ 'docente'=>['allow'=>['dashboard.php','internships.php','opportunities.php','alliances.php','reports.php','guide.php','notifications.php'],'deny'=>['users.php']],
+ 'estudiante'=>['allow'=>['dashboard.php','internships.php','opportunities.php','guide.php','notifications.php'],'deny'=>['users.php','reports.php','alliances.php']],
+ 'empresa'=>['allow'=>['dashboard.php','internships.php','opportunities.php','guide.php','notifications.php'],'deny'=>['users.php','reports.php','alliances.php']],
 ];
+const NIT='999000111';
+const CO_EMAIL='prueba.automatica@empresa.test';
+function pdf(string $name): CURLFile { $f=tempnam(sys_get_temp_dir(),'fet').'.pdf'; file_put_contents($f,"%PDF-1.4\n% ".TAG."\n"); return new CURLFile($f,'application/pdf',$name); }
 
 // F1. Acceso seguro
 $run('F1','Inicio de sesión y rechazo de credenciales inválidas','Todos',function() use($base){
     $s=[];
-    foreach(['admin','gestor','docente','estudiante','empresa'] as $r){ $c=new Client($base); $res=$c->login("$r@fet.edu.co"); $s[]=["Ingreso de $r@fet.edu.co llega al panel",str_contains($res['url'],'dashboard.php')&&$res['code']===200]; }
+    foreach(['admin','docente','estudiante','empresa'] as $r){ $c=new Client($base); $res=$c->login("$r@fet.edu.co"); $s[]=["Ingreso de $r@fet.edu.co llega al panel",str_contains($res['url'],'dashboard.php')&&$res['code']===200]; }
     $c=new Client($base); $res=$c->login('estudiante@fet.edu.co','claveIncorrecta'); $s[]=['Contraseña incorrecta muestra error y no abre sesión',str_contains($res['body'],'incorrectos')&&!str_contains($res['url'],'dashboard')];
     $res=$c->req('index.php',['csrf'=>'falso','identifier'=>'admin@fet.edu.co','password'=>PASS]); $s[]=['Formulario sin token CSRF válido es rechazado',str_contains($res['body'],'expiró')];
     return $s;
@@ -64,33 +66,32 @@ $run('F2','Cada perfil ve solo sus módulos (matriz de permisos)','Todos',functi
         $s[]=["$r abre sus ".count($p['allow']).' pantallas sin errores',$okAllow];
         if($p['deny']){ $okDeny=true; foreach($p['deny'] as $pg){ if($c->req($pg)['code']!==403) $okDeny=false; } $s[]=["$r recibe 403 en ".implode(', ',$p['deny']),$okDeny]; }
     }
+    $c=new Client($base); $c->login('admin@fet.edu.co'); $gone=true;
+    foreach(['projects.php','minutes.php','quality.php'] as $pg) if($c->req($pg)['code']!==404) $gone=false;
+    $s[]=['Los módulos retirados (Innovación, Actas, Calidad) ya no existen',$gone];
     return $s;
 });
 
-// F3. Oportunidades: empresa publica → administrador verifica → estudiante se postula → empresa revisa
-$run('F3','Oportunidad de empresa, verificación y postulación','Empresa · Admin · Estudiante',function() use($base,$pdo){
+// F3. Convocatoria: empresa publica → docente líder verifica → estudiante se postula → empresa acepta (crea la pasantía)
+$run('F3','Convocatoria de pasantía, verificación y postulación','Empresa · Docente · Estudiante',function() use($base,$pdo){
     $s=[]; $title=TAG.' Práctica de soporte TI';
     $emp=new Client($base); $emp->login('empresa@fet.edu.co');
     $emp->req('opportunities.php',['csrf'=>$emp->csrf('opportunities.php'),'action'=>'create','title'=>$title,'type'=>'practica','modality'=>'hibrida','location'=>'Neiva','closes_on'=>date('Y-m-d',strtotime('+20 days')),'status'=>'review','description'=>'Registro creado por la prueba automática.','requirements'=>'Ninguno']);
     $op=$pdo->query('SELECT * FROM opportunities WHERE title='.$pdo->quote($title))->fetch();
-    $s[]=['La empresa crea la oportunidad y queda «En revisión»',$op&&$op['status']==='review'];
-    $admin=$pdo->query('SELECT id FROM users WHERE email="admin@fet.edu.co"')->fetchColumn();
-    $s[]=['El administrador recibe un aviso para revisarla',(bool)$pdo->query('SELECT COUNT(*) FROM notifications WHERE user_id='.(int)$admin.' AND body LIKE '.$pdo->quote('%'.$title.'%'))->fetchColumn()];
-    $a=new Client($base); $a->login('admin@fet.edu.co');
+    $s[]=['La empresa crea la convocatoria y queda «En revisión»',$op&&$op['status']==='review'];
+    $doc=$pdo->query('SELECT id FROM users WHERE email="docente@fet.edu.co"')->fetchColumn();
+    $s[]=['El docente líder recibe un aviso para verificarla',(bool)$pdo->query('SELECT COUNT(*) FROM notifications WHERE user_id='.(int)$doc.' AND body LIKE '.$pdo->quote('%'.$title.'%'))->fetchColumn()];
+    $a=new Client($base); $a->login('docente@fet.edu.co');
     $a->req('opportunities.php',['csrf'=>$a->csrf('opportunities.php'),'action'=>'status','id'=>$op['id'],'status'=>'published']);
-    $s[]=['El administrador la publica como verificada',$pdo->query('SELECT status FROM opportunities WHERE id='.(int)$op['id'])->fetchColumn()==='published'];
+    $s[]=['El docente líder la publica como verificada',$pdo->query('SELECT status FROM opportunities WHERE id='.(int)$op['id'])->fetchColumn()==='published'];
     $st=new Client($base); $st->login('estudiante@fet.edu.co');
     $st->req('opportunities.php',['csrf'=>$st->csrf('opportunities.php'),'action'=>'apply','opportunity_id'=>$op['id'],'motivation'=>'Me interesa aplicar lo aprendido en Ingeniería de Software.']);
     $app=$pdo->query('SELECT * FROM applications WHERE opportunity_id='.(int)$op['id'])->fetch();
     $s[]=['El estudiante se postula',(bool)$app];
     $emp->req('opportunities.php',['csrf'=>$emp->csrf('opportunities.php'),'action'=>'application_status','id'=>$app['id'],'status'=>'accepted']);
-    $s[]=['La empresa acepta la postulación de su vacante',$pdo->query('SELECT status FROM applications WHERE id='.(int)$app['id'])->fetchColumn()==='accepted'];
+    $s[]=['La empresa acepta la postulación de su convocatoria',$pdo->query('SELECT status FROM applications WHERE id='.(int)$app['id'])->fetchColumn()==='accepted'];
     $stId=(int)$app['user_id'];
     $s[]=['El estudiante recibe el aviso del resultado',(bool)$pdo->query("SELECT COUNT(*) FROM notifications WHERE user_id=$stId AND title LIKE '%postulación%'")->fetchColumn()];
-    $other=(int)$pdo->query("SELECT id FROM opportunities WHERE created_by<>(SELECT id FROM users WHERE email='empresa@fet.edu.co') LIMIT 1")->fetchColumn();
-    $before=$pdo->query("SELECT status FROM opportunities WHERE id=$other")->fetchColumn();
-    $emp->req('opportunities.php',['csrf'=>$emp->csrf('opportunities.php'),'action'=>'status','id'=>$other,'status'=>'closed']);
-    $s[]=['La empresa no puede cerrar oportunidades de otra entidad',$pdo->query("SELECT status FROM opportunities WHERE id=$other")->fetchColumn()===$before];
     return $s;
 });
 
@@ -100,9 +101,9 @@ $run('F7','Pasantía: documentos, evaluación de la empresa y veredicto del doce
     $i=$pdo->query("SELECT * FROM internships WHERE title LIKE '".TAG."%' LIMIT 1")->fetch();
     $s[]=['Al aceptar la postulación a una práctica se crea la pasantía',(bool)$i];
     $docente=(int)$pdo->query("SELECT id FROM users WHERE email='docente@fet.edu.co'")->fetchColumn();
-    $g=new Client($base); $g->login('gestor@fet.edu.co');
+    $g=new Client($base); $g->login('docente@fet.edu.co');
     $g->req('internships.php',['csrf'=>$g->csrf('internships.php'),'action'=>'assign','id'=>$i['id'],'company_id'=>$i['company_id'],'teacher_id'=>$docente,'status'=>'active']);
-    $s[]=['El gestor asigna el docente que valida',(int)$pdo->query('SELECT teacher_id FROM internships WHERE id='.(int)$i['id'])->fetchColumn()===$docente];
+    $s[]=['El docente líder asigna el docente de la pasantía',(int)$pdo->query('SELECT teacher_id FROM internships WHERE id='.(int)$i['id'])->fetchColumn()===$docente];
     $tmp=tempnam(sys_get_temp_dir(),'fet').'.pdf'; file_put_contents($tmp,"%PDF-1.4\n% ".TAG."\n");
     $st=new Client($base); $st->login('estudiante@fet.edu.co');
     $st->req('internships.php',['csrf'=>$st->csrf('internships.php'),'action'=>'upload','id'=>$i['id'],'doc_type'=>'plan','title'=>TAG.' Plan de práctica','document'=>new CURLFile($tmp,'application/pdf','plan.pdf')]);
@@ -139,46 +140,96 @@ $run('F7','Pasantía: documentos, evaluación de la empresa y veredicto del doce
     $s[]=['El docente aprueba la pasantía con justificación',$f['final_result']==='aprobada'&&$f['status']==='completed'];
     $page=$st->req('internships.php?id='.$i['id'])['body'];
     $s[]=['El estudiante ve el resultado, la justificación y la evaluación de la empresa',str_contains($page,'Cumplió el plan')&&str_contains($page,'4/5')];
+    $s[]=['El estudiante no ve el historial de auditoría',!str_contains($page,'Historial de la pasantía')];
+    $h=$doc->req('internships.php?id='.$i['id'])['body'];
+    $s[]=['El docente líder ve el historial con la carga, la revisión, la descarga y el veredicto',str_contains($h,'Historial de la pasantía')&&str_contains($h,'Subió un documento')&&str_contains($h,'Revisó un documento')&&str_contains($h,'Descargó un documento')&&str_contains($h,'Emitió el veredicto final')];
     return $s;
 });
 
-// F4. Actas y compromisos con evidencia
-$run('F4','Compromiso asignado, avisado y cerrado con evidencia','Docente · Estudiante',function() use($base,$pdo){
-    $s=[]; $desc=TAG.' Verificar la vista móvil del tablero';
-    $d=new Client($base); $d->login('docente@fet.edu.co');
-    $mid=(int)$pdo->query("SELECT id FROM minutes WHERE number='ACT-006'")->fetchColumn();
-    $juan=(int)$pdo->query("SELECT id FROM users WHERE email='juan.sabogal@fet.edu.co'")->fetchColumn();
-    $d->req('minutes.php',['csrf'=>$d->csrf('minutes.php'),'action'=>'commitment','minute_id'=>$mid,'description'=>$desc,'responsible_id'=>$juan,'due_on'=>date('Y-m-d',strtotime('+7 days')),'expected_evidence'=>'Captura']);
-    $c=$pdo->query('SELECT * FROM commitments WHERE description='.$pdo->quote($desc))->fetch();
-    $s[]=['El docente asigna el compromiso en el Acta 6',(bool)$c];
-    $s[]=['El responsable recibe el aviso',(bool)$pdo->query("SELECT COUNT(*) FROM notifications WHERE user_id=$juan AND title LIKE '%ACT-006%'")->fetchColumn()];
-    $j=new Client($base); $j->login('juan.sabogal@fet.edu.co');
-    $j->req('minutes.php',['csrf'=>$j->csrf('minutes.php'),'action'=>'commitment_update','id'=>$c['id'],'status'=>'completed','evidence'=>'']);
-    $s[]=['No se puede completar sin evidencia',$pdo->query('SELECT status FROM commitments WHERE id='.(int)$c['id'])->fetchColumn()!=='completed'];
-    $j->req('minutes.php',['csrf'=>$j->csrf('minutes.php'),'action'=>'commitment_update','id'=>$c['id'],'status'=>'completed','evidence'=>'Captura de la vista móvil revisada.']);
-    $r=$pdo->query('SELECT status,completed_at FROM commitments WHERE id='.(int)$c['id'])->fetch();
-    $s[]=['Con evidencia queda «Completado» y con fecha de cierre',$r['status']==='completed'&&$r['completed_at']];
+
+// F8. Alianzas y cupos: el administrador crea la alianza; los cupos limitan cuántos pasantes acepta la empresa
+$run('F8','Alianza empresarial con cupos que limitan los pasantes','Administrador · Empresa · Docente · Estudiantes',function() use($base,$pdo){
+    $s=[]; $name=TAG.' Empresa Aliada de Prueba';
+    $doc=new Client($base); $doc->login('docente@fet.edu.co');
+    $doc->req('alliances.php',['csrf'=>$doc->csrf('alliances.php'),'action'=>'create','name'=>$name,'slots'=>1,'nit'=>NIT,'email'=>CO_EMAIL,'password'=>PASS]);
+    $s[]=['El docente líder no puede crear alianzas',!$pdo->query('SELECT COUNT(*) FROM alliances WHERE name='.$pdo->quote($name))->fetchColumn()];
+    $a=new Client($base); $a->login('admin@fet.edu.co');
+    $a->req('alliances.php',['csrf'=>$a->csrf('alliances.php'),'action'=>'create','name'=>$name,'sector'=>'Pruebas','agreement_code'=>'CONV-PRUEBA','slots'=>1,'starts_on'=>date('Y-m-d'),'ends_on'=>date('Y-m-d',strtotime('+1 year')),'nit'=>NIT,'email'=>CO_EMAIL,'password'=>PASS]);
+    $al=$pdo->query('SELECT * FROM alliances WHERE name='.$pdo->quote($name))->fetch();
+    $co=(int)$pdo->query('SELECT id FROM users WHERE email='.$pdo->quote(CO_EMAIL)." AND role='company'")->fetchColumn();
+    $s[]=['El administrador registra la alianza con 1 cupo y crea la cuenta de la empresa',$al&&(int)$al['slots']===1&&$co&&(int)$al['company_id']===$co];
+    $emp=new Client($base); $res=$emp->login(CO_EMAIL);
+    $s[]=['La empresa nueva inicia sesión y ve sus cupos',str_contains($res['url'],'dashboard.php')&&str_contains($emp->req('opportunities.php')['body'],'Cupos de pasantía en uso: 0 de 1')];
+    $title=TAG.' Pasantía con cupo limitado';
+    $emp->req('opportunities.php',['csrf'=>$emp->csrf('opportunities.php'),'action'=>'create','title'=>$title,'type'=>'practica','modality'=>'remota','closes_on'=>date('Y-m-d',strtotime('+15 days')),'status'=>'review','description'=>'Convocatoria creada por la prueba automática.']);
+    $op=(int)$pdo->query('SELECT id FROM opportunities WHERE title='.$pdo->quote($title))->fetchColumn();
+    $doc->req('opportunities.php',['csrf'=>$doc->csrf('opportunities.php'),'action'=>'status','id'=>$op,'status'=>'published']);
+    $apps=[];
+    foreach(['juan.sabogal@fet.edu.co','orlando.rojas@fet.edu.co'] as $mail){ $c=new Client($base); $c->login($mail); $c->req('opportunities.php',['csrf'=>$c->csrf('opportunities.php'),'action'=>'apply','opportunity_id'=>$op,'motivation'=>'Postulación de la prueba automática para validar los cupos.']); $apps[]=(int)$pdo->query("SELECT a.id FROM applications a JOIN users u ON u.id=a.user_id WHERE a.opportunity_id=$op AND u.email=".$pdo->quote($mail))->fetchColumn(); }
+    $s[]=['Dos estudiantes se postulan a la convocatoria verificada',$apps[0]&&$apps[1]];
+    $emp->req('opportunities.php',['csrf'=>$emp->csrf('opportunities.php'),'action'=>'application_status','id'=>$apps[0],'status'=>'accepted']);
+    $s[]=['La empresa acepta al primero: se crea la pasantía y ocupa el cupo',(int)$pdo->query("SELECT COUNT(*) FROM internships WHERE company_id=$co AND status='active'")->fetchColumn()===1];
+    $res=$emp->req('opportunities.php',['csrf'=>$emp->csrf('opportunities.php'),'action'=>'application_status','id'=>$apps[1],'status'=>'accepted']);
+    $s[]=['Sin cupos, no puede aceptar al segundo y ve el motivo',$pdo->query('SELECT status FROM applications WHERE id='.$apps[1])->fetchColumn()!=='accepted'&&str_contains($res['body'],'no tiene cupos disponibles')];
+    $a->req('alliances.php',['csrf'=>$a->csrf('alliances.php'),'action'=>'update','id'=>$al['id'],'slots'=>0,'status'=>'active']);
+    $s[]=['Los cupos no pueden quedar por debajo de los pasantes en curso',(int)$pdo->query('SELECT slots FROM alliances WHERE id='.(int)$al['id'])->fetchColumn()===1];
+    $a->req('alliances.php',['csrf'=>$a->csrf('alliances.php'),'action'=>'update','id'=>$al['id'],'slots'=>2,'status'=>'active','starts_on'=>$al['starts_on'],'ends_on'=>$al['ends_on']]);
+    $s[]=['El administrador amplía la alianza a 2 cupos y la empresa recibe el aviso',(int)$pdo->query('SELECT slots FROM alliances WHERE id='.(int)$al['id'])->fetchColumn()===2&&(bool)$pdo->query("SELECT COUNT(*) FROM notifications WHERE user_id=$co AND title='Se ampliaron tus cupos de pasantía'")->fetchColumn()];
+    $emp->req('opportunities.php',['csrf'=>$emp->csrf('opportunities.php'),'action'=>'application_status','id'=>$apps[1],'status'=>'accepted']);
+    $s[]=['Con el cupo nuevo acepta al segundo estudiante',(int)$pdo->query("SELECT COUNT(*) FROM internships WHERE company_id=$co AND status='active'")->fetchColumn()===2];
+    $demoOp=(int)$pdo->query("SELECT id FROM opportunities WHERE created_by=(SELECT id FROM users WHERE email='empresa@fet.edu.co') LIMIT 1")->fetchColumn();
+    $before=$pdo->query("SELECT status FROM opportunities WHERE id=$demoOp")->fetchColumn();
+    $emp->req('opportunities.php',['csrf'=>$emp->csrf('opportunities.php'),'action'=>'status','id'=>$demoOp,'status'=>'closed']);
+    $s[]=['Una empresa no puede cerrar publicaciones de otra',$demoOp&&$pdo->query("SELECT status FROM opportunities WHERE id=$demoOp")->fetchColumn()===$before];
+    $a->req('alliances.php',['csrf'=>$a->csrf('alliances.php'),'action'=>'update','id'=>$al['id'],'slots'=>2,'status'=>'suspended']);
+    $emp->req('opportunities.php',['csrf'=>$emp->csrf('opportunities.php'),'action'=>'create','title'=>TAG.' Publicación sin alianza','type'=>'practica','modality'=>'remota','closes_on'=>date('Y-m-d',strtotime('+15 days')),'status'=>'review','description'=>'No debería crearse.']);
+    $s[]=['Con la alianza suspendida la empresa no puede publicar',!$pdo->query('SELECT COUNT(*) FROM opportunities WHERE title='.$pdo->quote(TAG.' Publicación sin alianza'))->fetchColumn()];
+    $s[]=['La página de alianzas muestra la ocupación',str_contains($a->req('alliances.php')['body'],'2 / 2')];
+    return $s;
+});
+
+// F4. Oferta laboral opcional: el estudiante aplica con su hoja de vida en PDF
+$run('F4','Oferta laboral con hoja de vida','Empresa · Docente · Estudiante',function() use($base,$pdo){
+    $s=[]; $title=TAG.' Desarrollador junior';
+    $emp=new Client($base); $emp->login('empresa@fet.edu.co');
+    $emp->req('opportunities.php',['csrf'=>$emp->csrf('opportunities.php'),'action'=>'create','title'=>$title,'type'=>'empleo','modality'=>'hibrida','closes_on'=>date('Y-m-d',strtotime('+20 days')),'status'=>'review','description'=>'Oferta laboral creada por la prueba automática.']);
+    $op=(int)$pdo->query('SELECT id FROM opportunities WHERE type="empleo" AND title='.$pdo->quote($title))->fetchColumn();
+    $s[]=['La empresa crea la oferta laboral',(bool)$op];
+    $doc=new Client($base); $doc->login('docente@fet.edu.co');
+    $doc->req('opportunities.php',['csrf'=>$doc->csrf('opportunities.php'),'action'=>'status','id'=>$op,'status'=>'published']);
     $st=new Client($base); $st->login('estudiante@fet.edu.co');
-    $st->req('minutes.php',['csrf'=>$st->csrf('minutes.php'),'action'=>'commitment_update','id'=>$c['id'],'status'=>'pending','evidence'=>'x']);
-    $s[]=['Otro estudiante no puede modificar un compromiso ajeno',$pdo->query('SELECT status FROM commitments WHERE id='.(int)$c['id'])->fetchColumn()==='completed'];
-    $page=$d->req('minutes.php?id='.$mid)['body'];
-    $s[]=['El acta en Formato 1 muestra logo, desarrollo y compromisos',str_contains($page,'logo-fet.png')&&str_contains($page,'Desarrollo')&&str_contains($page,'Compromisos')];
+    $s[]=['El estudiante la ve publicada con el botón para aplicar con hoja de vida',str_contains($st->req('opportunities.php?type=empleo')['body'],'Aplicar con mi hoja de vida')];
+    $st->req('opportunities.php',['csrf'=>$st->csrf('opportunities.php'),'action'=>'apply','opportunity_id'=>$op,'motivation'=>'Quiero trabajar en desarrollo web al graduarme.']);
+    $s[]=['Sin hoja de vida no puede aplicar',!$pdo->query("SELECT COUNT(*) FROM applications WHERE opportunity_id=$op")->fetchColumn()];
+    $txt=tempnam(sys_get_temp_dir(),'fet').'.txt'; file_put_contents($txt,'no es pdf');
+    $st->req('opportunities.php',['csrf'=>$st->csrf('opportunities.php'),'action'=>'apply','opportunity_id'=>$op,'motivation'=>'Quiero trabajar en desarrollo web al graduarme.','cv'=>new CURLFile($txt,'text/plain','hoja.txt')]);
+    @unlink($txt);
+    $s[]=['Solo acepta la hoja de vida en PDF',!$pdo->query("SELECT COUNT(*) FROM applications WHERE opportunity_id=$op")->fetchColumn()];
+    $st->req('opportunities.php',['csrf'=>$st->csrf('opportunities.php'),'action'=>'apply','opportunity_id'=>$op,'motivation'=>'Quiero trabajar en desarrollo web al graduarme.','cv'=>pdf('hoja_de_vida.pdf')]);
+    $app=$pdo->query("SELECT * FROM applications WHERE opportunity_id=$op")->fetch();
+    $s[]=['Con el PDF la postulación queda registrada con la hoja de vida',$app&&$app['cv_file']&&$app['cv_name']==='hoja_de_vida.pdf'];
+    $s[]=['La empresa y el docente descargan la hoja de vida',str_contains($emp->req('evidence.php?type=cv&id='.$app['id'])['body'],'%PDF')&&str_contains($doc->req('evidence.php?type=cv&id='.$app['id'])['body'],'%PDF')];
+    $j=new Client($base); $j->login('juan.sabogal@fet.edu.co'); $other=new Client($base); $other->login(CO_EMAIL);
+    $s[]=['Otro estudiante y otra empresa no pueden descargarla',$j->req('evidence.php?type=cv&id='.$app['id'])['code']===404&&$other->req('evidence.php?type=cv&id='.$app['id'])['code']===404];
+    $emp->req('opportunities.php',['csrf'=>$emp->csrf('opportunities.php'),'action'=>'application_status','id'=>$app['id'],'status'=>'accepted']);
+    $s[]=['Aceptar una oferta laboral no crea pasantía ni usa cupos',$pdo->query('SELECT status FROM applications WHERE id='.(int)$app['id'])->fetchColumn()==='accepted'&&!$pdo->query('SELECT COUNT(*) FROM internships WHERE application_id='.(int)$app['id'])->fetchColumn()];
     return $s;
 });
 
-// F5. Indicadores y reportes
-$run('F5','Indicadores ODS por periodo y exportación CSV','Gestor',function() use($base){
-    $s=[]; $g=new Client($base); $g->login('gestor@fet.edu.co');
-    $r=$g->req('reports.php?desde=2026-09-01&hasta='.date('Y-m-d')); $s[]=['El reporte por periodo carga los indicadores ODS 8, 9 y 17',$r['code']===200&&str_contains($r['body'],'ods-17')&&clean($r['body'])];
-    $csv=$g->req('reports.php?desde=2026-09-01&hasta='.date('Y-m-d').'&formato=csv'); $s[]=['La exportación CSV incluye indicadores y cumplimiento por acta',str_contains($csv['body'],'Indicador')&&str_contains($csv['body'],'ACT-001')];
+// F5. Reportes y auditoría
+$run('F5','Reporte de pasantías, exportación CSV y bitácora','Docente líder',function() use($base){
+    $s=[]; $g=new Client($base); $g->login('docente@fet.edu.co');
+    $r=$g->req('reports.php?desde=2026-01-01&hasta='.date('Y-m-d')); $s[]=['El reporte carga el resumen, las alianzas y la bitácora',$r['code']===200&&clean($r['body'])&&str_contains($r['body'],'Cupos y resultados por empresa')&&str_contains($r['body'],'Bitácora de auditoría')];
+    $csv=$g->req('reports.php?desde=2026-01-01&hasta='.date('Y-m-d').'&formato=csv'); $s[]=['La exportación CSV incluye pasantías y alianzas',str_contains($csv['body'],'Empresa evaluadora')&&str_contains($csv['body'],'Empresa Aliada de Pasantías')];
+    $st=new Client($base); $st->login('estudiante@fet.edu.co'); $s[]=['Un estudiante no puede ver los reportes',$st->req('reports.php')['code']===403];
     return $s;
 });
 
 // F6. Respaldo y auditoría
 $run('F6','Respaldo SQL, desbloqueo de cuentas y auditoría','Administrador',function() use($base,$pdo){
     $s=[]; $a=new Client($base); $a->login('admin@fet.edu.co');
-    $b=$a->req('backup.php',['csrf'=>$a->csrf('quality.php')])['body'];
-    $s[]=['El respaldo incluye las tablas y su hash SHA-256',str_contains($b,'CREATE TABLE `commitments`')&&str_contains($b,'SHA-256')];
+    $b=$a->req('backup.php',['csrf'=>$a->csrf('users.php')])['body'];
+    $s[]=['El respaldo incluye las tablas y su hash SHA-256',str_contains($b,'CREATE TABLE `alliances`')&&str_contains($b,'SHA-256')];
     preg_match('/-- SHA-256 del contenido anterior: ([a-f0-9]{64})/',$b,$m); $content=substr($b,0,(int)strpos($b,"-- Registros:"));
     $s[]=['El hash coincide con el contenido descargado',isset($m[1])&&hash('sha256',$content)===$m[1]];
     $st=new Client($base); $st->login('estudiante@fet.edu.co');
@@ -198,15 +249,17 @@ $run('F6','Respaldo SQL, desbloqueo de cuentas y auditoría','Administrador',fun
 });
 
 // Limpieza de los datos de prueba
-foreach($pdo->query("SELECT d.file FROM internship_documents d JOIN internships i ON i.id=d.internship_id WHERE i.title LIKE '".TAG."%'")->fetchAll(PDO::FETCH_COLUMN) as $f){ if(preg_match('/^[a-f0-9]{24}\.[a-z0-9]{2,4}$/',$f)) @unlink(__DIR__.'/../storage/documents/'.$f); }
-$pdo->exec("DELETE FROM notifications WHERE body LIKE '%".TAG."%' AND link LIKE 'internships.php%'");
+$files=array_merge(
+    $pdo->query("SELECT d.file FROM internship_documents d JOIN internships i ON i.id=d.internship_id WHERE i.title LIKE '".TAG."%'")->fetchAll(PDO::FETCH_COLUMN),
+    $pdo->query("SELECT a.cv_file FROM applications a JOIN opportunities o ON o.id=a.opportunity_id WHERE o.title LIKE '".TAG."%' AND a.cv_file IS NOT NULL")->fetchAll(PDO::FETCH_COLUMN));
+foreach($files as $f){ if(preg_match('/^[a-f0-9]{24}\.[a-z0-9]{2,4}$/',(string)$f)) @unlink(__DIR__.'/../storage/documents/'.$f); }
 $pdo->exec("DELETE FROM notifications WHERE link IN (SELECT CONCAT('internships.php?id=',id) FROM internships WHERE title LIKE '".TAG."%')");
 $pdo->exec("DELETE FROM internships WHERE title LIKE '".TAG."%'");
 $pdo->exec("DELETE FROM notifications WHERE body LIKE '%".TAG."%' OR title LIKE '%".TAG."%'");
 $ids=$pdo->query("SELECT id FROM opportunities WHERE title LIKE '".TAG."%'")->fetchAll(PDO::FETCH_COLUMN);
 if($ids){ $in=implode(',',array_map('intval',$ids)); $pdo->exec("DELETE FROM notifications WHERE title LIKE '%postulación%' AND created_at>=NOW()-INTERVAL 10 MINUTE"); $pdo->exec("DELETE FROM opportunities WHERE id IN ($in)"); }
-$pdo->exec("DELETE FROM notifications WHERE title LIKE '%ACT-006%' AND created_at>=NOW()-INTERVAL 10 MINUTE");
-$pdo->exec("DELETE FROM commitments WHERE description LIKE '".TAG."%'");
+$pdo->exec("DELETE FROM notifications WHERE title IN ('Nueva alianza empresarial','Más cupos de pasantía','Nueva pasantía por asignar') AND created_at>=NOW()-INTERVAL 10 MINUTE");
+$pdo->exec("DELETE FROM users WHERE email='".CO_EMAIL."' AND role='company'");
 
 $passed=count(array_filter($flows,fn($f)=>$f['resultado']==='Pasa'));
 $result=['ejecutado'=>date('Y-m-d H:i:s'),'duracion_s'=>round(microtime(true)-$t0,1),'base'=>$base,'pasan'=>$passed,'total'=>count($flows),'flujos'=>$flows];
