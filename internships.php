@@ -2,7 +2,9 @@
 declare(strict_types=1);
 /**
  * Pasantías: el estudiante sube su documentación, la empresa evaluadora la avala
- * y el docente asignado la aprueba. Cada perfil ve solo las pasantías en las que participa.
+ * y el docente líder la califica, la aprueba y emite el veredicto final.
+ * Los docentes líderes y el administrador ven y gestionan todas las pasantías (con su historial de auditoría);
+ * el estudiante y la empresa ven solo las suyas.
  */
 require __DIR__.'/includes/bootstrap.php';
 require_auth();
@@ -10,7 +12,7 @@ require_auth();
 $u=current_user();
 $uid=(int)$u['id'];
 $isStudent=has_role('student');
-$canModerate=has_role('admin','manager');
+$canModerate=has_role('admin','leader');
 $docTypes=['plan'=>'Plan de práctica','parcial'=>'Informe parcial','final'=>'Informe final','evaluacion'=>'Evaluación de la empresa','certificado'=>'Certificado','otro'=>'Otro documento'];
 $docStatus=['submitted'=>['Enviado','submitted'],'endorsed'=>['Avalado por la empresa','in_progress'],'approved'=>['Aprobado por el docente','approved'],'returned'=>['Devuelto con observaciones','rejected']];
 $intStatus=['active'=>['En curso','active'],'completed'=>['Finalizada','completed'],'cancelled'=>['Anulada','closed']];
@@ -41,12 +43,13 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             if(!row("SELECT id FROM users WHERE id=? AND role='student' AND status='active'",[$student])||$title==='') throw new RuntimeException('Elige el estudiante y escribe el nombre de la pasantía.');
             if($company&&!row("SELECT id FROM users WHERE id=? AND role='company'",[$company])) throw new RuntimeException('La empresa evaluadora no es válida.');
             if($teacher&&!row("SELECT id FROM users WHERE id=? AND role='leader'",[$teacher])) throw new RuntimeException('El docente no es válido.');
+            if($company) require_internship_slot($company);
             if($organization==='') $organization=$company?(string)scalar('SELECT COALESCE(program,full_name) FROM users WHERE id=?',[$company]):'Por definir';
             query('INSERT INTO internships(student_id,company_id,teacher_id,title,organization,starts_on,ends_on) VALUES(?,?,?,?,?,?,?)',[$student,$company,$teacher,$title,$organization,valid_date($_POST['starts_on']??null),valid_date($_POST['ends_on']??null)]);
             $id=(int)db()->lastInsertId(); audit('create','internship',$id,$title);
             notify($student,'Tu pasantía quedó registrada','«'.$title.'»: ya puedes subir tus documentos de pasantía.','internships.php?id='.$id);
             if($company) notify($company,'Nuevo pasante asignado','Serás la empresa evaluadora de «'.$title.'».','internships.php?id='.$id);
-            if($teacher) notify($teacher,'Pasantía asignada para validar','Validarás los documentos de «'.$title.'».','internships.php?id='.$id);
+            if($teacher) notify($teacher,'Pasantía asignada','Eres el docente líder asignado de «'.$title.'».','internships.php?id='.$id);
             flash('success','Pasantía registrada.');
             $back='internships.php?id='.$id;
         }elseif($action==='assign'&&$canModerate){
@@ -54,9 +57,13 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             $company=(int)($_POST['company_id']??0)?:null; $teacher=(int)($_POST['teacher_id']??0)?:null;
             if($company&&!row("SELECT id FROM users WHERE id=? AND role='company'",[$company])) throw new RuntimeException('La empresa evaluadora no es válida.');
             if($teacher&&!row("SELECT id FROM users WHERE id=? AND role='leader'",[$teacher])) throw new RuntimeException('El docente no es válido.');
-            query('UPDATE internships SET company_id=?,teacher_id=?,starts_on=?,ends_on=?,status=? WHERE id=?',[$company,$teacher,valid_date($_POST['starts_on']??null),valid_date($_POST['ends_on']??null),allowed_value($_POST['status']??'',array_keys($intStatus),$i['status']),$i['id']]);
-            audit('assign','internship',(int)$i['id'],'empresa '.($company??'-').' · docente '.($teacher??'-'));
-            if($teacher&&$teacher!==(int)$i['teacher_id']) notify($teacher,'Pasantía asignada para validar','Validarás los documentos de «'.$i['title'].'» ('.$i['student'].').','internships.php?id='.$i['id']);
+            $newStatus=allowed_value($_POST['status']??'',array_keys($intStatus),$i['status']);
+            // Pasar el pasante a otra empresa, o reactivar la pasantía, ocupa un cupo de la alianza de esa empresa.
+            if($company&&$newStatus==='active'&&($company!==(int)$i['company_id']||$i['status']!=='active')) require_internship_slot($company);
+            if($i['final_result']&&$newStatus==='active') throw new RuntimeException('La pasantía ya tiene veredicto final: no se puede reactivar.');
+            query('UPDATE internships SET company_id=?,teacher_id=?,starts_on=?,ends_on=?,status=? WHERE id=?',[$company,$teacher,valid_date($_POST['starts_on']??null),valid_date($_POST['ends_on']??null),$newStatus,$i['id']]);
+            audit('assign','internship',(int)$i['id'],'empresa '.($company??'-').' · docente '.($teacher??'-').' · '.$newStatus);
+            if($teacher&&$teacher!==(int)$i['teacher_id']) notify($teacher,'Pasantía asignada','Eres el docente líder asignado de «'.$i['title'].'» ('.$i['student'].').','internships.php?id='.$i['id']);
             if($company&&$company!==(int)$i['company_id']) notify($company,'Nuevo pasante asignado','Serás la empresa evaluadora de «'.$i['title'].'» ('.$i['student'].').','internships.php?id='.$i['id']);
             flash('success','Pasantía actualizada.');
             $back='internships.php?id='.$i['id'];
@@ -76,7 +83,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         }elseif($action==='verdict'){
             // Veredicto final del docente: aprueba o reprueba la pasantía con justificación.
             $i=load_internship((int)$_POST['id']);
-            if(!$canModerate&&(int)$i['teacher_id']!==$uid) throw new RuntimeException('Solo el docente asignado puede emitir el veredicto.');
+            if(!$canModerate) throw new RuntimeException('Solo el docente líder puede emitir el veredicto.');
             if($i['final_result']) throw new RuntimeException('La pasantía ya tiene veredicto final.');
             $result=allowed_value($_POST['result']??'',['aprobada','reprobada'],'');
             $why=post_str('justification');
@@ -143,7 +150,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
                 if($i['teacher_id']) notify((int)$i['teacher_id'],'Documento avalado por la empresa','«'.$d['title'].'» de '.$i['student'].' está listo para tu aprobación.','internships.php?id='.$i['id']);
                 notify((int)$i['student_id'],'Tu documento fue avalado','La empresa avaló «'.$d['title'].'».','internships.php?id='.$i['id']);
             }elseif($decision==='approve'){
-                if(!$isTeacherReviewer||!in_array($d['status'],['submitted','endorsed'],true)) throw new RuntimeException('Solo el docente asignado puede aprobar documentos pendientes.');
+                if(!$isTeacherReviewer||!in_array($d['status'],['submitted','endorsed'],true)) throw new RuntimeException('Solo el docente líder puede aprobar documentos pendientes.');
                 if($grade<PASS_GRADE) throw new RuntimeException('Con nota menor a 3.0 el documento no se aprueba: devuélvelo con observaciones.');
                 query("UPDATE internship_documents SET status='approved',approved_at=NOW() WHERE id=?",[$d['id']]);
                 notify((int)$i['student_id'],'Tu documento fue aprobado','El docente aprobó «'.$d['title'].'» con '.number_format((float)$grade,1).'.','internships.php?id='.$i['id']);
@@ -184,12 +191,23 @@ if(isset($_GET['id'])){
     $isCompanyReviewer=(int)$i['company_id']===$uid;
     $isTeacherReviewer=(int)$i['teacher_id']===$uid||$canModerate;
     $decisionLabel=['endorse'=>'Avaló','approve'=>'Aprobó','return'=>'Devolvió','resubmit'=>'Corrigió'];
+    // Historial de auditoría de la pasantía y de sus documentos (incluye descargas), solo para la FET.
+    $history=[];
+    if($canModerate){
+        $in=implode(',',array_map(fn($d)=>(int)$d['id'],$docs)?:[0]);
+        $history=rows("SELECT e.*,u.full_name,u.role FROM audit_events e LEFT JOIN users u ON u.id=e.user_id
+            WHERE (e.entity_type='internship' AND e.entity_id=?) OR (e.entity_type='internship_document' AND e.entity_id IN ($in))
+               OR (e.entity_type='evidence' AND e.details='internship' AND e.entity_id IN ($in))
+            ORDER BY e.created_at DESC,e.id DESC LIMIT 100",[$i['id']]);
+    }
+    $actionLabel=['create'=>'Registró la pasantía','assign'=>'Actualizó responsables o estado','upload'=>'Subió un documento','resubmit'=>'Subió una corrección','review'=>'Revisó un documento','evaluate'=>'Evaluó el desempeño','verdict'=>'Emitió el veredicto final','download'=>'Descargó un documento'];
+    $docTitle=array_column($docs,'title','id');
     app_header($i['title'],'PASANTÍAS · DOCUMENTACIÓN');
     ?>
     <div class="page-actions"><a class="button button-ghost" href="<?= e(url('internships.php')) ?>"><?= icon('arrow-left',16) ?>Volver a las pasantías</a>
      <div class="button-row"><?php if($canModerate):?><button class="button button-ghost" type="button" data-open="internship-assign" id="tour-int-assign"><?= icon('edit',16) ?>Asignar empresa y docente</button><?php endif;?>
      <?php if($isCompanyReviewer&&!$i['final_result']):?><button class="button button-ghost" type="button" data-open="company-eval" id="tour-int-eval"><?= icon('edit',16) ?><?= $i['company_evaluated_at']?'Editar evaluación':'Evaluar desempeño' ?></button><?php endif;?>
-     <?php if(!$i['final_result']&&$i['status']==='active'&&($canModerate||(int)$i['teacher_id']===$uid)):?><button class="button button-primary" type="button" data-open="final-verdict" id="tour-int-verdict"><?= icon('check-circle',16) ?>Emitir veredicto final</button><?php endif;?>
+     <?php if(!$i['final_result']&&$i['status']==='active'&&$canModerate):?><button class="button button-primary" type="button" data-open="final-verdict" id="tour-int-verdict"><?= icon('check-circle',16) ?>Emitir veredicto final</button><?php endif;?>
      <?php if($isOwner&&$i['status']==='active'):?><button class="button button-primary" type="button" data-open="doc-upload" id="tour-int-upload"><?= icon('plus',16) ?>Subir documento</button><?php endif;?></div>
     </div>
 
@@ -197,7 +215,7 @@ if(isset($_GET['id'])){
      <div class="project-meta">
       <span><small>Estudiante</small><?= e($i['student']) ?></span>
       <span><small>Empresa evaluadora</small><?= e($i['company']?:'Sin asignar') ?></span>
-      <span><small>Docente que valida</small><?= e($i['teacher']?:'Sin asignar') ?></span>
+      <span><small>Docente líder asignado</small><?= e($i['teacher']?:'Sin asignar') ?></span>
       <span><small>Periodo</small><?= $i['starts_on']?e(date('d/m/Y',strtotime($i['starts_on']))):'Por definir' ?> — <?= $i['ends_on']?e(date('d/m/Y',strtotime($i['ends_on']))):'Abierto' ?></span>
       <span><small>Documentos aprobados</small><?= $approved ?> de <?= count($docs) ?></span>
       <span><small>Promedio de notas</small><?= $average!==null?e($average).' / 5.0':'Sin notas' ?></span>
@@ -250,6 +268,14 @@ if(isset($_GET['id'])){
     <?php endforeach;?>
     </tbody></table></div></section>
 
+    <?php if($canModerate):?>
+    <section class="panel" id="tour-int-history"><div class="panel-head"><div><span class="eyebrow">AUDITORÍA</span><h2>Historial de la pasantía</h2></div><span class="muted-inline">Visible solo para docentes líderes y administración</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Usuario</th><th>Acción</th><th>Detalle</th></tr></thead><tbody>
+    <?php if(!$history):?><tr><td colspan="4" class="empty">Sin eventos registrados.</td></tr><?php endif;?>
+    <?php foreach($history as $h):?><tr><td><?= e(date('d/m/Y H:i',strtotime($h['created_at']))) ?></td><td><?= e($h['full_name']?:'Sistema') ?><small><?= e($h['role']?role_label($h['role']):'') ?></small></td><td><?= e($actionLabel[$h['action']]??$h['action']) ?></td><td><?= e(trim(($h['entity_type']!=='internship'&&isset($docTitle[(int)$h['entity_id']])?'«'.$docTitle[(int)$h['entity_id']].'» ':'').($h['entity_type']==='evidence'?'':(string)$h['details']))) ?></td></tr><?php endforeach;?>
+    </tbody></table></div></section>
+    <?php endif;?>
+
     <?php if($isOwner&&$i['status']==='active'):?>
     <dialog id="doc-upload"><form method="post" enctype="multipart/form-data" class="modal-form"><input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="upload"><input type="hidden" name="id" value="<?= (int)$i['id'] ?>">
      <div class="modal-head"><div><span class="eyebrow">NUEVO DOCUMENTO</span><h2>Subir documento de pasantía</h2></div><button type="button" data-close aria-label="Cerrar">×</button></div>
@@ -268,7 +294,7 @@ if(isset($_GET['id'])){
     </form></dialog>
     <?php endif;?>
 
-    <?php if(!$i['final_result']&&$i['status']==='active'&&($canModerate||(int)$i['teacher_id']===$uid)):?>
+    <?php if(!$i['final_result']&&$i['status']==='active'&&$canModerate):?>
     <dialog id="final-verdict"><form method="post" class="modal-form" data-confirm="El veredicto final no se puede cambiar después. ¿Continuar?"><input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="verdict"><input type="hidden" name="id" value="<?= (int)$i['id'] ?>">
      <div class="modal-head"><div><span class="eyebrow">DOCENTE LÍDER DE PASANTÍAS</span><h2>Veredicto final</h2></div><button type="button" data-close aria-label="Cerrar">×</button></div>
      <p class="muted-inline">Evaluación de la empresa: <?= $i['company_evaluated_at']?(int)$i['company_rating'].'/5':'pendiente' ?> · Documentos aprobados: <?= $approved ?> de <?= count($docs) ?> · Promedio de notas: <?= $average!==null?e($average):'sin notas' ?></p>
@@ -282,10 +308,10 @@ if(isset($_GET['id'])){
 
     <?php if($canModerate):?>
     <dialog id="internship-assign"><form method="post" class="modal-form"><input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="assign"><input type="hidden" name="id" value="<?= (int)$i['id'] ?>">
-     <div class="modal-head"><div><span class="eyebrow">GESTIÓN FET</span><h2>Asignar empresa y docente</h2></div><button type="button" data-close aria-label="Cerrar">×</button></div>
+     <div class="modal-head"><div><span class="eyebrow">DOCENTE LÍDER</span><h2>Asignar empresa y docente</h2></div><button type="button" data-close aria-label="Cerrar">×</button></div>
      <div class="form-grid">
       <label>Empresa evaluadora<select name="company_id"><option value="">Sin asignar</option><?php foreach($companies as $c):?><option value="<?= (int)$c['id'] ?>" <?= (int)$i['company_id']===(int)$c['id']?'selected':'' ?>><?= e(($c['program']?:$c['full_name']).' · '.$c['full_name']) ?></option><?php endforeach;?></select></label>
-      <label>Docente que valida<select name="teacher_id"><option value="">Sin asignar</option><?php foreach($teachers as $t):?><option value="<?= (int)$t['id'] ?>" <?= (int)$i['teacher_id']===(int)$t['id']?'selected':'' ?>><?= e($t['full_name']) ?></option><?php endforeach;?></select></label>
+      <label>Docente líder asignado<select name="teacher_id"><option value="">Sin asignar</option><?php foreach($teachers as $t):?><option value="<?= (int)$t['id'] ?>" <?= (int)$i['teacher_id']===(int)$t['id']?'selected':'' ?>><?= e($t['full_name']) ?></option><?php endforeach;?></select></label>
       <label>Inicio<input type="date" name="starts_on" value="<?= e($i['starts_on']) ?>"></label><label>Fin<input type="date" name="ends_on" value="<?= e($i['ends_on']) ?>"></label>
       <label>Estado<select name="status"><?php foreach($intStatus as $k=>[$label]):?><option value="<?= e($k) ?>" <?= $i['status']===$k?'selected':'' ?>><?= e($label) ?></option><?php endforeach;?></select></label>
      </div>
@@ -308,16 +334,15 @@ $students=$canModerate?rows("SELECT id,full_name,program FROM users WHERE role='
 $intro=match(true){
     $isStudent=>'Sube aquí la documentación de tu pasantía. Tu empresa evaluadora y tu docente la revisan y te avisan.',
     has_role('company')=>'Documentos de tus pasantes: revísalos y avala los que estén correctos.',
-    has_role('leader')=>'Pasantías que te asignaron para validar. Aprueba los documentos después del aval de la empresa.',
-    default=>'Seguimiento de todas las pasantías: asigna la empresa evaluadora y el docente que valida.',
+    default=>'Todas las pasantías de la FET: revisa y califica los documentos, asigna empresa y docente, consulta el historial y emite el veredicto final.',
 };
-app_header('Pasantías','ODS 8 · DOCUMENTACIÓN DE PASANTÍAS');
+app_header('Pasantías','GESTIÓN DOCUMENTAL DE PASANTÍAS');
 ?>
 <div class="page-actions" id="tour-int-intro"><div><p><?= e($intro) ?></p></div><?php if($canModerate):?><button class="button button-primary" type="button" data-open="internship-form" id="tour-int-new"><?= icon('plus',16) ?>Registrar pasantía</button><?php endif;?></div>
 
 <section class="panel" id="tour-int-list"><div class="panel-head"><div><span class="eyebrow">SEGUIMIENTO</span><h2><?= $isStudent?'Mis pasantías':'Pasantías' ?></h2></div></div>
 <div class="table-wrap"><table><thead><tr><th>Pasantía</th><th>Estudiante</th><th>Empresa evaluadora</th><th>Docente</th><th>Documentos</th><th>Estado</th><th>Acción</th></tr></thead><tbody>
-<?php if(!$items):?><tr><td colspan="7" class="empty"><?= $isStudent?'Aún no tienes una pasantía registrada. Se crea cuando una empresa acepta tu postulación a una práctica.':'No hay pasantías registradas.' ?></td></tr><?php endif;?>
+<?php if(!$items):?><tr><td colspan="7" class="empty"><?= $isStudent?'Aún no tienes una pasantía registrada. Se crea cuando una empresa acepta tu postulación a una convocatoria de pasantía.':'No hay pasantías registradas.' ?></td></tr><?php endif;?>
 <?php foreach($items as $p):?><tr>
  <td><strong><?= e($p['title']) ?></strong><small><?= e($p['organization']) ?></small></td>
  <td><?= e($p['student']) ?></td><td><?= e($p['company']?:'Sin asignar') ?></td><td><?= e($p['teacher']?:'Sin asignar') ?></td>
@@ -335,7 +360,7 @@ app_header('Pasantías','ODS 8 · DOCUMENTACIÓN DE PASANTÍAS');
   <label>Estudiante<select name="student_id" required><?php foreach($students as $s):?><option value="<?= (int)$s['id'] ?>"><?= e($s['full_name']) ?></option><?php endforeach;?></select></label>
   <label>Entidad donde se realiza<input name="organization" maxlength="180" placeholder="Si se deja vacío, se usa la empresa"></label>
   <label>Empresa evaluadora<select name="company_id"><option value="">Sin asignar</option><?php foreach($companies as $c):?><option value="<?= (int)$c['id'] ?>"><?= e(($c['program']?:$c['full_name']).' · '.$c['full_name']) ?></option><?php endforeach;?></select></label>
-  <label>Docente que valida<select name="teacher_id"><option value="">Sin asignar</option><?php foreach($teachers as $t):?><option value="<?= (int)$t['id'] ?>"><?= e($t['full_name']) ?></option><?php endforeach;?></select></label>
+  <label>Docente líder asignado<select name="teacher_id"><option value="">Sin asignar</option><?php foreach($teachers as $t):?><option value="<?= (int)$t['id'] ?>"><?= e($t['full_name']) ?></option><?php endforeach;?></select></label>
   <label>Inicio<input type="date" name="starts_on"></label><label>Fin<input type="date" name="ends_on"></label>
  </div>
  <div class="modal-actions"><button type="button" class="button button-ghost" data-close>Cancelar</button><button class="button button-primary">Registrar</button></div>
