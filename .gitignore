@@ -1,0 +1,11 @@
+/.env
+/vendor/
+/.tools/
+/storage/documents/*
+!/storage/documents/.gitkeep
+/storage/logs/*
+!/storage/logs/.gitkeep
+/storage/exports/*
+!/storage/exports/.gitkeep
+/tests/output/
+*.log

@@ -1,0 +1,115 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * Contenido de las Actas 1 a 6 del proyecto (Formato 1 de la FET) y sus compromisos.
+ * Se transcribe de los documentos entregados en la carpeta «ENTREGA FINAL».
+ * Las claves de responsables se resuelven por correo en install.php.
+ */
+return [
+ [
+  'number'=>'ACT-001','title'=>'Inicio del proyecto Intranet Privada FET Versión 1.0, orientado a los ODS 8, 9 y 17','meeting_on'=>'2026-09-07',
+  'modality'=>'Presencial · Campus FET','starts_at'=>null,'ends_at'=>null,'status'=>'approved',
+  'attendees'=>'Miguel Antonio Urbano Silva (Docente gestor), Juan José Sabogal García (Seguimiento, pruebas y auditoría), Orlando Rojas Narváez (Frontend), Hernán Felipe Patiño Rico (Backend)',
+  'objectives'=>'Definir y someter a ratificación el propósito, alcance inicial, responsabilidades y plan de trabajo de Intranet Privada FET, en el curso de Ingeniería de Software II. La propuesta integra oportunidades de prácticas y empleo, proyectos de innovación y seguimiento de alianzas institucionales.',
+  'summary'=>'Se presenta para ratificación la formulación de Intranet Privada FET 1.0 y su relación con los ODS 8, 9 y 17, con roles y plan de doce semanas.',
+  'development'=>"Presentar al equipo y confirmar la asignación de roles de gestor, tracker, coaches, tester, auditor y desarrolladores.\nDelimitar el problema mediante entrevistas con representantes de estudiantes, docentes y gestión institucional. Validar cómo se publican oportunidades, se documentan proyectos y se realiza seguimiento a convenios.\nProponer una intranet con acceso por roles, oportunidades y postulaciones, proyectos y evidencias, aliados y convenios, actas y compromisos, y reportes de seguimiento.\nRelacionar el alcance con los ODS: el 8 mediante acceso a oportunidades y formación; el 9 mediante organización de proyectos de innovación; y el 17 mediante seguimiento de compromisos con aliados.\nRevisar el plan de doce semanas y los criterios de aceptación del documento del proyecto.",
+  'conclusion'=>'El equipo queda integrado por Miguel Antonio Urbano Silva como docente gestor; Juan José Sabogal García en seguimiento, pruebas y auditoría; Orlando Rojas Narváez en frontend; y Hernán Felipe Patiño Rico en backend.',
+  'work_model'=>'Trabajo presencial los lunes y martes, dos horas por día, y ocho horas de trabajo remoto distribuidas durante el resto de la semana. El tracker registra avances, bloqueos y compromisos; cada incremento tiene revisión y pruebas.',
+  'next_agenda'=>"Validar las necesidades identificadas, los módulos esenciales y los permisos de cada perfil.\nConfirmar responsables, criterios de aceptación, calendario y condiciones del piloto.",
+  'observations'=>'Las propuestas solo se convierten en acuerdos cuando son ratificadas por el equipo y el docente gestor.',
+  'commitments'=>[
+   ['juan','Completar asistencia y calendario; consolidar entrevistas, necesidades priorizadas, actas e indicadores.','2026-09-14','Acta diligenciada y registro de necesidades','completed','Acta 1 diligenciada y requisitos priorizados en REQUISITOS-Intranet-FET.md.'],
+   ['orlando','Presentar el prototipo navegable de la intranet.','2026-09-21','Diseños y revisión técnica','completed','Prototipo navegable con tablero, oportunidades, proyectos, alianzas y actas.'],
+   ['hernan','Presentar el modelo de datos y la matriz de permisos.','2026-09-21','Modelo de datos y matriz de permisos','completed','database/schema.sql y control de rutas por rol en includes/functions.php.'],
+   ['juan','Definir casos de aceptación, trazabilidad y revisión de accesos.','2026-09-21','Plan de pruebas y matriz de requisitos','completed','Casos de prueba de acceso en docs/Test_Cases_Login.csv y evidencias en docs/evidencias.'],
+  ],
+ ],
+ [
+  'number'=>'ACT-002','title'=>'Seguimiento y definición inicial del proyecto Intranet Privada FET','meeting_on'=>'2026-09-14',
+  'modality'=>'Presencial · Campus FET','starts_at'=>null,'ends_at'=>null,'status'=>'approved',
+  'attendees'=>'Miguel Antonio Urbano Silva (Docente gestor), Juan José Sabogal García (Tracker, tester y auditor), Orlando Rojas Narváez (Frontend), Hernán Felipe Patiño Rico (Backend)',
+  'objectives'=>'Revisar los avances de la formulación del proyecto, confirmar las responsabilidades del equipo y establecer las actividades necesarias para iniciar el prototipo, el modelo de datos, la matriz de permisos y el plan de pruebas.',
+  'summary'=>'Se define la intranet como piloto académico de acceso restringido y se priorizan los módulos de la primera versión.',
+  'development'=>"Se revisaron los acuerdos de la primera reunión. El nombre del proyecto, el propósito general y la distribución de funciones se mantienen.\nSe definió que la Intranet Privada FET será un piloto académico de acceso restringido para organizar oportunidades profesionales, proyectos de innovación, alianzas, actas, compromisos y reportes.\nSe priorizaron los módulos de autenticación y permisos, oportunidades y postulaciones, proyectos, aliados y convenios, actas y compromisos, y reportes por periodo y ODS.\nSe relacionó oportunidades con el ODS 8, proyectos de innovación con el ODS 9 y actividades con aliados con el ODS 17.\nSe propuso PHP con MariaDB en XAMPP. Las primeras pruebas utilizan datos ficticios.",
+  'conclusion'=>'El equipo consolidó el alcance inicial y definió los productos de la siguiente etapa: prototipo navegable, modelo de datos, matriz de permisos, requisitos con criterios de aceptación y plan de pruebas.',
+  'work_model'=>'Presencial lunes y martes (dos horas por día) y ocho horas de trabajo remoto. El tracker registra avances, bloqueos y compromisos.',
+  'next_agenda'=>"Presentar y revisar el prototipo con los perfiles definidos.\nAprobar la primera versión de requisitos y casos de prueba.",
+  'observations'=>'Juan José Sabogal García concentra las funciones de seguimiento, pruebas y auditoría.',
+  'commitments'=>[
+   ['juan','Consolidar el tablero, el acta, los requisitos priorizados y sus criterios de aceptación.','2026-09-21','Acta 2, requisitos priorizados e indicadores','completed','Compromisos_Acta_2_Intranet_Privada_FET.pdf con capturas del tablero y del módulo de actas.'],
+   ['orlando','Elaborar el mapa de navegación y el prototipo de acceso, oportunidades y proyectos.','2026-09-28','Prototipo navegable','completed','Pantallas de acceso, oportunidades y proyectos funcionando en la versión local.'],
+   ['hernan','Preparar el modelo de datos, la autenticación y la matriz de permisos.','2026-09-28','Esquema relacional y perfiles de usuario','completed','Autenticación con contraseñas cifradas, bloqueo por intentos y cinco perfiles.'],
+   ['juan','Diseñar los casos de prueba, la matriz de trazabilidad y la revisión de acceso por roles; integrar los entregables iniciales con el equipo.','2026-10-05','Casos de prueba y matriz de trazabilidad','completed','Pruebas de caja negra en docs/Pruebas_Caja_Negra.md y tests/blackbox-results.csv.'],
+  ],
+ ],
+ [
+  'number'=>'ACT-003','title'=>'Seguimiento del prototipo de Intranet Privada FET','meeting_on'=>'2026-09-21',
+  'modality'=>'Presencial · Campus FET','starts_at'=>null,'ends_at'=>null,'status'=>'approved',
+  'attendees'=>'Miguel Antonio Urbano Silva (Docente gestor), Juan José Sabogal García (Seguimiento, pruebas y auditoría), Orlando Rojas Narváez (Frontend), Hernán Felipe Patiño Rico (Backend)',
+  'objectives'=>'Revisar brevemente el prototipo, identificar ajustes pequeños y asignar compromisos verificables para el siguiente encuentro.',
+  'summary'=>'Revisión del prototipo con datos de demostración y tres compromisos acotados, uno por integrante.',
+  'development'=>"Se dispone de un prototipo local con acceso por perfiles y módulos de oportunidades, proyectos, alianzas, actas y reportes.\nSe recorre el inicio de sesión, la lista de oportunidades y el registro de compromisos para identificar dudas de uso o errores visibles.\nLos reportes relacionan el trabajo del piloto con los ODS 8, 9 y 17; sus cifras son de prueba.\nQuedan pendientes una comprobación breve de permisos por rol y una revisión de la presentación en celular.",
+  'conclusion'=>'El prototipo permite continuar con revisiones pequeñas. Se proponen tres compromisos acotados, uno por integrante.',
+  'work_model'=>'Cada avance y bloqueo se registra en una lista compartida. La revisión de compromisos se hace al inicio de la próxima reunión (quince minutos).',
+  'next_agenda'=>"Revisar la lista de Juan, los resultados de acceso de Hernán y la captura de la vista móvil de Orlando.\nConfirmar el siguiente ajuste y su responsable.",
+  'observations'=>'Para esta revisión se usan registros de demostración.',
+  'commitments'=>[
+   ['juan','Actualizar una lista de tres pendientes del proyecto, marcar su estado y guardar una captura o archivo como evidencia.','2026-09-28','Lista de pendientes con captura','completed','Lista de pendientes registrada en el módulo Calidad y pruebas.'],
+   ['hernan','Comprobar el ingreso con dos perfiles y el acceso a una sección restringida; anotar si cada prueba pasa o falla.','2026-09-28','Resultado de pruebas de acceso','completed','Ingreso de administrador y estudiante verificado; el estudiante recibe 403 en Usuarios.'],
+   ['orlando','Revisar en celular el menú y la lista de oportunidades, corregir un detalle visual y guardar una captura.','2026-09-28','Captura de la vista móvil','completed','Menú lateral plegable y tarjetas de oportunidades en una columna en celular.'],
+  ],
+ ],
+ [
+  'number'=>'ACT-004','title'=>'Consolidación del primer avance de Intranet Privada FET','meeting_on'=>'2026-09-28',
+  'modality'=>'Presencial · Campus FET','starts_at'=>null,'ends_at'=>null,'status'=>'approved',
+  'attendees'=>'Miguel Antonio Urbano Silva (Docente gestor), Juan José Sabogal García (Seguimiento, pruebas y auditoría), Orlando Rojas Narváez (Frontend), Hernán Felipe Patiño Rico (Backend)',
+  'objectives'=>'Registrar los avances desde el Acta 3 y organizar las evidencias para la primera exposición del proyecto integrador.',
+  'summary'=>'Prototipo funcional con acceso de administrador, estudiante y empresa; preparación de la primera exposición.',
+  'development'=>"El equipo precisó el problema: la información de oportunidades, proyectos, alianzas y compromisos se encuentra dispersa.\nLa solución es un prototipo local construido con PHP, MariaDB, HTML, CSS y JavaScript sobre XAMPP.\nSe comprobó el acceso de administrador, estudiante y empresa. El estudiante se postula; la empresa administra sus vacantes; el administrador controla usuarios y publicaciones.\nEl prototipo integra oportunidades, proyectos, alianzas, actas, compromisos, usuarios, indicadores y auditoría.",
+  'conclusion'=>'El proyecto cuenta con un prototipo funcional para la primera demostración. El equipo definió el alcance, las evidencias y el orden de la exposición.',
+  'work_model'=>'Versión común del prototipo y carpeta de evidencias. El ensayo sigue el orden de las diapositivas e incluye el acceso por roles.',
+  'next_agenda'=>"Revisar pruebas, respaldo, capturas y diapositivas.\nRealizar un ensayo de diez minutos y registrar observaciones.",
+  'observations'=>'Las cuentas, indicadores y registros son datos de prueba. El prototipo no certifica el cumplimiento oficial de los ODS.',
+  'commitments'=>[
+   ['juan','Preparar cinco comprobaciones rápidas y ordenar la exposición.','2026-10-05','Lista diligenciada antes del ensayo','completed','Exposicion_Primer_Avance_Intranet_Privada_FET.pptx y lista de comprobaciones.'],
+   ['hernan','Respaldar la base de datos y validar los tres accesos (administrador, estudiante y empresa).','2026-10-05','Respaldo y registro de resultados','completed','Respaldo SQL descargable desde Calidad y pruebas; tres accesos validados.'],
+   ['orlando','Seleccionar tres capturas y revisar acceso y oportunidades en computador y celular.','2026-10-05','Capturas finales','completed','Capturas incluidas en Compromisos_Acta_4_Semana_5_al_11_Octubre_2026.pdf.'],
+  ],
+ ],
+ [
+  'number'=>'ACT-005','title'=>'Definición de la arquitectura y diseño de Intranet Privada FET','meeting_on'=>'2026-10-05',
+  'modality'=>'Presencial · Campus FET','starts_at'=>null,'ends_at'=>null,'status'=>'approved',
+  'attendees'=>'Miguel Antonio Urbano Silva (Docente gestor), Juan José Sabogal García (Seguimiento, pruebas y auditoría), Orlando Rojas Narváez (Frontend), Hernán Felipe Patiño Rico (Backend)',
+  'objectives'=>'Acordar cómo se estructura la solución de software y documentar las decisiones técnicas necesarias para continuar la implementación.',
+  'summary'=>'Arquitectura cliente-servidor en tres capas (interfaz, aplicación y datos) con validación en servidor, CSRF y auditoría.',
+  'development'=>"Se definió una arquitectura web cliente-servidor organizada en tres capas: interfaz, aplicación y datos.\nLa interfaz usa HTML, CSS y JavaScript; la aplicación se ejecuta con PHP 8; y la persistencia se gestiona en MariaDB sobre XAMPP.\nLos componentes principales son autenticación, paneles por rol, oportunidades y postulaciones, proyectos y alianzas, actas y compromisos, usuarios, indicadores y auditoría.\nLas sesiones validan el rol y las claves foráneas relacionan usuarios, oportunidades, postulaciones, proyectos, actas y compromisos.\nSe acordó conservar validación en el servidor, contraseñas con hash, consultas preparadas, protección CSRF, control de propiedad para empresas y registro de acciones.",
+  'conclusion'=>'La arquitectura acordada coincide con el prototipo actual y permite continuar el desarrollo por módulos.',
+  'work_model'=>'Versión común del código, del esquema de base de datos y de una carpeta de diagramas. Cada cambio de arquitectura registra su motivo y efecto.',
+  'next_agenda'=>"Revisar el diagrama de arquitectura y la relación entre componentes.\nValidar los flujos por rol y la lista de comprobaciones.",
+  'observations'=>'Los datos y los indicadores corresponden a demostraciones del prototipo.',
+  'commitments'=>[
+   ['hernan','Documentar la arquitectura, los componentes y las relaciones principales de datos.','2026-10-15','Diagrama técnico y resumen del esquema','completed','docs/ARQUITECTURA.md con capas, componentes y relaciones del esquema.'],
+   ['orlando','Elaborar el flujo de navegación de los tres perfiles y revisar una vista en computador y celular.','2026-10-16','Diagrama de navegación y capturas','completed','Flujos por perfil en la Guía de uso y docs/ARQUITECTURA.md.'],
+   ['juan','Ejecutar seis comprobaciones de arquitectura, permisos y auditoría.','2026-10-17','Lista con resultados y observaciones','completed','Comprobaciones automáticas en Calidad y pruebas con resultado en vivo.'],
+   ['juan','Revisar con todo el equipo los diagramas y registrar las decisiones técnicas acordadas.','2026-10-18','Versión común y acta de observaciones','completed','Decisiones registradas en docs/ARQUITECTURA.md.'],
+  ],
+ ],
+ [
+  'number'=>'ACT-006','title'=>'Seguimiento al desarrollo de Intranet Privada FET','meeting_on'=>'2026-10-12',
+  'modality'=>'Presencial · Campus FET','starts_at'=>null,'ends_at'=>null,'status'=>'approved',
+  'attendees'=>'Miguel Antonio Urbano Silva (Docente gestor), Juan José Sabogal García (Seguimiento, pruebas y auditoría), Orlando Rojas Narváez (Frontend), Hernán Felipe Patiño Rico (Backend)',
+  'objectives'=>'Registrar el avance de construcción del prototipo y distribuir las acciones necesarias para estabilizar la siguiente versión de la plataforma.',
+  'summary'=>'Módulos principales integrados; quedan correcciones de acceso, respaldo SQL, ajustes móviles y matriz de pruebas.',
+  'development'=>"Se integraron el inicio de sesión y los paneles para administrador, estudiante y empresa, junto con oportunidades, proyectos, alianzas, actas, usuarios, indicadores ODS y trazabilidad.\nEl prototipo se ejecuta de forma local con PHP y MariaDB en XAMPP con cuentas de demostración.\nHernán avanzó en sesiones, permisos, base de datos y auditoría; Orlando en navegación, vistas y adaptación visual; Juan verificó accesos, registros y evidencias.\nDificultades: separar la información por perfil y empresa, conservar la coherencia de los datos de demostración y ajustar vistas para pantallas pequeñas.\nSe aplicaron validaciones de propiedad y rol en el servidor, consultas preparadas, CSRF, auditoría y ajustes de estilos.",
+  'conclusion'=>'El prototipo es funcional, tiene acceso por roles y módulos principales integrados. Quedan pendientes ajustes móviles, la matriz de pruebas y la revisión académica.',
+  'work_model'=>'Versión común del proyecto, lista de hallazgos con prioridad y estado, y carpeta compartida de evidencias.',
+  'next_agenda'=>"Revisar las correcciones prioritarias, el respaldo de datos y las evidencias de las pruebas.\nPreparar la demostración del incremento funcional y los asuntos del Acta No. 7.",
+  'observations'=>'Se emplean datos de demostración; no representan información institucional oficial.',
+  'commitments'=>[
+   ['juan','Probar seis flujos principales y registrar cada resultado o defecto con evidencia.','2026-10-19','Matriz de pruebas con evidencia','completed','Seis flujos con resultado en Calidad y pruebas; defectos en la lista de hallazgos.'],
+   ['hernan','Corregir hallazgos prioritarios de acceso y datos, y generar un respaldo SQL verificable.','2026-10-19','Hallazgos corregidos y respaldo SQL','completed','Hallazgos marcados como corregidos y respaldo SQL descargable por el administrador.'],
+   ['orlando','Ajustar acceso, oportunidades y paneles en computador y celular, y entregar capturas de las vistas corregidas.','2026-10-19','Capturas de vistas corregidas','completed','Vistas adaptadas a celular: menú plegable, tablas desplazables y formularios en una columna.'],
+  ],
+ ],
+];

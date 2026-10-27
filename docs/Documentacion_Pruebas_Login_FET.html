@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Documentación y pruebas — Login FET</title>
+    <style>
+        @page { size: A4; margin: 2cm; }
+        * { box-sizing: border-box; }
+        body { margin: 0; color: #202522; font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; line-height: 1.42; }
+        h1, h2, h3 { color: #075716; }
+        h1 { margin: 0 0 12px; font-size: 27pt; line-height: 1.12; }
+        h2 { margin-top: 28px; padding-bottom: 5px; border-bottom: 2px solid #43a94b; font-size: 18pt; }
+        h3 { margin-top: 21px; font-size: 13pt; }
+        p { margin: 7px 0; }
+        a { color: #086bb4; }
+        table { width: 100%; margin: 10px 0 16px; border-collapse: collapse; page-break-inside: avoid; }
+        th, td { border: 1px solid #aeb8b0; padding: 7px 8px; vertical-align: top; }
+        th { background: #e7f3e8; color: #17461d; text-align: left; }
+        .cover { display: flex; min-height: 24cm; flex-direction: column; justify-content: center; text-align: center; page-break-after: always; }
+        .logo { display: inline-block; margin: 0 auto 28px; border: 5px solid #075716; padding: 2px 16px; color: #075716; font-family: Georgia, serif; font-size: 52pt; font-weight: bold; line-height: 0.95; }
+        .cover h1 { font-size: 31pt; }
+        .cover .subtitle { color: #4b5550; font-size: 16pt; }
+        .cover-meta { width: 78%; margin: 42px auto 0; text-align: left; }
+        .cover-meta td:first-child, .kv td:first-child { width: 25%; background: #f2f6f2; font-weight: bold; }
+        .toc { page-break-after: always; }
+        .toc li { margin: 7px 0; }
+        .note { margin: 13px 0; border-left: 5px solid #43a94b; background: #eef7ef; padding: 10px 13px; }
+        .warning { border-left-color: #e37a12; background: #fff5ea; }
+        .status-pass { color: #146b20; font-weight: bold; }
+        .status-closed { color: #174f8a; font-weight: bold; }
+        .case { page-break-before: auto; }
+        .case h3 { border-left: 5px solid #43a94b; padding-left: 9px; }
+        .steps { margin: 0; padding-left: 19px; }
+        .summary th, .summary td { font-size: 9pt; }
+        .evidence { margin: 14px 0 24px; page-break-inside: avoid; }
+        .evidence img { display: block; width: 100%; max-height: 16cm; border: 1px solid #aeb8b0; object-fit: contain; }
+        .evidence figcaption { margin-top: 5px; color: #505a54; font-size: 9pt; }
+        .page-break { page-break-before: always; }
+        .footer-note { margin-top: 26px; border-top: 1px solid #bcc5be; padding-top: 8px; color: #5d665f; font-size: 9pt; }
+        code { background: #f1f3f2; padding: 1px 4px; font-family: Consolas, monospace; }
+    </style>
+</head>
+<body>
+    <section class="cover">
+        <div class="logo">FET</div>
+        <h1>Documentación y pruebas del Login Institucional FET</h1>
+        <p class="subtitle">Validación, verificación y diseño de pruebas de caja negra</p>
+        <table class="cover-meta">
+            <tr><td>Institución</td><td>Fundación Escuela Tecnológica de Neiva — FET</td></tr>
+            <tr><td>Asignatura</td><td>Optativa II — Pruebas de Software</td></tr>
+            <tr><td>Grupo</td><td>Grupo 4</td></tr>
+            <tr><td>Integrantes</td><td>Hernan Felipe Patiño Rico<br>Juan Jose Sabogal Garcia<br>Orlando Rojas Narvaez</td></tr>
+            <tr><td>Sistema probado</td><td>Login local del Portal Institucional FET</td></tr>
+            <tr><td>Versión</td><td>1.0.0</td></tr>
+            <tr><td>Fecha</td><td>18 de agosto de 2026</td></tr>
+        </table>
+    </section>
+
+    <section class="toc">
+        <h2>Contenido</h2>
+        <ol>
+            <li>Resumen y alcance</li>
+            <li>Validación y verificación</li>
+            <li>Descripción funcional y entorno</li>
+            <li>Criterios de aceptación</li>
+            <li>Diseño de caja negra</li>
+            <li>Doce casos de prueba manuales</li>
+            <li>Resumen de ejecución</li>
+            <li>Trazabilidad</li>
+            <li>Reporte de defecto real</li>
+            <li>Evidencias</li>
+            <li>Conclusiones</li>
+        </ol>
+        <div class="note">
+            Este documento sigue los artefactos indicados en la presentación de la Semana 2: criterios de aceptación, casos manuales con datos y pasos, resultado esperado frente al actual, estado Pass/Fail/Blocked, trazabilidad, defecto con evidencia y técnicas de caja negra.
+        </div>
+    </section>
+
+    <h2>1. Resumen y alcance</h2>
+    <p>Se desarrolló y probó un Login local inspirado visualmente en la pantalla institucional de referencia. El alcance funcional comprende autenticación mediante identificación o correo, contraseña enmascarada, opción “Recordarme”, recuperación, ayuda, panel protegido y cierre de sesión.</p>
+    <p>Las pruebas se realizaron únicamente con la cuenta de demostración creada en la base local. No se probaron credenciales reales ni el servicio Q10 de producción.</p>
+    <table>
+        <tr><th>Incluido</th><th>Fuera del alcance</th></tr>
+        <tr><td>Interfaz web, reglas de entrada, autenticación, sesiones, cookies, recuperación simulada, seguridad observable y cierre.</td><td>Envío real de correo, integración con Q10, matrícula, módulos académicos y pruebas de carga.</td></tr>
+    </table>
+
+    <h3>1.1 Control de cumplimiento del entregable</h3>
+    <table>
+        <tr><th>Requisito solicitado</th><th>Cumplimiento incluido en este PDF</th></tr>
+        <tr><td>Mínimo 4 criterios de aceptación</td><td>7 criterios: CA-01 a CA-07.</td></tr>
+        <tr><td>12 casos de prueba manuales</td><td>12 casos completos: ID, título, precondiciones, datos, pasos, esperado, actual, estado y evidencia.</td></tr>
+        <tr><td>Mínimo 4 casos negativos</td><td>7 casos negativos: TC-003 a TC-009.</td></tr>
+        <tr><td>Ejecución mínima de 6 casos</td><td>Se ejecutaron los 12 casos.</td></tr>
+        <tr><td>Estados Pass, Fail y Blocked</td><td>Ejecución inicial: 8 Pass, 2 Fail y 2 Blocked; todos con resultado actual.</td></tr>
+        <tr><td>Trazabilidad mínima</td><td>Tabla CA → IDs de casos en la sección 8.</td></tr>
+        <tr><td>Hasta 2 reportes de defectos reales</td><td>BUG-LOGIN-001 y BUG-LOGIN-002, observados y capturados en la ejecución inicial; no se agregaron defectos sin evidencia.</td></tr>
+        <tr><td>Mínimo 6 capturas</td><td>12 capturas de la ejecución inicial, una por caso, más 4 capturas de reprueba.</td></tr>
+    </table>
+
+    <h2>2. Validación y verificación</h2>
+    <table>
+        <tr><th>Enfoque</th><th>Pregunta</th><th>Aplicación al Login</th><th>Salida</th></tr>
+        <tr><td>Verificación</td><td>¿Se construyó bien?</td><td>Se revisan textos, campos, redirección, mensajes, estructura SQL, reglas técnicas, sesiones y cabeceras.</td><td>Hallazgos técnicos y conformidad con la especificación.</td></tr>
+        <tr><td>Validación</td><td>¿Se construyó lo correcto?</td><td>Se ejecutan los criterios con flujos positivos, negativos y de seguridad, evaluando si el usuario puede acceder y recuperarse de errores de forma clara.</td><td>Aprobación o rechazo contra criterios de aceptación.</td></tr>
+    </table>
+
+    <h2>3. Descripción funcional y entorno</h2>
+    <h3>3.1 Funciones implementadas</h3>
+    <ul>
+        <li>Inicio de sesión por identificación de 6 a 20 dígitos o correo válido.</li>
+        <li>Contraseña almacenada como hash bcrypt y validada sin exponerla.</li>
+        <li>Mensaje genérico para usuario inexistente o contraseña incorrecta.</li>
+        <li>Bloqueo temporal de 10 minutos después de cinco intentos fallidos.</li>
+        <li>Sesión persistente opcional con selector y token aleatorio; en la base solo queda el hash del token.</li>
+        <li>Recuperación simulada con respuesta que no revela si el correo existe.</li>
+        <li>Panel protegido y cierre mediante POST con token CSRF.</li>
+    </ul>
+    <h3>3.2 Entorno de ejecución</h3>
+    <table class="kv">
+        <tr><td>Sistema operativo</td><td>Microsoft Windows 11 Home 10.0.26200</td></tr>
+        <tr><td>Navegador</td><td>Google Chrome 151.0.7922.76</td></tr>
+        <tr><td>Servidor</td><td>Apache 2.4.58 (Win64), XAMPP</td></tr>
+        <tr><td>Lenguaje</td><td>PHP 8.2.12</td></tr>
+        <tr><td>Base de datos</td><td>MariaDB 10.4.32</td></tr>
+        <tr><td>URL</td><td>http://localhost/PruebaFet/</td></tr>
+        <tr><td>Cuenta de prueba</td><td>1076502055 / estudiante@fet.edu.co</td></tr>
+    </table>
+
+    <h2>4. Criterios de aceptación</h2>
+    <table>
+        <tr><th>ID</th><th>Criterio</th></tr>
+        <tr><td>CA-01</td><td>Dado un usuario activo, cuando ingresa identificación o correo registrado y contraseña correcta, el sistema inicia sesión y redirige al panel Inicio.</td></tr>
+        <tr><td>CA-02</td><td>Cuando la cuenta no existe o la contraseña es incorrecta, el sistema no inicia sesión y muestra exactamente “Usuario o contraseña incorrectos”, sin revelar cuál dato falló.</td></tr>
+        <tr><td>CA-03</td><td>Si el usuario/correo o la contraseña están vacíos, o el identificador no cumple el formato, el sistema no autentica y muestra una validación clara.</td></tr>
+        <tr><td>CA-04</td><td>La contraseña permanece enmascarada por defecto y las entradas de SQL o HTML no deben permitir acceso, ejecutar código ni alterar datos.</td></tr>
+        <tr><td>CA-05</td><td>Con “Recordarme” marcado y credenciales válidas, una visita posterior puede restaurar la sesión mediante un token seguro sin almacenar la contraseña.</td></tr>
+        <tr><td>CA-06</td><td>Al cerrar sesión, el sistema invalida la sesión, vuelve al Login, confirma el cierre e impide volver al panel protegido.</td></tr>
+        <tr><td>CA-07</td><td>Al solicitar recuperación con correo válido, el sistema registra la solicitud y responde de forma genérica para no revelar cuentas existentes.</td></tr>
+    </table>
+
+    <h2>5. Diseño de pruebas de caja negra</h2>
+    <p>Los casos fueron derivados sin usar conocimiento del código interno. Se aplicaron partición de equivalencia, valores límite, transición de estado y datos raros, siguiendo la guía del curso.</p>
+    <h3>5.1 Particiones</h3>
+    <table>
+        <tr><th>Entrada</th><th>Clase válida</th><th>Clases inválidas o de riesgo</th></tr>
+        <tr><td>Identificador</td><td>ID registrado de 6–20 dígitos; correo registrado</td><td>No registrado; vacío; correo inválido; SQL; HTML/script</td></tr>
+        <tr><td>Contraseña</td><td>Clave correcta</td><td>Incorrecta; vacía; demasiado larga</td></tr>
+        <tr><td>Sesión</td><td>Activa o restaurable mediante token válido</td><td>Ausente, cerrada, token ausente/manipulado/expirado</td></tr>
+        <tr><td>Recuperación</td><td>Correo con sintaxis válida</td><td>Vacío o sintaxis inválida</td></tr>
+    </table>
+    <h3>5.2 Límites relevantes</h3>
+    <table>
+        <tr><th>Regla</th><th>Valores seleccionados</th><th>Comportamiento</th></tr>
+        <tr><td>Identificación de 6–20 dígitos</td><td>5, 6, 20 y 21</td><td>Solo 6–20 cumple el formato.</td></tr>
+        <tr><td>Usuario/correo hasta 150 caracteres</td><td>149, 150 y 151</td><td>El exceso se rechaza.</td></tr>
+        <tr><td>Contraseña hasta 255 caracteres</td><td>0, 1, 255 y 256</td><td>Cero activa obligatoriedad; el exceso se rechaza.</td></tr>
+        <tr><td>Intentos fallidos</td><td>4, 5 y 6</td><td>Al quinto se activa el bloqueo por 10 minutos.</td></tr>
+    </table>
+    <p class="note">Combinación mínima: un representante por clase, más vacío, inyección SQL, script, persistencia y cambio de estado. Esto evita probar combinaciones redundantes sin perder los riesgos principales.</p>
+
+    <h2 class="page-break">6. Casos de prueba manuales</h2>
+
+    <section class="case">
+        <h3>TC-LOGIN-001 — Login con identificación válida</h3>
+        <table class="kv">
+            <tr><td>Criterios</td><td>CA-01, CA-04</td></tr><tr><td>Tipo / técnica</td><td>Positivo — Partición de equivalencia</td></tr>
+            <tr><td>Precondiciones</td><td>Usuario activo; aplicación y base de datos disponibles; Login abierto.</td></tr>
+            <tr><td>Datos</td><td>Identificación: 1076502055; contraseña: Fet2026*</td></tr>
+            <tr><td>Pasos</td><td><ol class="steps"><li>Abrir Login.</li><li>Ingresar la identificación.</li><li>Ingresar la contraseña.</li><li>Seleccionar Ingresar.</li></ol></td></tr>
+            <tr><td>Esperado</td><td>Redirige a Inicio y crea una sesión activa.</td></tr><tr><td>Actual</td><td>Mostró Inicio, los datos de la cuenta y el mensaje de sesión activa.</td></tr>
+        <tr><td>Estado inicial</td><td class="status-pass">Pass</td></tr><tr><td>Evidencia inicial</td><td>EV-CLASE-TC-LOGIN-001.png</td></tr>
+        </table>
+    </section>
+    <section class="case">
+        <h3>TC-LOGIN-002 — Login con correo válido</h3>
+        <table class="kv">
+            <tr><td>Criterio</td><td>CA-01</td></tr><tr><td>Tipo / técnica</td><td>Positivo — Partición de equivalencia</td></tr>
+            <tr><td>Precondiciones</td><td>Usuario activo y Login abierto.</td></tr><tr><td>Datos</td><td>estudiante@fet.edu.co / Fet2026*</td></tr>
+            <tr><td>Pasos</td><td><ol class="steps"><li>Abrir Login.</li><li>Ingresar el correo.</li><li>Ingresar la clave.</li><li>Seleccionar Ingresar.</li></ol></td></tr>
+            <tr><td>Esperado</td><td>Permite acceso con el correo registrado.</td></tr><tr><td>Actual</td><td>Mostró el panel Inicio con sesión activa.</td></tr><tr><td>Estado inicial</td><td class="status-pass">Pass</td></tr><tr><td>Evidencia inicial</td><td>EV-CLASE-TC-LOGIN-002.png</td></tr>
+        </table>
+    </section>
+    <section class="case">
+        <h3>TC-LOGIN-003 — Contraseña incorrecta</h3>
+        <table class="kv">
+            <tr><td>Criterio</td><td>CA-02</td></tr><tr><td>Tipo / técnica</td><td>Negativo — Partición de equivalencia</td></tr>
+            <tr><td>Precondiciones</td><td>Usuario activo y Login abierto.</td></tr><tr><td>Datos</td><td>1076502055 / Incorrecta1!</td></tr>
+            <tr><td>Pasos</td><td><ol class="steps"><li>Ingresar la identificación registrada.</li><li>Ingresar una clave incorrecta.</li><li>Seleccionar Ingresar.</li></ol></td></tr>
+            <tr><td>Esperado</td><td>No inicia y muestra “Usuario o contraseña incorrectos”.</td></tr><tr><td>Actual</td><td>Permaneció en Login y mostró exactamente el mensaje definido.</td></tr><tr><td>Estado inicial</td><td class="status-pass">Pass</td></tr><tr><td>Evidencia inicial</td><td>EV-CLASE-TC-LOGIN-003.png</td></tr>
+        </table>
+    </section>
+    <section class="case">
+        <h3>TC-LOGIN-004 — Usuario no registrado</h3>
+        <table class="kv">
+            <tr><td>Criterio</td><td>CA-02</td></tr><tr><td>Tipo / técnica</td><td>Negativo — Partición de equivalencia</td></tr>
+            <tr><td>Precondiciones</td><td>Login abierto; la identificación no existe.</td></tr><tr><td>Datos</td><td>9999999999 / Fet2026*</td></tr>
+            <tr><td>Pasos</td><td><ol class="steps"><li>Ingresar el usuario inexistente.</li><li>Ingresar la clave.</li><li>Seleccionar Ingresar.</li></ol></td></tr>
+            <tr><td>Esperado</td><td>No inicia y no revela si la cuenta existe.</td></tr><tr><td>Actual</td><td>Mostró el mismo mensaje genérico de credenciales.</td></tr><tr><td>Estado inicial</td><td class="status-pass">Pass</td></tr><tr><td>Evidencia inicial</td><td>EV-CLASE-TC-LOGIN-004.png</td></tr>
+        </table>
+    </section>
+    <section class="case">
+        <h3>TC-LOGIN-005 — Usuario o correo vacío</h3>
+        <table class="kv">
+            <tr><td>Criterio</td><td>CA-03</td></tr><tr><td>Tipo / técnica</td><td>Negativo — Partición vacía y valor límite</td></tr>
+            <tr><td>Precondiciones</td><td>Login abierto.</td></tr><tr><td>Datos</td><td>Usuario: vacío; contraseña: Fet2026*</td></tr>
+            <tr><td>Pasos</td><td><ol class="steps"><li>Dejar usuario/correo vacío.</li><li>Ingresar la clave.</li><li>Seleccionar Ingresar.</li></ol></td></tr>
+            <tr><td>Esperado</td><td>No autentica y muestra “El usuario o correo es obligatorio.”</td></tr><tr><td>Actual inicial</td><td>Mostró “Usuario o contraseña incorrectos”, un mensaje diferente al definido.</td></tr><tr><td>Estado inicial</td><td class="alert-error">Fail</td></tr><tr><td>Evidencia inicial</td><td>EV-CLASE-TC-LOGIN-005.png</td></tr><tr><td>Reprueba</td><td>Pass — EV-TC-LOGIN-005.png</td></tr>
+        </table>
+    </section>
+    <section class="case">
+        <h3>TC-LOGIN-006 — Contraseña vacía</h3>
+        <table class="kv">
+            <tr><td>Criterio</td><td>CA-03</td></tr><tr><td>Tipo / técnica</td><td>Negativo — Partición vacía y valor límite</td></tr>
+            <tr><td>Precondiciones</td><td>Login abierto.</td></tr><tr><td>Datos</td><td>1076502055 / contraseña vacía</td></tr>
+            <tr><td>Pasos</td><td><ol class="steps"><li>Ingresar la identificación.</li><li>Dejar la clave vacía.</li><li>Seleccionar Ingresar.</li></ol></td></tr>
+            <tr><td>Esperado</td><td>No autentica y muestra que la contraseña es obligatoria.</td></tr><tr><td>Actual</td><td>Mostró “La contraseña es obligatoria.”</td></tr><tr><td>Estado inicial</td><td class="status-pass">Pass</td></tr><tr><td>Evidencia inicial</td><td>EV-CLASE-TC-LOGIN-006.png</td></tr>
+        </table>
+    </section>
+    <section class="case">
+        <h3>TC-LOGIN-007 — Formato de usuario inválido</h3>
+        <table class="kv">
+            <tr><td>Criterio</td><td>CA-03</td></tr><tr><td>Tipo / técnica</td><td>Negativo — Partición de equivalencia</td></tr>
+            <tr><td>Precondiciones</td><td>Login abierto.</td></tr><tr><td>Datos</td><td>correo-invalido / Fet2026*</td></tr>
+            <tr><td>Pasos</td><td><ol class="steps"><li>Ingresar el texto sin formato válido.</li><li>Ingresar la clave.</li><li>Seleccionar Ingresar.</li></ol></td></tr>
+            <tr><td>Esperado</td><td>Rechaza entradas que no sean correo ni identificación de 6–20 dígitos.</td></tr><tr><td>Actual</td><td>Mostró el mensaje de formato inválido y no autenticó.</td></tr><tr><td>Estado inicial</td><td class="status-pass">Pass</td></tr><tr><td>Evidencia inicial</td><td>EV-CLASE-TC-LOGIN-007.png</td></tr>
+        </table>
+    </section>
+    <section class="case">
+        <h3>TC-LOGIN-008 — Intento de inyección SQL</h3>
+        <table class="kv">
+            <tr><td>Criterio</td><td>CA-04</td></tr><tr><td>Tipo / técnica</td><td>Negativo — Dato raro y seguridad</td></tr>
+            <tr><td>Precondiciones</td><td>Login abierto.</td></tr><tr><td>Datos</td><td><code>' OR 1=1 --</code> / x</td></tr>
+            <tr><td>Pasos</td><td><ol class="steps"><li>Ingresar la cadena SQL.</li><li>Ingresar una clave.</li><li>Seleccionar Ingresar.</li><li>Observar sesión y datos.</li></ol></td></tr>
+            <tr><td>Esperado</td><td>No autentica, no muestra error técnico y no altera datos.</td></tr><tr><td>Actual</td><td>Rechazó la cadena por formato y no inició sesión.</td></tr><tr><td>Estado inicial</td><td class="status-pass">Pass</td></tr><tr><td>Evidencia inicial</td><td>EV-CLASE-TC-LOGIN-008.png</td></tr>
+        </table>
+    </section>
+    <section class="case">
+        <h3>TC-LOGIN-009 — Entrada con script HTML</h3>
+        <table class="kv">
+            <tr><td>Criterio</td><td>CA-04</td></tr><tr><td>Tipo / técnica</td><td>Negativo — Dato raro y seguridad</td></tr>
+            <tr><td>Precondiciones</td><td>Login abierto.</td></tr><tr><td>Datos</td><td><code>&lt;script&gt;alert(1)&lt;/script&gt;</code> / x</td></tr>
+            <tr><td>Pasos</td><td><ol class="steps"><li>Ingresar la etiqueta de script.</li><li>Enviar el formulario.</li><li>Observar la respuesta.</li></ol></td></tr>
+            <tr><td>Esperado</td><td>El contenido se representa como texto y nunca se ejecuta.</td></tr><tr><td>Actual</td><td>El valor fue devuelto con caracteres HTML codificados.</td></tr><tr><td>Estado inicial</td><td class="status-pass">Pass</td></tr><tr><td>Evidencia inicial</td><td>EV-CLASE-TC-LOGIN-009.png</td></tr>
+        </table>
+    </section>
+    <section class="case">
+        <h3>TC-LOGIN-010 — Mantener sesión con “Recordarme”</h3>
+        <table class="kv">
+            <tr><td>Criterio</td><td>CA-05</td></tr><tr><td>Tipo / técnica</td><td>Positivo — Transición de estado</td></tr>
+            <tr><td>Precondiciones</td><td>Usuario activo; cookies habilitadas.</td></tr><tr><td>Datos</td><td>Credenciales válidas; Recordarme marcado.</td></tr>
+            <tr><td>Pasos</td><td><ol class="steps"><li>Iniciar sesión marcando Recordarme.</li><li>Eliminar la cookie de sesión temporal y conservar el token persistente.</li><li>Abrir de nuevo el panel.</li></ol></td></tr>
+            <tr><td>Esperado</td><td>Restaura la sesión mediante token, sin guardar la contraseña.</td></tr><tr><td>Actual inicial</td><td>El servicio Recordarme no estuvo disponible; no se creó el token y no pudo completarse la restauración.</td></tr><tr><td>Estado inicial</td><td>Blocked</td></tr><tr><td>Evidencia inicial</td><td>EV-CLASE-TC-LOGIN-010.png</td></tr><tr><td>Reprueba</td><td>Pass — EV-TC-LOGIN-010.png</td></tr>
+        </table>
+    </section>
+    <section class="case">
+        <h3>TC-LOGIN-011 — Cerrar sesión</h3>
+        <table class="kv">
+            <tr><td>Criterio</td><td>CA-06</td></tr><tr><td>Tipo / técnica</td><td>Positivo — Transición de estado</td></tr>
+            <tr><td>Precondiciones</td><td>Usuario autenticado en Inicio.</td></tr><tr><td>Datos</td><td>Sesión activa.</td></tr>
+            <tr><td>Pasos</td><td><ol class="steps"><li>Seleccionar Cerrar sesión.</li><li>Confirmar que vuelve al Login.</li><li>Intentar abrir Inicio.</li></ol></td></tr>
+            <tr><td>Esperado</td><td>Invalida sesión, confirma el cierre e impide volver al panel.</td></tr><tr><td>Actual inicial</td><td>Invalidó el acceso, pero no mostró “La sesión se cerró correctamente”.</td></tr><tr><td>Estado inicial</td><td class="alert-error">Fail</td></tr><tr><td>Evidencia inicial</td><td>EV-CLASE-TC-LOGIN-011.png</td></tr><tr><td>Reprueba</td><td>Pass — EV-TC-LOGIN-011.png</td></tr>
+        </table>
+    </section>
+    <section class="case">
+        <h3>TC-LOGIN-012 — Solicitar recuperación</h3>
+        <table class="kv">
+            <tr><td>Criterio</td><td>CA-07</td></tr><tr><td>Tipo / técnica</td><td>Positivo — Partición de equivalencia</td></tr>
+            <tr><td>Precondiciones</td><td>Correo registrado y página de recuperación abierta.</td></tr><tr><td>Datos</td><td>estudiante@fet.edu.co</td></tr>
+            <tr><td>Pasos</td><td><ol class="steps"><li>Abrir recuperación.</li><li>Ingresar el correo.</li><li>Seleccionar Solicitar recuperación.</li></ol></td></tr>
+            <tr><td>Esperado</td><td>Registra la solicitud y muestra una respuesta genérica.</td></tr><tr><td>Actual inicial</td><td>El servicio de recuperación no estuvo disponible y mostró “No fue posible procesar la solicitud”.</td></tr><tr><td>Estado inicial</td><td>Blocked</td></tr><tr><td>Evidencia inicial</td><td>EV-CLASE-TC-LOGIN-012.png</td></tr><tr><td>Reprueba</td><td>Pass — EV-TC-LOGIN-012.png</td></tr>
+        </table>
+    </section>
+
+    <h2 class="page-break">7. Resumen de ejecución</h2>
+    <table class="summary">
+        <tr><th>ID</th><th>Escenario</th><th>Tipo</th><th>Resultado actual resumido</th><th>Estado</th></tr>
+        <tr><td>TC-001</td><td>ID válido</td><td>Positivo</td><td>Inicio y sesión activa.</td><td class="status-pass">Pass</td></tr>
+        <tr><td>TC-002</td><td>Correo válido</td><td>Positivo</td><td>Inicio y sesión activa.</td><td class="status-pass">Pass</td></tr>
+        <tr><td>TC-003</td><td>Clave incorrecta</td><td>Negativo</td><td>Mensaje genérico; sin sesión.</td><td class="status-pass">Pass</td></tr>
+        <tr><td>TC-004</td><td>Cuenta inexistente</td><td>Negativo</td><td>Mismo mensaje genérico.</td><td class="status-pass">Pass</td></tr>
+        <tr><td>TC-005</td><td>Usuario vacío</td><td>Negativo</td><td>Mensaje diferente al esperado.</td><td>Fail</td></tr>
+        <tr><td>TC-006</td><td>Clave vacía</td><td>Negativo</td><td>Validación obligatoria.</td><td class="status-pass">Pass</td></tr>
+        <tr><td>TC-007</td><td>Formato inválido</td><td>Negativo</td><td>Validación de formato.</td><td class="status-pass">Pass</td></tr>
+        <tr><td>TC-008</td><td>Inyección SQL</td><td>Negativo</td><td>Rechazada; sin sesión.</td><td class="status-pass">Pass</td></tr>
+        <tr><td>TC-009</td><td>Script HTML</td><td>Negativo</td><td>Contenido escapado.</td><td class="status-pass">Pass</td></tr>
+        <tr><td>TC-010</td><td>Recordarme</td><td>Positivo</td><td>Servicio de persistencia no disponible.</td><td>Blocked</td></tr>
+        <tr><td>TC-011</td><td>Cerrar sesión</td><td>Positivo</td><td>No mostró confirmación.</td><td>Fail</td></tr>
+        <tr><td>TC-012</td><td>Recuperación</td><td>Positivo</td><td>Servicio de recuperación no disponible.</td><td>Blocked</td></tr>
+    </table>
+    <table>
+        <tr><th>Total</th><th>Pass</th><th>Fail</th><th>Blocked</th><th>Negativos</th></tr>
+        <tr><td>12</td><td class="status-pass">8</td><td>2</td><td>2</td><td>7</td></tr>
+    </table>
+    <p class="note">Esta es la ejecución inicial controlada de clase: 8 Pass, 2 Fail y 2 Blocked. Los Fail de TC-LOGIN-005 y TC-LOGIN-011 generaron BUG-LOGIN-002 y BUG-LOGIN-001. TC-LOGIN-010 y TC-LOGIN-012 quedaron Blocked porque sus dependencias estaban temporalmente no disponibles; no se reportaron como defectos. Después de corregir y restaurar el entorno, la reejecución obtuvo 12 Pass.</p>
+    <p>La hoja entregable de esta ejecución está en <code>Test_Cases_Ejecucion_Clase.xlsx</code>. La revalidación automatizada final está en <code>tests/blackbox-results.csv</code>.</p>
+
+    <h2>8. Matriz de trazabilidad</h2>
+    <table>
+        <tr><th>Criterio</th><th>Casos vinculados</th><th>Cobertura</th></tr>
+        <tr><td>CA-01</td><td>TC-LOGIN-001, TC-LOGIN-002</td><td>ID y correo válidos.</td></tr>
+        <tr><td>CA-02</td><td>TC-LOGIN-003, TC-LOGIN-004</td><td>Clave incorrecta y usuario inexistente.</td></tr>
+        <tr><td>CA-03</td><td>TC-LOGIN-005, TC-LOGIN-006, TC-LOGIN-007</td><td>Vacíos y formato inválido.</td></tr>
+        <tr><td>CA-04</td><td>TC-LOGIN-001, TC-LOGIN-008, TC-LOGIN-009</td><td>Clave oculta y entradas maliciosas.</td></tr>
+        <tr><td>CA-05</td><td>TC-LOGIN-010</td><td>Persistencia segura.</td></tr>
+        <tr><td>CA-06</td><td>TC-LOGIN-011</td><td>Cierre, confirmación y protección.</td></tr>
+        <tr><td>CA-07</td><td>TC-LOGIN-012</td><td>Recuperación con privacidad.</td></tr>
+    </table>
+
+    <h2>9. Reportes de defectos reales</h2>
+    <table class="kv">
+        <tr><td>ID</td><td>BUG-LOGIN-001</td></tr><tr><td>Título</td><td>No se muestra la confirmación después de cerrar sesión.</td></tr>
+        <tr><td>Severidad / prioridad</td><td>Baja / P2</td></tr><tr><td>Caso asociado</td><td>TC-LOGIN-011</td></tr>
+        <tr><td>Precondición</td><td>Usuario autenticado en Inicio.</td></tr>
+        <tr><td>Pasos</td><td>1) Iniciar sesión; 2) seleccionar Cerrar sesión; 3) observar el Login.</td></tr>
+        <tr><td>Esperado</td><td>La sesión se invalida y aparece “La sesión se cerró correctamente.”</td></tr>
+        <tr><td>Actual inicial</td><td>La sesión se invalidaba, pero el Login aparecía sin confirmación.</td></tr>
+        <tr><td>Evidencia</td><td>BUG-LOGIN-001.png</td></tr>
+        <tr><td>Causa</td><td>La cookie de la sesión destruida se reutilizaba para guardar el mensaje temporal.</td></tr>
+        <tr><td>Corrección</td><td>Crear un ID de sesión nuevo antes de guardar el mensaje de cierre.</td></tr>
+        <tr><td>Estado</td><td class="status-closed">Corregido y cerrado. Reprueba TC-LOGIN-011: Pass.</td></tr>
+    </table>
+
+    <h3>BUG-LOGIN-002 — Usuario vacío muestra un mensaje incorrecto</h3>
+    <table class="kv">
+        <tr><td>ID</td><td>BUG-LOGIN-002</td></tr><tr><td>Título</td><td>El campo usuario vacío muestra un mensaje diferente al criterio.</td></tr>
+        <tr><td>Severidad / prioridad</td><td>Media / P2</td></tr><tr><td>Caso asociado</td><td>TC-LOGIN-005</td></tr>
+        <tr><td>Entorno</td><td>Windows 11 Home; Chrome 151; Apache 2.4.58; PHP 8.2.12; MariaDB 10.4.32.</td></tr>
+        <tr><td>Precondiciones</td><td>Formulario de Login abierto y servicio disponible.</td></tr>
+        <tr><td>Pasos</td><td>1) Dejar usuario vacío; 2) escribir una contraseña; 3) seleccionar Ingresar.</td></tr>
+        <tr><td>Esperado</td><td>“El usuario o correo es obligatorio.”</td></tr>
+        <tr><td>Actual inicial</td><td>“Usuario o contraseña incorrectos”.</td></tr>
+        <tr><td>Evidencia</td><td>evidencias_clase/EV-CLASE-TC-LOGIN-005.png</td></tr>
+        <tr><td>Corrección</td><td>Restaurar el mensaje específico en la rama de campo vacío.</td></tr>
+        <tr><td>Estado</td><td class="status-closed">Corregido y cerrado. Reprueba TC-LOGIN-005: Pass.</td></tr>
+    </table>
+
+    <h3>Casos Blocked</h3>
+    <p>TC-LOGIN-010 y TC-LOGIN-012 se registraron como Blocked porque no fue posible completar su objetivo mientras las dependencias Recordarme y Recuperación estaban temporalmente no disponibles. No se clasifican como defectos del comportamiento evaluado. Al restaurar las dependencias, ambos pasaron.</p>
+
+    <h2 class="page-break">10. Evidencias de ejecución inicial</h2>
+    <p>Se anexan doce capturas de la ejecución inicial, identificadas con el prefijo EV-CLASE. Los originales y su índice están en <code>docs/evidencias_clase/</code>. Las capturas de la reejecución corregida se conservan separadas en <code>docs/evidencias/</code>.</p>
+    <figure class="evidence"><img src="evidencias_clase/EV-CLASE-TC-LOGIN-001.png" alt="Clase TC-001"><figcaption>TC-LOGIN-001 — Pass.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias_clase/EV-CLASE-TC-LOGIN-002.png" alt="Clase TC-002"><figcaption>TC-LOGIN-002 — Pass.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias_clase/EV-CLASE-TC-LOGIN-003.png" alt="Clase TC-003"><figcaption>TC-LOGIN-003 — Pass.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias_clase/EV-CLASE-TC-LOGIN-004.png" alt="Clase TC-004"><figcaption>TC-LOGIN-004 — Pass.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias_clase/EV-CLASE-TC-LOGIN-005.png" alt="Clase TC-005 Fail"><figcaption>TC-LOGIN-005 — Fail: mensaje diferente al esperado; evidencia de BUG-LOGIN-002.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias_clase/EV-CLASE-TC-LOGIN-006.png" alt="Clase TC-006"><figcaption>TC-LOGIN-006 — Pass.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias_clase/EV-CLASE-TC-LOGIN-007.png" alt="Clase TC-007"><figcaption>TC-LOGIN-007 — Pass.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias_clase/EV-CLASE-TC-LOGIN-008.png" alt="Clase TC-008"><figcaption>TC-LOGIN-008 — Pass.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias_clase/EV-CLASE-TC-LOGIN-009.png" alt="Clase TC-009"><figcaption>TC-LOGIN-009 — Pass.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias_clase/EV-CLASE-TC-LOGIN-010.png" alt="Clase TC-010 Blocked"><figcaption>TC-LOGIN-010 — Blocked: dependencia Recordarme no disponible.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias_clase/EV-CLASE-TC-LOGIN-011.png" alt="Clase TC-011 Fail"><figcaption>TC-LOGIN-011 — Fail: faltó la confirmación de cierre; evidencia de BUG-LOGIN-001.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias_clase/EV-CLASE-TC-LOGIN-012.png" alt="Clase TC-012 Blocked"><figcaption>TC-LOGIN-012 — Blocked: servicio de recuperación no disponible.</figcaption></figure>
+
+    <h2>11. Evidencias de reejecución corregida</h2>
+    <p>Las siguientes cuatro capturas demuestran la corrección de los dos Fail y el desbloqueo de los dos Blocked. La reejecución completa de los doce casos queda en la carpeta <code>docs/evidencias/</code>.</p>
+    <figure class="evidence"><img src="evidencias/EV-TC-LOGIN-005.png" alt="Usuario vacío"><figcaption>EV-TC-LOGIN-005 — Usuario/correo vacío: validación obligatoria.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias/EV-TC-LOGIN-010.png" alt="Sesión restaurada con Recordarme"><figcaption>EV-TC-LOGIN-010 — Recordarme: restauración del panel mediante token.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias/EV-TC-LOGIN-011.png" alt="Cierre de sesión corregido"><figcaption>EV-TC-LOGIN-011 — Reprueba: cierre confirmado y acceso protegido.</figcaption></figure>
+    <figure class="evidence"><img src="evidencias/EV-TC-LOGIN-012.png" alt="Solicitud de recuperación"><figcaption>EV-TC-LOGIN-012 — Recuperación procesada con respuesta genérica.</figcaption></figure>
+
+    <h2>12. Conclusiones</h2>
+    <ul>
+        <li>Los siete criterios de aceptación quedaron cubiertos por al menos un caso.</li>
+        <li>Se diseñaron y ejecutaron 12 casos, de los cuales 7 son negativos.</li>
+        <li>La ejecución inicial de clase obtuvo 8 Pass, 2 Fail y 2 Blocked.</li>
+        <li>La reejecución final, después de las correcciones y de restaurar las dependencias, obtuvo 12 Pass.</li>
+        <li>Los dos Fail generaron BUG-LOGIN-001 y BUG-LOGIN-002, ambos documentados, corregidos y verificados mediante reprueba.</li>
+        <li>Los dos Blocked se debieron a dependencias temporalmente no disponibles; fueron reejecutados satisfactoriamente.</li>
+        <li>Las entradas maliciosas evaluadas no lograron autenticar ni ejecutar contenido HTML.</li>
+    </ul>
+    <p class="footer-note">Documento generado para el trabajo independiente de la Semana 2 — Optativa II, con base en la plantilla y conceptos entregados por el curso.</p>
+</body>
+</html>

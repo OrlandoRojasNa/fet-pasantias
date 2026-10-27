@@ -1,0 +1,6 @@
+Options -Indexes
+RewriteEngine On
+RewriteRule ^(?:app|config|database|storage|tests|docs|includes|vendor|\.git|\.tools)(?:/|$) - [F,L,NC]
+<FilesMatch "^(\.|composer\.|REQUISITOS|README)">
+  Require all denied
+</FilesMatch>
