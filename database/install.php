@@ -4,15 +4,22 @@ declare(strict_types=1);
  * Instalador y actualizador de Pasantías FET.
  * Se puede ejecutar varias veces: crea lo que falta, migra columnas nuevas y
  * carga datos de demostración sin duplicar registros.
- *   C:\xampp\php\php.exe C:\xampp\htdocs\PruebaFet\database\install.php
+ *   C:\xampp\php\php.exe C:\xampp\htdocs\PruebaFet\database\install.php            (demostración)
+ *   php database/install.php --produccion --admin-correo=... --admin-identificacion=... --admin-clave=...
  * Las tablas de módulos retirados (actas, proyectos, hallazgos, convenios) no se borran
  * en instalaciones anteriores: la aplicación ya no las usa.
  */
 if(PHP_SAPI!=='cli'){http_response_code(404);exit;}
+// --produccion (o APP_ENV=production en .env): instala sin cuentas ni datos de demostración.
+$opts=getopt('',['produccion','admin-correo:','admin-clave:','admin-nombre:','admin-identificacion:']);
 $config=require __DIR__.'/../config/database.php';
+$production=isset($opts['produccion'])||strtolower((string)getenv('APP_ENV'))==='production';
 try{
  $pdo=new PDO("mysql:host={$config['host']};port={$config['port']};charset={$config['charset']}",$config['username'],$config['password'],[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
- $pdo->exec(file_get_contents(__DIR__.'/schema.sql'));
+ // El esquema usa fet_intranet; se reemplaza por el nombre configurado en DB_NAME.
+ $db=(string)$config['database'];
+ if(!preg_match('/^[A-Za-z0-9_]+$/',$db)) throw new RuntimeException('DB_NAME solo puede tener letras, números y guion bajo.');
+ $pdo->exec(str_replace('fet_intranet',$db,file_get_contents(__DIR__.'/schema.sql')));
  $pdo=new PDO("mysql:host={$config['host']};port={$config['port']};dbname={$config['database']};charset={$config['charset']}",$config['username'],$config['password'],[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC]);
 
  // Migraciones idempotentes para bases creadas con versiones anteriores.
@@ -38,6 +45,24 @@ try{
   "UPDATE opportunities SET status='closed' WHERE type='formacion' AND status<>'closed'",
  ];
  foreach($migrations as $sql) $pdo->exec($sql);
+
+
+ if($production){
+  // Modo producción: no se cargan cuentas ni datos de demostración. Solo se crea el administrador inicial si aún no hay uno.
+  $hasAdmin=(int)$pdo->query("SELECT COUNT(*) FROM users WHERE role='admin' AND status='active'")->fetchColumn();
+  if(!$hasAdmin){
+   $email=mb_strtolower(trim((string)($opts['admin-correo']??'')));
+   $pass=(string)($opts['admin-clave']??getenv('FET_ADMIN_PASS')?:'');
+   $name=trim((string)($opts['admin-nombre']??'Administrador de la plataforma'));
+   $ident=trim((string)($opts['admin-identificacion']??''));
+   if(!filter_var($email,FILTER_VALIDATE_EMAIL)||$ident==='') throw new RuntimeException("Falta el administrador inicial. Usa: --admin-correo=correo@dominio --admin-identificacion=NUMERO --admin-clave=CLAVE [--admin-nombre=\"Nombre\"]");
+   if(mb_strlen($pass)<10||!preg_match('/[A-Za-z]/',$pass)||!preg_match('/\d/',$pass)) throw new RuntimeException('La clave del administrador debe tener al menos 10 caracteres, con letras y números.');
+   $pdo->prepare("INSERT INTO users(identification,full_name,email,password_hash,role,program,status) VALUES(?,?,?,?,'admin','Administración','active')")->execute([$ident,$name,$email,password_hash($pass,PASSWORD_DEFAULT)]);
+   echo "Administrador inicial creado: $email\n";
+  }
+  echo "Pasantías FET instalada y actualizada correctamente (modo producción, sin datos de demostración).\n";
+  exit(0);
+ }
 
  $hash=password_hash('FET2026*',PASSWORD_DEFAULT);
  // Cuentas de demostración (siempre activas y con la clave conocida): una por perfil, más el equipo del proyecto.
@@ -92,6 +117,6 @@ try{
   $n->execute(['Bienvenido a Pasantías FET','Pulsa el botón de ayuda (?) para recorrer la plataforma paso a paso.','guide.php']);
  }
 
- echo "Pasantías FET instalada y actualizada correctamente.\n";
+ echo "Pasantías FET instalada y actualizada correctamente (modo demostración).\n";
  echo "Cuentas: admin@fet.edu.co, docente@fet.edu.co, estudiante@fet.edu.co, empresa@fet.edu.co | Clave: FET2026*\n";
 }catch(Throwable $e){fwrite(STDERR,$e->getMessage()."\n");exit(1);}

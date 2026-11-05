@@ -1,191 +1,525 @@
-# Manual de despliegue · Pasantías FET
+# Manual de despliegue
 
-Esta guía explica, paso a paso, cómo instalar Pasantías FET en un computador con Windows usando XAMPP, desde cero. Al final tendrás la plataforma funcionando en `http://localhost/PruebaFet/` con las cuentas de demostración.
+## Pasantías FET · Plataforma de gestión documental de pasantías
 
-**Tiempo estimado:** 20 a 30 minutos (la mayor parte es la descarga de XAMPP).
+| | |
+|---|---|
+| **Producto** | Pasantías FET |
+| **Versión del producto** | 2.0.0 |
+| **Versión del documento** | 1.0 |
+| **Fecha** | Noviembre de 2026 |
+| **Institución** | Fundación Escuela Tecnológica de Neiva «Jesús Oviedo Pérez» · Campus Rivera, Huila |
+| **Elaborado por** | Orlando Rojas Narváez · Hernán Felipe Patiño Rico · Juan José Sabogal García |
+| **Repositorio** | https://github.com/OrlandoRojasNa/fet-pasantias |
+| **Clasificación** | Uso interno: equipo técnico y de infraestructura |
 
-## Contenido
+### Control de cambios
 
-1. [Qué se necesita (descargas comunes)](#1-qué-se-necesita-descargas-comunes)
-2. [Instalar XAMPP](#2-instalar-xampp)
-3. [Iniciar Apache y MySQL](#3-iniciar-apache-y-mysql)
-4. [Descargar el proyecto](#4-descargar-el-proyecto)
-5. [Configurar la conexión (.env)](#5-configurar-la-conexión-env)
-6. [Crear la base de datos](#6-crear-la-base-de-datos)
-7. [Abrir la plataforma](#7-abrir-la-plataforma)
-8. [Verificar con las pruebas automáticas](#8-verificar-con-las-pruebas-automáticas)
-9. [Actualizar a una versión nueva](#9-actualizar-a-una-versión-nueva)
-10. [Respaldos](#10-respaldos)
-11. [Solución de problemas](#11-solución-de-problemas)
-12. [Despliegue en un servidor (opcional)](#12-despliegue-en-un-servidor-opcional)
+| Versión | Fecha | Descripción | Autor |
+|---|---|---|---|
+| 1.0 | 05/11/2026 | Primera versión para el lanzamiento de la versión 2.0.0 | Equipo Pasantías FET |
 
 ---
 
-## 1. Qué se necesita (descargas comunes)
+## Contenido
 
-| Programa | Para qué | Dónde se descarga | ¿Obligatorio? |
+1. [Introducción](#1-introducción)
+2. [Arquitectura de despliegue](#2-arquitectura-de-despliegue)
+3. [Requisitos y descargas](#3-requisitos-y-descargas)
+4. [Ambientes](#4-ambientes)
+5. [Instalación en producción (servidor Linux)](#5-instalación-en-producción-servidor-linux)
+6. [Instalación en producción (servidor Windows)](#6-instalación-en-producción-servidor-windows)
+7. [Verificación posterior al despliegue](#7-verificación-posterior-al-despliegue)
+8. [Puesta en marcha](#8-puesta-en-marcha)
+9. [Operación: respaldos, restauración y registros](#9-operación-respaldos-restauración-y-registros)
+10. [Actualización y reversión](#10-actualización-y-reversión)
+11. [Lista de control de seguridad](#11-lista-de-control-de-seguridad)
+12. [Ambiente de pruebas local (XAMPP)](#12-ambiente-de-pruebas-local-xampp)
+13. [Solución de problemas](#13-solución-de-problemas)
+14. [Soporte](#14-soporte)
+
+---
+
+## 1. Introducción
+
+### 1.1 Propósito
+
+Este manual describe cómo instalar, configurar, poner en marcha, mantener y actualizar **Pasantías FET** en un servidor de producción, y cómo montar un ambiente local de pruebas.
+
+### 1.2 Alcance
+
+Cubre la instalación del servidor web, el lenguaje PHP y la base de datos; la configuración segura de la aplicación; la creación del administrador inicial; los respaldos; las actualizaciones y la reversión a una versión anterior. No cubre el uso funcional de la plataforma, que se explica en el [Manual de usuario](manual/MANUAL_USUARIO.md).
+
+### 1.3 Público objetivo
+
+Personal de sistemas o de infraestructura con conocimientos básicos de la línea de comandos, de un servidor web (Apache) y de MySQL/MariaDB.
+
+### 1.4 Glosario
+
+| Término | Significado |
+|---|---|
+| **Servidor de producción** | Equipo donde corre la plataforma que usan estudiantes, empresas y docentes. |
+| **Ambiente de pruebas** | Instalación local, con datos de demostración, para probar sin afectar la producción. |
+| **`.env`** | Archivo de configuración privado con la conexión a la base de datos. Nunca se publica. |
+| **Instalador** | Script `database/install.php`, que crea o actualiza la base de datos. |
+| **Etiqueta (tag)** | Nombre de una versión publicada en el repositorio, por ejemplo `v2.0.0`. |
+| **HTTPS / TLS** | Conexión cifrada entre el navegador y el servidor. |
+
+---
+
+## 2. Arquitectura de despliegue
+
+```mermaid
+flowchart LR
+  U[Usuarios<br/>navegador web] -- HTTPS 443 --> A[Apache 2.4<br/>+ PHP 8]
+  A -- PDO 3306 --> D[(MariaDB / MySQL<br/>base fet_intranet)]
+  A --> S[/storage/documents<br/>hojas de vida y documentos/]
+  B[Respaldo diario<br/>base + documentos] -.-> D
+  B -.-> S
+```
+
+- **Aplicación:** PHP 8 sin dependencias externas (no requiere Composer ni Node.js).
+- **Base de datos:** una sola base, `fet_intranet` por defecto.
+- **Archivos:** los documentos y hojas de vida se guardan con nombres aleatorios en `storage/documents`. Solo se descargan a través de la aplicación, que valida los permisos.
+- **Protección de carpetas:** el `.htaccess` del proyecto bloquea el acceso web a `config`, `database`, `storage`, `tests`, `docs`, `includes` y a los archivos ocultos como `.env`.
+
+---
+
+## 3. Requisitos y descargas
+
+### 3.1 Servidor
+
+| Recurso | Mínimo | Recomendado |
+|---|---|---|
+| CPU | 1 vCPU | 2 vCPU |
+| Memoria RAM | 2 GB | 4 GB |
+| Disco | 10 GB | 20 GB o más (crece con los documentos) |
+| Sistema operativo | Ubuntu Server 22.04 LTS / Windows Server 2019 | Ubuntu Server 24.04 LTS |
+| Red | IP pública o interna, puertos 80 y 443 | Dominio propio, por ejemplo `pasantias.fet.edu.co` |
+
+### 3.2 Software
+
+| Componente | Versión | Notas |
+|---|---|---|
+| Apache HTTP Server | 2.4 | Módulos `rewrite` y `headers` activos, y `AllowOverride All`. |
+| PHP | 8.1 o superior (probado con 8.2 y 8.3) | Extensiones: `pdo_mysql`, `mbstring`, `fileinfo`, `curl` y `openssl`. |
+| MariaDB o MySQL | MariaDB 10.6+ o MySQL 8.0+ | Juego de caracteres `utf8mb4`. |
+| Git | 2.30+ | Para descargar y actualizar el código. |
+| Certbot | Actual | Certificado HTTPS gratuito de Let's Encrypt (Linux). |
+
+### 3.3 Descargas comunes
+
+| Programa | Para qué | Enlace |
+|---|---|---|
+| **XAMPP 8.2** (Windows) | Apache, PHP y MariaDB en un solo instalador | https://www.apachefriends.org/es/download.html |
+| **Git** | Descargar el código y sus versiones | https://git-scm.com/downloads |
+| **Ubuntu Server LTS** | Sistema operativo del servidor | https://ubuntu.com/download/server |
+| **Certbot** | Certificado HTTPS | https://certbot.eff.org/ |
+| **Visual Studio Code** (opcional) | Editar configuraciones | https://code.visualstudio.com/ |
+| **Navegador** (Chrome, Edge o Firefox) | Usar y verificar la plataforma | Viene con el sistema operativo |
+
+---
+
+## 4. Ambientes
+
+| Ambiente | Para qué | Datos | Cómo se instala |
 |---|---|---|---|
-| **XAMPP 8.2 para Windows** (trae Apache, PHP 8.2 y MariaDB/MySQL) | Servidor web, lenguaje y base de datos | https://www.apachefriends.org/es/download.html | Sí |
-| **Navegador** actualizado (Chrome, Edge o Firefox) | Usar la plataforma | Ya viene en Windows (Edge) | Sí |
-| **Git para Windows** | Descargar el proyecto y recibir actualizaciones | https://git-scm.com/download/win | Recomendado (también se puede bajar en ZIP) |
-| **Visual Studio Code** | Editar el archivo `.env` o revisar el código | https://code.visualstudio.com/ | Opcional (sirve el Bloc de notas) |
-| **Node.js LTS** | Solo para regenerar las capturas del manual | https://nodejs.org/es | Opcional |
+| **Producción** | Uso real por estudiantes, empresas y docentes | Reales. Sin cuentas de demostración. | Secciones 5 o 6, con `--produccion` |
+| **Pruebas local** | Probar cambios, capacitar y hacer las pruebas de usuario | Datos y cuentas de demostración | Sección 12 (XAMPP) |
 
-**Requisitos del equipo:** Windows 10 u 11, 4 GB de RAM, 1 GB libre en disco y permisos de administrador para instalar programas.
+> **Importante:** nunca instales producción sin la opción `--produccion`. Sin ella, el instalador crea cuentas de demostración con una contraseña conocida.
 
-> La plataforma usa PHP 8 con las extensiones `pdo_mysql`, `mbstring`, `fileinfo` y `curl`, y Apache con `mod_rewrite`. XAMPP ya las trae activadas, así que no hay que configurar nada extra.
+---
 
-## 2. Instalar XAMPP
+## 5. Instalación en producción (servidor Linux)
 
-1. Descarga el instalador de **XAMPP para Windows** con PHP 8.2 desde la página oficial.
-2. Ejecútalo como administrador. Si Windows avisa sobre el Control de cuentas de usuario (UAC), acepta y continúa.
-3. En **Select Components** deja marcados al menos **Apache**, **MySQL**, **PHP** y **phpMyAdmin**.
-4. Usa la carpeta por defecto **`C:\xampp`**. Este manual asume esa ruta.
-5. Termina la instalación y abre el **XAMPP Control Panel**.
+Los comandos se ejecutan en Ubuntu Server con un usuario que tenga `sudo`. Reemplaza `pasantias.fet.edu.co` por el dominio real.
 
-## 3. Iniciar Apache y MySQL
+### 5.1 Instalar los paquetes
 
-1. En el **XAMPP Control Panel** pulsa **Start** en **Apache** y en **MySQL**.
-2. Los dos nombres deben quedar con fondo verde. Frente a MySQL aparece el puerto en el que quedó (normalmente **3306**). Anótalo.
-
-> **¿MySQL no arranca o usa otro puerto?** Si ya tienes otro MySQL instalado, el puerto 3306 puede estar ocupado. Cambia el de XAMPP: **Config → my.ini** en la fila de MySQL, reemplaza `port=3306` por `port=3307` en las dos secciones donde aparece, guarda y vuelve a pulsar **Start**. Luego usa ese puerto en el paso 5.
->
-> **¿Apache no arranca?** Suele ser porque otro programa usa el puerto 80 (IIS, Skype u otro servidor). Ciérralo o cambia `Listen 80` por `Listen 8080` en **Config → httpd.conf**. En ese caso la dirección será `http://localhost:8080/PruebaFet/`.
-
-## 4. Descargar el proyecto
-
-La carpeta del proyecto debe quedar en **`C:\xampp\htdocs\PruebaFet`**.
-
-### Opción A: con Git (recomendada)
-
-Abre **PowerShell** o **Git Bash** y ejecuta:
-
-```powershell
-cd C:\xampp\htdocs
-git clone https://github.com/OrlandoRojasNa/fet-pasantias.git PruebaFet
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y apache2 mariadb-server git \
+  php libapache2-mod-php php-mysql php-mbstring php-curl php-xml
+sudo a2enmod rewrite headers
+sudo systemctl enable --now apache2 mariadb
+php -v        # debe mostrar PHP 8.1 o superior
 ```
 
-### Opción B: descargando el ZIP
+### 5.2 Asegurar la base de datos y crear su usuario
 
-1. Entra a https://github.com/OrlandoRojasNa/fet-pasantias.
-2. Pulsa **Code → Download ZIP**.
-3. Descomprime el archivo y renombra la carpeta `fet-pasantias-main` a **`PruebaFet`**.
-4. Muévela a `C:\xampp\htdocs\`.
-
-Comprueba que exista `C:\xampp\htdocs\PruebaFet\index.php`.
-
-## 5. Configurar la conexión (.env)
-
-La conexión a la base de datos se configura en el archivo `.env`. Ese archivo **no se sube a GitHub**, porque contiene la contraseña de tu base de datos. Cada persona crea el suyo.
-
-1. En `C:\xampp\htdocs\PruebaFet` copia **`.env.example`** y nombra la copia **`.env`**.
-   - En PowerShell: `copy .env.example .env`
-   - Si Windows oculta las extensiones, activa **Vista → Extensiones de nombre de archivo** para ver bien el nombre.
-2. Ábrelo con el Bloc de notas o VS Code. Este es el contenido por defecto:
-
-   ```ini
-   APP_NAME="Pasantías FET"
-   APP_BASE_URL=/PruebaFet
-   DB_HOST=127.0.0.1
-   DB_PORT=3306
-   DB_NAME=fet_intranet
-   DB_USER=root
-   DB_PASS=
-   ```
-
-3. Ajusta lo que cambie en tu equipo:
-   - **`DB_PORT`**: el puerto de MySQL que anotaste en el paso 3, por ejemplo `3307`.
-   - **`DB_PASS`**: déjalo vacío si nunca le pusiste contraseña al usuario `root` de XAMPP, que es lo normal.
-   - **`APP_BASE_URL`**: el nombre de la carpeta dentro de `htdocs`, precedido de `/`. Si la carpeta se llama `PruebaFet`, déjalo igual.
-
-> Si no creas el `.env`, la plataforma usa los valores por defecto: puerto 3306, usuario `root` y sin contraseña.
-
-## 6. Crear la base de datos
-
-El instalador crea la base `fet_intranet`, sus tablas y los datos de demostración. Se puede ejecutar varias veces: no duplica datos y actualiza bases de versiones anteriores.
-
-Con Apache y MySQL encendidos, abre **PowerShell** y ejecuta:
-
-```powershell
-C:\xampp\php\php.exe C:\xampp\htdocs\PruebaFet\database\install.php
+```bash
+sudo mysql_secure_installation   # define la clave de root y elimina usuarios anónimos y la base de prueba
+sudo mysql
 ```
 
-Si todo sale bien, verás:
+Dentro de la consola de MariaDB (usa una contraseña larga y propia):
+
+```sql
+CREATE DATABASE fet_intranet CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'pasantias'@'localhost' IDENTIFIED BY 'CAMBIA_ESTA_CLAVE_LARGA';
+GRANT ALL PRIVILEGES ON fet_intranet.* TO 'pasantias'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+### 5.3 Descargar la versión a publicar
+
+```bash
+sudo git clone https://github.com/OrlandoRojasNa/fet-pasantias.git /var/www/pasantias-fet
+cd /var/www/pasantias-fet
+sudo git checkout v2.0.0     # versión publicada (o main si aún no hay etiqueta)
+```
+
+### 5.4 Configurar la aplicación
+
+```bash
+sudo cp .env.example .env
+sudo nano .env
+```
+
+Este es el contenido para producción:
+
+```ini
+APP_NAME="Pasantías FET"
+APP_ENV=production
+APP_BASE_URL=
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=fet_intranet
+DB_USER=pasantias
+DB_PASS=CAMBIA_ESTA_CLAVE_LARGA
+```
+
+- `APP_ENV=production` hace que el instalador nunca cargue datos de demostración.
+- `APP_BASE_URL` va vacío porque la plataforma queda en la raíz del dominio. Si quedara en una subcarpeta, escribe su ruta, por ejemplo `/pasantias`.
+
+Ahora asigna los permisos. El servidor web solo necesita escribir en `storage`, y el `.env` queda legible solo para él:
+
+```bash
+sudo chown -R root:www-data /var/www/pasantias-fet
+sudo find /var/www/pasantias-fet -type d -exec chmod 750 {} \;
+sudo find /var/www/pasantias-fet -type f -exec chmod 640 {} \;
+sudo chown -R www-data:www-data /var/www/pasantias-fet/storage
+sudo chmod 640 /var/www/pasantias-fet/.env
+```
+
+### 5.5 Crear la base de datos y el administrador inicial
+
+```bash
+cd /var/www/pasantias-fet
+sudo -u www-data php database/install.php --produccion \
+  --admin-correo=coordinacion.pasantias@fet.edu.co \
+  --admin-identificacion=NUMERO_DE_DOCUMENTO \
+  --admin-nombre="Coordinación de Pasantías" \
+  --admin-clave='ClaveSegura2026'
+```
+
+Si todo sale bien, el instalador responde:
 
 ```text
-Pasantías FET instalada y actualizada correctamente.
-Cuentas: admin@fet.edu.co, docente@fet.edu.co, estudiante@fet.edu.co, empresa@fet.edu.co | Clave: FET2026*
+Administrador inicial creado: coordinacion.pasantias@fet.edu.co
+Pasantías FET instalada y actualizada correctamente (modo producción, sin datos de demostración).
 ```
 
-> Por seguridad, el instalador solo funciona desde la consola: si se abre en el navegador, responde *404*.
+- La clave del administrador debe tener **al menos 10 caracteres, con letras y números**.
+- El administrador inicial solo se crea si aún no existe un administrador activo. Volver a correr el instalador no lo duplica ni cambia su clave.
+- Para que la clave no quede en el historial de comandos, puedes pasarla en la variable `FET_ADMIN_PASS` en lugar de `--admin-clave`: `sudo -u www-data env FET_ADMIN_PASS='...' php database/install.php --produccion ...`
 
-## 7. Abrir la plataforma
+### 5.6 Publicar el sitio en Apache
 
-1. Abre `http://localhost/PruebaFet/`.
-2. Entra con cualquiera de estas cuentas. La contraseña de todas es **`FET2026*`**.
+Crea el archivo `/etc/apache2/sites-available/pasantias-fet.conf`:
 
-| Perfil | Correo | Identificación |
+```apache
+<VirtualHost *:80>
+    ServerName pasantias.fet.edu.co
+    DocumentRoot /var/www/pasantias-fet
+
+    <Directory /var/www/pasantias-fet>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    ErrorLog ${APACHE_LOG_DIR}/pasantias-fet-error.log
+    CustomLog ${APACHE_LOG_DIR}/pasantias-fet-access.log combined
+</VirtualHost>
+```
+
+Actívalo:
+
+```bash
+sudo a2ensite pasantias-fet.conf
+sudo a2dissite 000-default.conf
+sudo apache2ctl configtest && sudo systemctl reload apache2
+```
+
+### 5.7 Activar HTTPS
+
+```bash
+sudo apt install -y certbot python3-certbot-apache
+sudo certbot --apache -d pasantias.fet.edu.co --redirect
+```
+
+Certbot instala el certificado, redirige HTTP a HTTPS y lo renueva automáticamente. Con HTTPS activo, la plataforma marca la cookie de sesión como segura.
+
+### 5.8 Ajustar PHP para producción
+
+Edita `/etc/php/8.*/apache2/php.ini` y deja estos valores:
+
+```ini
+display_errors = Off
+log_errors = On
+expose_php = Off
+upload_max_filesize = 8M
+post_max_size = 10M
+session.cookie_httponly = 1
+```
+
+Luego reinicia Apache con `sudo systemctl restart apache2`.
+
+> La aplicación limita cada archivo a 5 MB. Los valores de PHP deben quedar por encima de ese límite.
+
+### 5.9 Cortafuegos
+
+```bash
+sudo ufw allow OpenSSH
+sudo ufw allow 'Apache Full'
+sudo ufw enable
+```
+
+La base de datos solo escucha en `127.0.0.1`, así que no hay que abrir el puerto 3306.
+
+---
+
+## 6. Instalación en producción (servidor Windows)
+
+Para un servidor Windows de la institución:
+
+1. Instala **XAMPP 8.2** en `C:\xampp` y registra **Apache** y **MySQL** como servicios. En el panel de XAMPP, marca la casilla **Service** de cada uno para que arranquen con Windows.
+2. Define una contraseña para `root` y crea el usuario `pasantias` con los mismos comandos SQL de la sección 5.2, desde **phpMyAdmin → SQL** o desde `C:\xampp\mysql\bin\mysql.exe -u root -p`.
+3. Clona el proyecto en `C:\xampp\htdocs\pasantias-fet` (`git clone ...` y `git checkout v2.0.0`).
+4. Crea el `.env` como en la sección 5.4, con `APP_ENV=production` y `APP_BASE_URL=/pasantias-fet`, o vacío si configuras un *VirtualHost* hacia esa carpeta.
+5. Ejecuta el instalador en modo producción:
+
+   ```powershell
+   C:\xampp\php\php.exe C:\xampp\htdocs\pasantias-fet\database\install.php --produccion --admin-correo=coordinacion.pasantias@fet.edu.co --admin-identificacion=NUMERO --admin-nombre="Coordinación de Pasantías" --admin-clave=ClaveSegura2026
+   ```
+
+6. En `C:\xampp\php\php.ini` aplica los mismos valores de la sección 5.8.
+7. Configura HTTPS con el certificado de la institución, en `C:\xampp\apache\conf\extra\httpd-ssl.conf`.
+8. Restringe phpMyAdmin a acceso local. En `C:\xampp\apache\conf\extra\httpd-xampp.conf`, deja `Require local` en el bloque de `phpmyadmin`.
+
+---
+
+## 7. Verificación posterior al despliegue
+
+Marca cada punto antes de anunciar el lanzamiento:
+
+| # | Verificación | Resultado esperado | ✔ |
+|---|---|---|---|
+| 1 | Abrir `https://pasantias.fet.edu.co/` | Carga la pantalla de acceso con candado HTTPS | ☐ |
+| 2 | Abrir `http://pasantias.fet.edu.co/` | Redirige automáticamente a HTTPS | ☐ |
+| 3 | Entrar con el administrador inicial | Abre el *Panel de pasantías* | ☐ |
+| 4 | Abrir `/.env`, `/config/database.php`, `/database/install.php` y `/storage/` | *403 Forbidden* o *404*, nunca su contenido | ☐ |
+| 5 | Entrar con `admin@fet.edu.co` y `FET2026*` | **Debe fallar**: no hay cuentas de demostración | ☐ |
+| 6 | **Usuarios → Descargar respaldo SQL** | Se descarga el `.sql` con su huella SHA-256 | ☐ |
+| 7 | Crear una alianza de prueba, subir un PDF y descargarlo | El archivo se guarda en `storage/documents` y se descarga | ☐ |
+| 8 | Revisar `/var/log/apache2/pasantias-fet-error.log` | Sin errores de PHP | ☐ |
+
+Después de la verificación 7, suspende la alianza de prueba desde **Alianzas → Editar o ampliar** y desactiva su cuenta en **Usuarios**.
+
+> La prueba automática `tests/smoke_test.php` usa las cuentas de demostración. Ejecútala solo en el ambiente de pruebas (sección 12), nunca en producción.
+
+---
+
+## 8. Puesta en marcha
+
+Una vez verificado el servidor, el administrador carga la información inicial desde la propia plataforma (ver el [Manual de usuario](manual/MANUAL_USUARIO.md#7-perfil-administrador)):
+
+1. **Docentes líderes de pasantías:** en **Usuarios → Nuevo usuario**, con el perfil *Docente líder de pasantías*.
+2. **Empresas aliadas:** en **Alianzas → Nueva alianza**, registrando la empresa, su convenio, su vigencia y sus **cupos**. Esto crea también la cuenta de la empresa.
+3. **Estudiantes:** en **Usuarios → Nuevo usuario**, con el perfil *Estudiante*. Para cargar muchos a la vez, el área de sistemas puede importarlos directamente en la tabla `users` con una contraseña temporal.
+4. **Entregar las credenciales** a cada persona por un canal seguro (correo institucional) y pedirles que guarden su contraseña.
+5. **Anunciar el lanzamiento** con la dirección de la plataforma y el enlace al Manual de usuario.
+
+---
+
+## 9. Operación: respaldos, restauración y registros
+
+### 9.1 Respaldo automático diario (Linux)
+
+Crea el archivo `/usr/local/bin/respaldo-pasantias.sh`:
+
+```bash
+#!/bin/bash
+set -e
+DESTINO=/var/backups/pasantias-fet
+FECHA=$(date +%F)
+mkdir -p "$DESTINO"
+mysqldump --single-transaction -u pasantias -p'CAMBIA_ESTA_CLAVE_LARGA' fet_intranet | gzip > "$DESTINO/base-$FECHA.sql.gz"
+tar -czf "$DESTINO/documentos-$FECHA.tar.gz" -C /var/www/pasantias-fet storage/documents
+find "$DESTINO" -type f -mtime +30 -delete    # conserva 30 días
+```
+
+Prográmalo todos los días a las 2:00 a. m.:
+
+```bash
+sudo chmod 700 /usr/local/bin/respaldo-pasantias.sh
+echo "0 2 * * * root /usr/local/bin/respaldo-pasantias.sh" | sudo tee /etc/cron.d/respaldo-pasantias
+```
+
+Copia periódicamente `/var/backups/pasantias-fet` a otro equipo o a un almacenamiento externo.
+
+En Windows, programa una tarea en el **Programador de tareas** que ejecute `C:\xampp\mysql\bin\mysqldump.exe` y comprima `storage\documents`.
+
+**Respaldo manual:** el administrador puede descargar un respaldo en cualquier momento desde **Usuarios → Descargar respaldo SQL**.
+
+### 9.2 Restauración
+
+```bash
+sudo systemctl stop apache2
+gunzip -c /var/backups/pasantias-fet/base-AAAA-MM-DD.sql.gz | mysql -u pasantias -p fet_intranet
+sudo tar -xzf /var/backups/pasantias-fet/documentos-AAAA-MM-DD.tar.gz -C /var/www/pasantias-fet
+sudo chown -R www-data:www-data /var/www/pasantias-fet/storage
+sudo systemctl start apache2
+```
+
+### 9.3 Registros
+
+| Registro | Ubicación | Contenido |
 |---|---|---|
-| Administrador | admin@fet.edu.co | 1000000001 |
-| Docente líder de pasantías | docente@fet.edu.co | 1000000003 |
-| Estudiante | estudiante@fet.edu.co | 1076502055 |
-| Empresa aliada | empresa@fet.edu.co | 900123456 |
-| Docente líder (equipo) | hernan.patino@fet.edu.co | 1000000004 |
-| Estudiante (equipo) | orlando.rojas@fet.edu.co | 1000000005 |
-| Estudiante (equipo) | juan.sabogal@fet.edu.co | 1000000006 |
+| Bitácora de auditoría | La plataforma, en **Reportes y auditoría** | Quién hizo qué y cuándo: accesos, aprobaciones, veredictos, descargas, respaldos y desbloqueos. |
+| Errores del servidor | `/var/log/apache2/pasantias-fet-error.log` | Errores de PHP y de Apache. |
+| Accesos web | `/var/log/apache2/pasantias-fet-access.log` | Todas las solicitudes HTTP. |
 
-Para aprender a usar cada perfil, consulta el [Manual de usuario](manual/MANUAL_USUARIO.md).
+---
 
-## 8. Verificar con las pruebas automáticas
+## 10. Actualización y reversión
 
-El proyecto trae una prueba de humo que recorre por HTTP los 8 flujos principales: acceso, permisos, convocatorias, pasantías, alianzas y cupos, empleo con hoja de vida, reportes, y respaldo con desbloqueo. Al terminar borra lo que creó.
+### 10.1 Actualizar a una versión nueva
 
-```powershell
-C:\xampp\php\php.exe C:\xampp\htdocs\PruebaFet\tests\smoke_test.php http://localhost/PruebaFet
+```bash
+sudo /usr/local/bin/respaldo-pasantias.sh          # 1. respaldo previo, obligatorio
+cd /var/www/pasantias-fet
+sudo git fetch --tags
+git tag --sort=-v:refname | head -5                  # 2. ver las versiones disponibles
+sudo git checkout vX.Y.Z                             # 3. cambiar a la versión nueva
+sudo -u www-data php database/install.php --produccion   # 4. aplicar los cambios a la base
+sudo systemctl reload apache2
 ```
 
-El resultado esperado es `Resultado: 8 de 8 flujos pasan.`. Si algún flujo falla, el reporte muestra con una `X` qué comprobación no se cumplió.
+Luego repite la [verificación de la sección 7](#7-verificación-posterior-al-despliegue).
 
-## 9. Actualizar a una versión nueva
+El instalador es **idempotente**: solo agrega lo que falta y migra columnas, sin borrar datos. El `.env` y la carpeta `storage` no cambian con la actualización.
 
-```powershell
-cd C:\xampp\htdocs\PruebaFet
-git pull
-C:\xampp\php\php.exe database\install.php
+### 10.2 Volver a la versión anterior
+
+Si la versión nueva presenta un problema grave:
+
+```bash
+cd /var/www/pasantias-fet
+sudo git checkout vVERSION_ANTERIOR
 ```
 
-`git pull` trae el código nuevo y el instalador aplica los cambios a la base de datos. Tu `.env` y los documentos subidos (`storage/documents`) no se tocan.
+Si la actualización cambió la base de datos, restaura además el respaldo tomado en el paso 1 (sección 9.2).
 
-Si usaste la opción ZIP, descarga el ZIP nuevo y reemplaza los archivos, conservando tu `.env` y la carpeta `storage`. Luego vuelve a correr el instalador.
+---
 
-## 10. Respaldos
+## 11. Lista de control de seguridad
 
-- **Desde la plataforma:** entra como administrador, ve a **Usuarios → Descargar respaldo SQL**. El archivo incluye su huella SHA-256 para comprobar que no se alteró.
-- **Desde phpMyAdmin:** abre `http://localhost/phpmyadmin`, elige `fet_intranet` y usa **Exportar**.
-- **Documentos subidos:** copia la carpeta `C:\xampp\htdocs\PruebaFet\storage\documents`.
+| ✔ | Control |
+|---|---|
+| ☐ | Instalación hecha con `--produccion` y `APP_ENV=production`, sin cuentas de demostración. |
+| ☐ | La base de datos usa un usuario propio con contraseña larga, no `root`. |
+| ☐ | El `.env` tiene permisos 640 y no está en el repositorio. |
+| ☐ | HTTPS activo, con redirección desde HTTP. |
+| ☐ | `display_errors = Off` en PHP. |
+| ☐ | `AllowOverride All` activo, para que el `.htaccess` bloquee las carpetas internas. |
+| ☐ | Solo `storage` tiene permisos de escritura para el servidor web. |
+| ☐ | Cortafuegos activo, con el puerto 3306 cerrado al exterior. |
+| ☐ | phpMyAdmin no está expuesto a internet (en Windows, `Require local`). |
+| ☐ | Respaldo diario programado y probado con una restauración. |
+| ☐ | Sistema operativo y PHP actualizados con regularidad. |
 
-Para restaurar, importa el `.sql` en phpMyAdmin (**Importar**) y devuelve la carpeta `storage\documents` a su lugar.
+Controles que la aplicación ya trae: contraseñas cifradas con `password_hash`, protección CSRF en todos los formularios, bloqueo de la cuenta tras 5 intentos fallidos, validación de permisos por perfil en cada solicitud, archivos con nombres aleatorios y descargas controladas, y bitácora de auditoría.
 
-## 11. Solución de problemas
+---
+
+## 12. Ambiente de pruebas local (XAMPP)
+
+Usa este ambiente para desarrollar, capacitar y hacer las pruebas de usuario. Incluye datos y cuentas de demostración.
+
+1. **Instala XAMPP 8.2** en `C:\xampp` y, en el panel, pulsa **Start** en **Apache** y en **MySQL**. Anota el puerto de MySQL; normalmente es 3306.
+   - Si MySQL no arranca porque el puerto 3306 está ocupado, cambia el puerto en **Config → my.ini** (por ejemplo a `3307`).
+   - Si Apache no arranca porque el puerto 80 está ocupado, cambia `Listen 80` a `Listen 8080` en **Config → httpd.conf**.
+2. **Descarga el proyecto** en `C:\xampp\htdocs\PruebaFet`:
+
+   ```powershell
+   cd C:\xampp\htdocs
+   git clone https://github.com/OrlandoRojasNa/fet-pasantias.git PruebaFet
+   ```
+
+   Otra opción: en GitHub, **Code → Download ZIP**, descomprimir y renombrar la carpeta a `PruebaFet`.
+3. **Configura** el archivo: copia `.env.example` como `.env`. Deja `APP_ENV=development` y cambia `DB_PORT` si tu MySQL no usa el 3306.
+4. **Crea la base de datos con datos de demostración:**
+
+   ```powershell
+   C:\xampp\php\php.exe C:\xampp\htdocs\PruebaFet\database\install.php
+   ```
+
+5. **Abre** `http://localhost/PruebaFet/` y entra con una de estas cuentas. La contraseña de todas es `FET2026*`.
+
+   | Perfil | Correo |
+   |---|---|
+   | Administrador | admin@fet.edu.co |
+   | Docente líder de pasantías | docente@fet.edu.co |
+   | Estudiante | estudiante@fet.edu.co |
+   | Empresa aliada | empresa@fet.edu.co |
+
+6. **Ejecuta la prueba automática.** Recorre 8 flujos y deja la base como estaba:
+
+   ```powershell
+   C:\xampp\php\php.exe C:\xampp\htdocs\PruebaFet\tests\smoke_test.php http://localhost/PruebaFet
+   ```
+
+   El resultado esperado es `Resultado: 8 de 8 flujos pasan.`
+
+7. **Regenera las capturas del manual** (opcional). Requiere Node.js y Playwright, y una base recién instalada:
+
+   ```powershell
+   node docs\manual\generar_capturas.js docs\manual\img http://localhost/PruebaFet
+   ```
+
+---
+
+## 13. Solución de problemas
 
 | Síntoma | Causa probable | Solución |
 |---|---|---|
-| `SQLSTATE[HY000] [2002] No connection could be made` al instalar | MySQL apagado o puerto equivocado | Enciende MySQL en XAMPP y revisa que `DB_PORT` en `.env` coincida con el puerto del panel. |
-| `SQLSTATE[HY000] [1045] Access denied for user 'root'` | El usuario `root` tiene contraseña | Escríbela en `DB_PASS` del `.env`. |
-| `"php" no se reconoce como un comando` | PHP no está en el PATH | Usa la ruta completa `C:\xampp\php\php.exe`, como en este manual. |
-| La página sale sin estilos o los enlaces llevan a *Not Found* | `APP_BASE_URL` no coincide con el nombre de la carpeta | Pon en `APP_BASE_URL` el nombre exacto de la carpeta dentro de `htdocs`, por ejemplo `/PruebaFet`. |
-| *Forbidden* al abrir `http://localhost/PruebaFet/docs` o `/database` | Es intencional | Esas carpetas están protegidas por `.htaccess`. La documentación se lee en GitHub o en el explorador de archivos. |
-| No se puede subir un archivo | Supera los 5 MB o el formato no está permitido | La hoja de vida debe ser PDF. Los documentos de pasantía pueden ser PDF, imagen u Office. |
-| Una cuenta quedó bloqueada | 5 intentos fallidos | Entra como administrador y usa **Usuarios → Desbloquear**, o vuelve a correr el instalador, que reactiva las cuentas de demostración. |
-| Apache o MySQL se apagan solos | Puerto ocupado por otro programa | Consulta la nota del paso 3. |
+| `SQLSTATE[HY000] [2002]` al instalar | La base de datos está apagada o el puerto es incorrecto | Inicia MariaDB/MySQL y revisa `DB_HOST` y `DB_PORT`. |
+| `SQLSTATE[HY000] [1045] Access denied` | Usuario o clave incorrectos | Revisa `DB_USER` y `DB_PASS` en el `.env`. |
+| `Falta el administrador inicial` | Modo producción sin los datos del administrador | Agrega `--admin-correo`, `--admin-identificacion` y `--admin-clave`. |
+| `La clave del administrador debe tener al menos 10 caracteres` | Clave débil | Usa 10 caracteres o más, con letras y números. |
+| La página sale sin estilos o los enlaces dan *Not Found* | `APP_BASE_URL` no coincide con la ruta real | Déjalo vacío si el sitio está en la raíz o escribe la subcarpeta exacta (`/PruebaFet`). |
+| Error 500 en todas las páginas | `mod_rewrite` inactivo o `.htaccess` no permitido | Ejecuta `sudo a2enmod rewrite` y pon `AllowOverride All`; luego recarga Apache. |
+| `No fue posible guardar el archivo` | Sin permisos de escritura en `storage` | Ejecuta `sudo chown -R www-data:www-data storage`. |
+| `El archivo supera el límite de 5 MB` | Archivo demasiado grande | Comprime el PDF. Los 5 MB son el límite de la plataforma. |
+| Un usuario quedó bloqueado | 5 intentos fallidos | El administrador usa **Usuarios → Desbloquear** o le asigna una contraseña nueva. |
+| *"php" no se reconoce como un comando* (Windows) | PHP no está en el PATH | Usa la ruta completa `C:\xampp\php\php.exe`. |
 
-## 12. Despliegue en un servidor (opcional)
+---
 
-Para publicar la plataforma en un servidor real (Linux con Apache, PHP 8.1 o superior y MariaDB/MySQL), sigue los mismos pasos y además:
+## 14. Soporte
 
-1. Crea un usuario de base de datos propio, con contraseña, en lugar de `root`, y ponlo en `.env`.
-2. Ajusta `APP_BASE_URL` (vacío si la plataforma queda en la raíz del dominio).
-3. Habilita `AllowOverride All` para que el `.htaccess` proteja las carpetas internas.
-4. Da permisos de escritura al usuario de Apache sobre `storage/documents`, `storage/logs` y `storage/exports`.
-5. Usa **HTTPS**.
-6. **Cambia las contraseñas de demostración** (o desactiva esas cuentas) desde **Usuarios** antes de abrir la plataforma a usuarios reales.
+| Nivel | Responsable | Atiende |
+|---|---|---|
+| 1. Usuarios | Administrador de la plataforma | Cuentas, contraseñas, bloqueos, alianzas y cupos. |
+| 2. Infraestructura | Área de sistemas de la FET | Servidor, base de datos, respaldos, HTTPS y actualizaciones. |
+| 3. Desarrollo | Equipo Pasantías FET | Errores de la aplicación y nuevas versiones. Se reportan como *issue* en el repositorio. |
+
+Para reportar un error, abre un *issue* en https://github.com/OrlandoRojasNa/fet-pasantias/issues con los pasos para reproducirlo, la fecha y hora, el perfil usado y una captura. **No incluyas contraseñas.**
