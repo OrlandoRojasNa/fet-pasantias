@@ -9,6 +9,7 @@ try{ mermaidJs=fs.readFileSync(require.resolve('mermaid/dist/mermaid.min.js'),'u
 const logo='data:image/png;base64,'+fs.readFileSync(path.join(root,'assets/img/logo-fet.png')).toString('base64');
 const docs=[
  {md:'docs/manual/MANUAL_USUARIO.md',pdf:'docs/pdf/Manual_de_Usuario_Pasantias_FET_v2.0.0.pdf',title:'Manual de usuario',sub:'Guía de uso por perfil: estudiante, empresa aliada, docente líder de pasantías y administrador'},
+ {md:'docs/pruebas-despliegue/INFORME_DESPLIEGUE.md',pdf:'docs/pdf/Informe_Prueba_Despliegue_Pasantias_FET_v2.0.0.pdf',title:'Informe de prueba de despliegue',sub:'Instalación en máquinas virtuales Ubuntu Server 24.04 siguiendo el Manual de despliegue'},
  {md:'docs/MANUAL_DESPLIEGUE.md',pdf:'docs/pdf/Manual_de_Despliegue_Pasantias_FET_v2.0.0.pdf',title:'Manual de despliegue',sub:'Instalación, configuración, puesta en marcha, operación y actualización'},
 ];
 const css=`
