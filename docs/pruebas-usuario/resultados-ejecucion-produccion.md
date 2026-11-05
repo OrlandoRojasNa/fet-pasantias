@@ -1,120 +1,143 @@
-# Resultados · Ejecución de los guiones de prueba en el servidor de producción
+# Ejecución de los guiones de prueba por perfil en el servidor de producción de Pasantías FET 2.0.0
 
-| | |
-|---|---|
-| **Producto** | Pasantías FET 2.0.0 |
-| **Fecha** | 05/11/2026 |
-| **Servidor** | Máquina virtual Ubuntu Server 24.04.5 LTS instalada con `deploy/instalar_servidor.sh` (Apache 2.4.58, PHP 8.3.6, MariaDB 10.11.14, HTTPS). Es la VM 3 del [informe de despliegue](../pruebas-despliegue/INFORME_DESPLIEGUE.md). |
-| **Base de datos** | Producción recién instalada: sin datos de demostración y con un único administrador inicial |
-| **Cómo se ejecutó** | Se automatizaron los cuatro guiones con un navegador controlado por un programa (Chromium con Playwright). Se usó una sesión independiente por perfil y se siguió el orden de la sesión del [plan de pruebas](README.md). |
-| **Resultado** | ✅ **25 de 25 pasos completados** en la corrida final, sin errores de JavaScript en ninguna pantalla. En la primera corrida aparecieron **2 errores reales de la plataforma**; los dos quedaron corregidos. |
+El plan de pruebas de usuario de Pasantías FET define veinticuatro tareas distribuidas entre los cuatro perfiles de la plataforma: estudiante, empresa aliada, docente líder de pasantías y administrador. Antes de realizar la sesión con los integrantes del equipo, se ejecutaron esas mismas tareas sobre el servidor de producción para comprobar que cada una puede completarse y que la plataforma responde como lo describe el *Manual de usuario* (Rojas Narváez et al., 2026b).
 
-> **Importante.** Esta ejecución comprueba que cada tarea de los guiones **se puede completar** en producción y que la plataforma responde como dicen los manuales. No reemplaza la sesión con los integrantes del equipo. El tiempo de una persona, la dificultad percibida, las observaciones y el cuestionario de satisfacción (SUS) solo los pueden dar Juan José, Hernán y Orlando. Por eso esos campos siguen en blanco en los guiones y en el [formato de resultados](formato-resultados.md).
+Este informe describe esa ejecución, realizada el 5 de noviembre de 2026. Las veinticinco tareas ejecutadas, que incluyen las veinticuatro del plan y una de preparación, se completaron en la corrida final. Durante la primera corrida se encontraron dos errores de la plataforma que se corrigieron antes de repetirla.
 
-## 1. Cuentas usadas
+La ejecución verifica el funcionamiento de cada tarea, pero no mide la experiencia de las personas. El tiempo que tarda un usuario, la dificultad que percibe y su satisfacción, medida con la escala SUS (Brooke, 1996), solo pueden obtenerse en la sesión con los participantes.
 
-En producción no existen las cuentas de demostración ni la clave `FET2026*`. Por eso la sesión empezó con la puesta en marcha de la sección 8 del manual de despliegue, que en los guiones aparece como paso P0.
+## Método
 
-| Perfil | Cuenta | Cómo se creó |
+### Ambiente
+
+Se utilizó el servidor descrito como VM 3 en el informe de despliegue (Rojas Narváez et al., 2026a). Es una instalación de Ubuntu Server 24.04.5 LTS hecha con el instalador automático, con Apache 2.4.58, PHP 8.3.6, MariaDB 10.11.14 y HTTPS. La base de datos se instaló en modo de producción, sin datos de demostración y con un único administrador inicial.
+
+### Procedimiento
+
+Las tareas de los cuatro guiones se automatizaron con Playwright 1.63 (Microsoft, 2026), una herramienta que controla un navegador Chromium. Cada perfil trabajó en una sesión independiente del navegador, y las tareas se ejecutaron en el orden de la sesión definido en el plan de pruebas. En cada tarea se verificaron los mensajes de la plataforma, los estados de los registros y el contenido de las pantallas, y se tomó una captura como evidencia.
+
+Como la base de producción no contiene las cuentas de demostración, la ejecución empezó con la puesta en marcha de la sección 8 del manual de despliegue. En ese paso, identificado como P0, el administrador creó las cuentas del docente y del estudiante (ver Tabla 1). Las contraseñas fueron de prueba, solo existieron en el servidor de la prueba y la base se borró al terminar.
+
+**Tabla 1**
+
+*Cuentas utilizadas en la ejecución*
+
+| Perfil | Cuenta | Origen |
 |---|---|---|
-| Administrador | orlando.rojas@fet.edu.co | Administrador inicial, creado por el instalador |
-| Docente líder | hernan.patino@fet.edu.co | Creada por el administrador en **Usuarios** (P0) |
-| Estudiante | juan.sabogal@fet.edu.co | Creada por el administrador en **Usuarios** (P0) |
-| Empresa | NIT 901222333 · *InnovaSoft Huila S.A.S.* | Creada por el administrador al registrar la alianza (A1) |
+| Administrador | orlando.rojas@fet.edu.co | Administrador inicial creado por el instalador |
+| Docente líder | hernan.patino@fet.edu.co | Creada por el administrador en *Usuarios* (P0) |
+| Estudiante | juan.sabogal@fet.edu.co | Creada por el administrador en *Usuarios* (P0) |
+| Empresa | NIT 901222333, InnovaSoft Huila S.A.S. | Creada por el administrador al registrar la alianza (A1) |
 
-Las contraseñas fueron de prueba y solo existieron en la máquina virtual. Al terminar, la base se borró.
+## Resultados
 
-## 2. Resultado por tarea
+### Resultado por tarea
 
-✅ completó · ❌ no completó. El paso es el turno dentro de la sesión del [plan de pruebas](README.md).
+La Tabla 2 presenta el resultado de cada tarea en el orden de la sesión. La columna *Paso* corresponde al turno dentro de la sesión del plan de pruebas. Las veinticinco tareas se completaron, lo que equivale a una tasa de éxito del 100 %, y no se registraron errores de JavaScript en ninguna pantalla.
 
-| Paso | Código | Perfil | Tarea | Qué se comprobó | Resultado |
+**Tabla 2**
+
+*Resultado de las tareas ejecutadas en el servidor de producción*
+
+| Paso | Código | Perfil | Tarea | Comprobación | Resultado |
 |---|---|---|---|---|---|
-| 0 | P0 | Administrador | Crear las cuentas de Hernán y Juan José | Las dos cuentas quedan creadas | ✅ |
-| 1 | A1 | Administrador | Registrar una alianza con una empresa nueva | «Alianza registrada con 2 cupo(s)»; aparece *Vigente* con 0 / 2 cupos | ✅ |
-| 2 | E1 | Empresa | Entrar y revisar la alianza | Entra con el NIT; ve la franja *Cupos en uso: 0 de 2* y la vigencia | ✅ |
-| 2 | E2 | Empresa | Publicar una convocatoria de pasantía | Queda *En revisión* («enviada a la FET para su verificación») | ✅ |
-| 3 | D1 | Docente | Revisar el panel | Ve 1 publicación por verificar y la notificación | ✅ |
-| 3 | D2 | Docente | Verificar la convocatoria | Queda *Publicada* | ✅ |
-| 4 | S1 | Estudiante | Entrar y ubicarse | Ve 1 convocatoria abierta; el tutorial se abre solo la primera vez y el botón **Tutorial** lo vuelve a abrir | ✅ (después de corregir F-01) |
-| 4 | S2 | Estudiante | Postularse con hoja de vida | «Tu postulación quedó registrada»; la tarjeta dice *Ya te postulaste* | ✅ |
-| 5 | E3 | Empresa | Aceptar al estudiante | Descarga la hoja de vida en PDF; se crea la pasantía; la alianza pasa a 1 de 2 cupos | ✅ |
-| 6 | D3 | Docente | Asignarse a la pasantía | La pasantía aparece sin responsables; queda Hernán como docente líder | ✅ |
-| 7 | S3 | Estudiante | Subir el plan de práctica | Documento en estado *Enviado* | ✅ |
-| 8 | E4 | Empresa | Avalar el plan de práctica | Descarga el documento y lo avala | ✅ |
-| 8 | E5 | Empresa | Evaluar el desempeño | Guarda 4/5 y luego la edita a 5/5 | ✅ |
-| 9 | D4 | Docente | Devolver el documento con nota baja | No deja **aprobar** con 2.5; lo **devuelve** con 2.5 y la observación | ✅ (después de corregir F-02) |
-| 10 | S4 | Estudiante | Corregir el documento devuelto | Ve la observación y la nota; envía la versión corregida; la nota anterior desaparece | ✅ |
-| 11 | D5 | Docente | Aprobar la corrección | Aprobado con 4.2; promedio 4.2 / 5.0 | ✅ |
-| 11 | D6 | Docente | Emitir el veredicto final | «Veredicto registrado: pasantía aprobada»; el botón de veredicto desaparece; el historial muestra todos los pasos | ✅ |
-| 12 | E6 | Empresa | Publicar una oferta laboral | El cupo se libera (0 de 2); la oferta no ocupa cupos; Hernán la verifica | ✅ |
-| 13 | S5 | Estudiante | Consultar el resultado final | Pasantía *Finalizada*, *Aprobada* con justificación, evaluación de la empresa y notificación | ✅ |
-| 13 | S6 | Estudiante | Aplicar a la oferta laboral | Sin hoja de vida no deja enviar; con hoja de vida queda registrada | ✅ |
-| 14 | D7 | Docente | Reportes y auditoría | 1 aprobada / 0 reprobadas; ocupación de InnovaSoft; bitácora filtrada por Juan José; CSV descargado | ✅ |
-| 15 | A2 | Administrador | Ampliar cupos | No acepta 0 cupos; amplía de 2 a 4 | ✅ |
-| 15 | A3 | Administrador | Crear usuario, cambiar contraseña y desactivar | El usuario entra con la clave nueva; al desactivarlo ya no puede entrar | ✅ |
-| 15 | A4 | Administrador | Desbloquear una cuenta | Tras 5 intentos fallidos ni la clave correcta entra; aparece *Bloqueada*; se desbloquea, Juan José vuelve a entrar y la bitácora lo registra | ✅ |
-| 15 | A5 | Administrador | Descargar el respaldo | Archivo `.sql` de 23,1 KB con su huella SHA-256 | ✅ |
+| 0 | P0 | Administrador | Crear las cuentas del docente y del estudiante | Las dos cuentas quedan activas | Completada |
+| 1 | A1 | Administrador | Registrar una alianza con una empresa nueva | La alianza aparece vigente con 0 de 2 cupos en uso | Completada |
+| 2 | E1 | Empresa | Entrar y revisar la alianza | Ingresa con el NIT y ve los cupos y la vigencia | Completada |
+| 2 | E2 | Empresa | Publicar una convocatoria de pasantía | La convocatoria queda en revisión | Completada |
+| 3 | D1 | Docente | Revisar el panel | Ve la publicación pendiente y su notificación | Completada |
+| 3 | D2 | Docente | Verificar la convocatoria | La convocatoria queda publicada | Completada |
+| 4 | S1 | Estudiante | Entrar y ubicarse | Ve la convocatoria abierta y el tutorial se abre | Completada después de corregir F-01 |
+| 4 | S2 | Estudiante | Postularse con hoja de vida | La postulación queda registrada | Completada |
+| 5 | E3 | Empresa | Aceptar al estudiante | Descarga la hoja de vida; se crea la pasantía y se ocupa un cupo | Completada |
+| 6 | D3 | Docente | Asignarse a la pasantía | Queda registrado como docente líder | Completada |
+| 7 | S3 | Estudiante | Subir el plan de práctica | El documento queda en estado enviado | Completada |
+| 8 | E4 | Empresa | Avalar el plan de práctica | Descarga y avala el documento | Completada |
+| 8 | E5 | Empresa | Evaluar el desempeño | Guarda la evaluación y luego la modifica | Completada |
+| 9 | D4 | Docente | Devolver el documento con nota baja | La plataforma impide aprobar con 2.5; el documento se devuelve con nota y observación | Completada después de corregir F-02 |
+| 10 | S4 | Estudiante | Corregir el documento devuelto | Ve la observación y envía la versión corregida | Completada |
+| 11 | D5 | Docente | Aprobar la corrección | El documento se aprueba con 4.2 | Completada |
+| 11 | D6 | Docente | Emitir el veredicto final | La pasantía queda aprobada y el veredicto ya no puede cambiarse | Completada |
+| 12 | E6 | Empresa | Publicar una oferta laboral | La oferta no ocupa cupos y el docente la verifica | Completada |
+| 13 | S5 | Estudiante | Consultar el resultado final | Ve el resultado, la justificación y la evaluación de la empresa | Completada |
+| 13 | S6 | Estudiante | Aplicar a la oferta laboral | Sin hoja de vida no puede enviar; con ella la postulación queda registrada | Completada |
+| 14 | D7 | Docente | Revisar reportes y auditoría | Cifras del periodo, bitácora filtrada por usuario y archivo CSV | Completada |
+| 15 | A2 | Administrador | Ampliar los cupos | No acepta cero cupos; amplía de 2 a 4 | Completada |
+| 15 | A3 | Administrador | Crear un usuario, cambiar su contraseña y desactivarlo | La cuenta desactivada ya no puede ingresar | Completada |
+| 15 | A4 | Administrador | Desbloquear una cuenta | Tras cinco intentos fallidos la cuenta se bloquea; se desbloquea y queda registrado | Completada |
+| 15 | A5 | Administrador | Descargar el respaldo | Archivo SQL de 23,1 KB con su huella SHA-256 | Completada |
 
-**Tasa de éxito:** 25 de 25 (100 %).
+### Errores encontrados
 
-## 3. Errores encontrados y corregidos
+La primera corrida reveló dos errores de la plataforma, descritos en la Tabla 3. El primero afectaba al tutorial, que el manual de usuario presenta como la ayuda de cada pantalla y que no abría con ningún perfil. Al retirar los módulos que ya no hacían parte de la plataforma se había borrado el inicio de la lista de pasos del recorrido. El segundo hacía que, cuando una acción fallaba dentro de una pasantía, el usuario terminara en el listado general en lugar de seguir en la pasantía que estaba revisando.
 
-| ID | Tarea | Error | Severidad | Corrección | Estado |
-|---|---|---|---|---|---|
-| F-01 | S1 | El **tutorial** no abría en ninguna pantalla ni con ningún perfil. El navegador mostraba el error `pages is not defined`. Al quitar los módulos que ya no se usan, se borró por error el inicio de la lista de pasos del recorrido. | Media: el manual de usuario promete un tutorial que no funcionaba | Se reconstruyó `assets/js/tour.js` con los textos del menú y la bienvenida para los cuatro perfiles actuales. | Cerrado |
-| F-02 | D4 | Cuando una acción dentro de una pasantía fallaba (por ejemplo, intentar aprobar un documento con 2.5), la plataforma mostraba el mensaje correcto, pero **sacaba al usuario al listado de pasantías** en lugar de dejarlo en la pasantía. El docente tenía que volver a buscarla. | Media: la tarea se completa, pero con un paso de más y desorientando al usuario | `internships.php` ahora vuelve al detalle de la pasantía cuando el error ocurre dentro de ella. | Cerrado |
+**Tabla 3**
 
-Además, los guiones se ajustaron para que también sirvan en producción:
+*Errores encontrados en la primera corrida*
 
-- El [plan de pruebas](README.md) tiene ahora la sección *Si la sesión se hace en el servidor de producción*, con la creación de las cuentas (P0).
-- La tarea **E6** (oferta laboral) pasó al paso 12, antes de **S6**, porque el estudiante necesita esa oferta para aplicar. En producción no existe la oferta de demostración *Desarrollador web junior*.
-- La tarea **A4** usa la cuenta de Juan José, porque `estudiante@fet.edu.co` solo existe en el ambiente de pruebas.
+| ID | Tarea | Descripción | Severidad | Corrección |
+|---|---|---|---|---|
+| F-01 | S1 | El tutorial no abría en ninguna pantalla; el navegador registraba el error `pages is not defined` | Media | Se reconstruyeron los pasos del recorrido en `assets/js/tour.js` para los cuatro perfiles |
+| F-02 | D4 | Ante un error dentro de una pasantía, por ejemplo al intentar aprobar con 2.5, la plataforma enviaba al listado de pasantías | Media | La plataforma regresa al detalle de la pasantía cuando el error ocurre dentro de ella |
 
-## 4. Evidencias
+Con las dos correcciones aplicadas, se reinstaló la base de producción y se repitió la ejecución completa. El resultado fue el de la Tabla 2.
 
-Las 29 capturas de esta ejecución están en [evidencias/produccion/](evidencias/produccion/), nombradas con el código de cada tarea. Las más representativas:
+### Ajustes a los guiones
 
-**P0 · El administrador crea las cuentas de Hernán y Juan José:**
+La ejecución también mostró tres puntos en los que los guiones suponían el ambiente de pruebas. Primero, en producción no existen las cuentas del docente y del estudiante, por lo que el plan incluye ahora la preparación P0. Segundo, la tarea S6 usaba una oferta laboral de demostración que no existe en producción, así que la publicación de la oferta (E6) pasó al paso 12, antes de que el estudiante aplique. Tercero, la tarea A4 usaba la cuenta `estudiante@fet.edu.co`, que solo existe en el ambiente de pruebas, y ahora usa la cuenta del estudiante participante.
 
-![P0](evidencias/produccion/P0-cuentas-creadas.png)
+### Evidencias
 
-**A1 · Alianza registrada con 2 cupos:**
+Las veintinueve capturas de la ejecución se encuentran en la carpeta `evidencias/produccion/`, nombradas con el código de cada tarea. Las figuras 1 a 6 muestran las más representativas.
 
-![A1](evidencias/produccion/A1-alianza-registrada.png)
+**Figura 1**
 
-**S1 · El tutorial ya abre (corrección F-01):**
+*Creación de las cuentas del docente y del estudiante por parte del administrador (P0)*
 
-![S1](evidencias/produccion/S1-tutorial.png)
+![Cuentas creadas por el administrador](evidencias/produccion/P0-cuentas-creadas.png)
 
-**E3 · La empresa recibe la postulación con la hoja de vida:**
+**Figura 2**
 
-![E3](evidencias/produccion/E3-postulaciones.png)
+*Tutorial del estudiante después de la corrección F-01 (S1)*
 
-**D4 · La plataforma no deja aprobar con 2.5 y el docente sigue en la pasantía (corrección F-02):**
+![Tutorial del estudiante](evidencias/produccion/S1-tutorial.png)
 
-![D4](evidencias/produccion/D4-bloqueo-aprobar.png)
+**Figura 3**
 
-**S4 · El estudiante corrige el documento devuelto:**
+*Postulación recibida por la empresa con la hoja de vida del estudiante (E3)*
 
-![S4](evidencias/produccion/S4-corregir.png)
+![Postulaciones recibidas](evidencias/produccion/E3-postulaciones.png)
 
-**D6 · Pasantía finalizada con veredicto e historial de auditoría:**
+**Figura 4**
 
-![D6](evidencias/produccion/D6-finalizada.png)
+*Mensaje que impide aprobar con nota 2.5, con el docente en la misma pasantía (D4)*
 
-**S5 · El estudiante consulta su resultado:**
+![Bloqueo al aprobar con nota baja](evidencias/produccion/D4-bloqueo-aprobar.png)
 
-![S5](evidencias/produccion/S5-resultado.png)
+**Figura 5**
 
-**A4 · Cuenta bloqueada por intentos fallidos:**
+*Pasantía finalizada con veredicto e historial de auditoría (D6)*
 
-![A4](evidencias/produccion/A4-bloqueada.png)
+![Pasantía finalizada](evidencias/produccion/D6-finalizada.png)
 
-## 5. Lo que falta: la sesión con el equipo
+**Figura 6**
 
-1. Hacer la sesión con Juan José, Hernán y Orlando siguiendo el [plan de pruebas](README.md), en el ambiente de pruebas o en el servidor de producción.
-2. Llenar en cada guion el resultado, el tiempo, la dificultad, las observaciones y el cuestionario SUS.
-3. Pasar todo al [formato de resultados](formato-resultados.md) y calcular el puntaje SUS.
+*Cuenta bloqueada por intentos fallidos en la pantalla de usuarios (A4)*
 
-Esta ejecución sirve como referencia: si una persona no logra una tarea que aquí sí se completó, el problema probablemente es de claridad de la pantalla y no de funcionamiento, y vale la pena anotarlo como hallazgo.
+![Cuenta bloqueada](evidencias/produccion/A4-bloqueada.png)
+
+## Conclusiones
+
+Las veinticuatro tareas del plan de pruebas pueden completarse en una instalación de producción de Pasantías FET 2.0.0. Las reglas principales del proceso se cumplen en el servidor: el límite de cupos por alianza, la nota mínima de 3.0, la hoja de vida obligatoria en las ofertas laborales, el veredicto irreversible y el bloqueo por intentos fallidos. Los dos errores encontrados habrían afectado a los participantes durante la sesión real y quedaron corregidos.
+
+Esta ejecución sirve de referencia para la sesión con el equipo. Si un participante no logra completar una tarea que aquí sí se completó, la causa probable es la claridad de la pantalla y no su funcionamiento, y conviene registrarla como hallazgo en el formato de resultados.
+
+## Referencias
+
+Brooke, J. (1996). SUS: A "quick and dirty" usability scale. En P. W. Jordan, B. Thomas, B. A. Weerdmeester, & I. L. McClelland (Eds.), *Usability evaluation in industry* (pp. 189–194). Taylor & Francis.
+
+Microsoft. (2026). *Playwright* (Versión 1.63) [Software]. https://playwright.dev
+
+Rojas Narváez, O., Patiño Rico, H. F., & Sabogal García, J. J. (2026a). *Prueba de despliegue de Pasantías FET 2.0.0 en máquinas virtuales Ubuntu Server* [Informe técnico]. Fundación Escuela Tecnológica de Neiva.
+
+Rojas Narváez, O., Patiño Rico, H. F., & Sabogal García, J. J. (2026b). *Manual de usuario: Pasantías FET versión 2.0.0* [Manual]. Fundación Escuela Tecnológica de Neiva.

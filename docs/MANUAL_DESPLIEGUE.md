@@ -381,16 +381,16 @@ Para un servidor Windows de la institución:
 
 Marca cada punto antes de anunciar el lanzamiento:
 
-| # | Verificación | Resultado esperado | ✔ |
+| # | Verificación | Resultado esperado | Cumple |
 |---|---|---|---|
-| 1 | Abrir `https://pasantias.fet.edu.co/` | Carga la pantalla de acceso con candado HTTPS | ☐ |
-| 2 | Abrir `http://pasantias.fet.edu.co/` | Redirige automáticamente a HTTPS | ☐ |
-| 3 | Entrar con el administrador inicial | Abre el *Panel de pasantías* | ☐ |
-| 4 | Abrir `/.env`, `/config/database.php`, `/database/install.php` y `/storage/` | *403 Forbidden* o *404*, nunca su contenido | ☐ |
-| 5 | Entrar con `admin@fet.edu.co` y `FET2026*` | **Debe fallar**: no hay cuentas de demostración | ☐ |
-| 6 | **Usuarios → Descargar respaldo SQL** | Se descarga el `.sql` con su huella SHA-256 | ☐ |
-| 7 | Crear una alianza de prueba, subir un PDF y descargarlo | El archivo se guarda en `storage/documents` y se descarga | ☐ |
-| 8 | Revisar `/var/log/apache2/pasantias-fet-error.log` | Sin errores de PHP | ☐ |
+| 1 | Abrir `https://pasantias.fet.edu.co/` | Carga la pantalla de acceso con candado HTTPS |   |
+| 2 | Abrir `http://pasantias.fet.edu.co/` | Redirige automáticamente a HTTPS |   |
+| 3 | Entrar con el administrador inicial | Abre el *Panel de pasantías* |   |
+| 4 | Abrir `/.env`, `/config/database.php`, `/database/install.php` y `/storage/` | *403 Forbidden* o *404*, nunca su contenido |   |
+| 5 | Entrar con `admin@fet.edu.co` y `FET2026*` | **Debe fallar**: no hay cuentas de demostración |   |
+| 6 | **Usuarios → Descargar respaldo SQL** | Se descarga el `.sql` con su huella SHA-256 |   |
+| 7 | Crear una alianza de prueba, subir un PDF y descargarlo | El archivo se guarda en `storage/documents` y se descarga |   |
+| 8 | Revisar `/var/log/apache2/pasantias-fet-error.log` | Sin errores de PHP |   |
 
 Después de la verificación 7, suspende la alianza de prueba desde **Alianzas → Editar o ampliar** y desactiva su cuenta en **Usuarios**.
 
@@ -494,19 +494,19 @@ Si la actualización cambió la base de datos, restaura además el respaldo toma
 
 ## 11. Lista de control de seguridad
 
-| ✔ | Control |
+| Cumple | Control |
 |---|---|
-| ☐ | Instalación hecha con `--produccion` y `APP_ENV=production`, sin cuentas de demostración. |
-| ☐ | La base de datos usa un usuario propio con contraseña larga, no `root`. |
-| ☐ | El `.env` tiene permisos 640 y no está en el repositorio. |
-| ☐ | HTTPS activo, con redirección desde HTTP. |
-| ☐ | `display_errors = Off` en PHP. |
-| ☐ | `AllowOverride All` activo, para que el `.htaccess` bloquee las carpetas internas. |
-| ☐ | Solo `storage` tiene permisos de escritura para el servidor web. |
-| ☐ | Cortafuegos activo, con el puerto 3306 cerrado al exterior. |
-| ☐ | phpMyAdmin no está expuesto a internet (en Windows, `Require local`). |
-| ☐ | Respaldo diario programado y probado con una restauración. |
-| ☐ | Sistema operativo y PHP actualizados con regularidad. |
+|   | Instalación hecha con `--produccion` y `APP_ENV=production`, sin cuentas de demostración. |
+|   | La base de datos usa un usuario propio con contraseña larga, no `root`. |
+|   | El `.env` tiene permisos 640 y no está en el repositorio. |
+|   | HTTPS activo, con redirección desde HTTP. |
+|   | `display_errors = Off` en PHP. |
+|   | `AllowOverride All` activo, para que el `.htaccess` bloquee las carpetas internas. |
+|   | Solo `storage` tiene permisos de escritura para el servidor web. |
+|   | Cortafuegos activo, con el puerto 3306 cerrado al exterior. |
+|   | phpMyAdmin no está expuesto a internet (en Windows, `Require local`). |
+|   | Respaldo diario programado y probado con una restauración. |
+|   | Sistema operativo y PHP actualizados con regularidad. |
 
 Controles que la aplicación ya trae: contraseñas cifradas con `password_hash`, protección CSRF en todos los formularios, bloqueo de la cuenta tras 5 intentos fallidos, validación de permisos por perfil en cada solicitud, archivos con nombres aleatorios y descargas controladas, y bitácora de auditoría.
 

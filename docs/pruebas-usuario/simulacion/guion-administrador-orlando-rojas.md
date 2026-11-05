@@ -1,4 +1,4 @@
-# Guion de prueba de usuario (sesión simulada) · Administrador
+# Guion de prueba de usuario, sesión simulada · Administrador
 
 | Campo | Valor |
 |---|---|
@@ -8,13 +8,13 @@
 | Contraseña | La que se definió al instalar el servidor (en producción no existe `FET2026*`) |
 | Fecha | 05 / 11 / 2026 |
 | Navegador y equipo | Chromium, pantalla 1366 × 860, servidor de producción en máquina virtual |
-| Observador(a) | Sesión simulada (asistente de IA) |
+| Observador(a) | Sesión simulada (recorrido cognitivo) |
 
-> **Sesión simulada.** Este guion fue diligenciado por el asistente de IA (Claude), asumiendo el papel del participante, sobre el servidor de producción recién instalado (Ubuntu 24.04, HTTPS) el 05/11/2026. El *resultado* de cada tarea se comprobó en la plataforma ([resultados de la ejecución](../resultados-ejecucion-produccion.md)). El *tiempo* es una **estimación** de lo que tardaría una persona que usa la plataforma por primera vez, y la *dificultad* y las *observaciones* salen de una revisión de cada pantalla. **No son la opinión del participante real**: el cuestionario SUS y la firma quedan para la sesión con el equipo, en los guiones originales de la carpeta superior.
+> **Nota.** Este guion corresponde a una sesión simulada, realizada el 5 de noviembre de 2026 sobre el servidor de producción mediante un recorrido cognitivo con apoyo de un asistente de inteligencia artificial (ver el [informe de la sesión simulada](informe-sesion-simulada.md)). El resultado de cada tarea se comprobó en la plataforma; el tiempo es una estimación para una persona que usa la plataforma por primera vez, y la dificultad y las observaciones provienen de la revisión de cada pantalla. No recoge la opinión del participante, por lo que el cuestionario SUS y la firma quedan para la sesión real.
 
 Asumes el papel del administrador de la plataforma, que crea alianzas empresariales (y con ellas cupos de pasantía), gestiona las cuentas y cuida la seguridad y los respaldos.
 
-**Convenciones:** en *Resultado* marca ✅ (completó sin ayuda), 🟡 (completó con ayuda) o ❌ (no completó). La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](../README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../../manual/MANUAL_USUARIO.md).
+**Convenciones:** en *Resultado* escribe *Completó* (sin ayuda), *Con ayuda* o *No completó*. La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](../README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../../manual/MANUAL_USUARIO.md).
 
 ## A1 · Registrar una alianza con una empresa nueva
 
@@ -31,7 +31,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| ✅ | 4 (estimado) | 3 | [`A1-alianza-registrada.png`](../evidencias/produccion/A1-alianza-registrada.png) |
+| Completó | 4 (estimado) | 3 | [`A1-alianza-registrada.png`](../evidencias/produccion/A1-alianza-registrada.png) |
 
 **Observaciones:** El formulario de *Nueva alianza* es largo: hay que bajar para ver la cuenta de la empresa (NIT, correo y contraseña inicial) y el botón de guardar. La opción «Crear una cuenta nueva con los datos de abajo» no es evidente a primera vista. Al guardar, el mensaje «Alianza registrada con 2 cupo(s)» y la fila *Vigente · 0 / 2* confirman bien el resultado.
 
@@ -50,7 +50,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| ✅ | 1 (estimado) | 1 | [`A2-ampliar.png`](../evidencias/produccion/A2-ampliar.png) |
+| Completó | 1 (estimado) | 1 | [`A2-ampliar.png`](../evidencias/produccion/A2-ampliar.png) |
 
 **Observaciones:** El botón «Editar o ampliar» está en la misma fila de la alianza. La plataforma no acepta 0 cupos y el mensaje «cupos 2 → 4» deja claro el cambio.
 
@@ -70,7 +70,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| ✅ | 3 (estimado) | 2 | [`A3-usuarios.png`](../evidencias/produccion/A3-usuarios.png) |
+| Completó | 3 (estimado) | 2 | [`A3-usuarios.png`](../evidencias/produccion/A3-usuarios.png) |
 
 **Observaciones:** Crear la cuenta es directo. El perfil se cambia con un selector y el botón «Guardar» de cada fila, que es fácil de pasar por alto. Al desactivar, el estado cambia a *Inactivo* y la persona ya no puede entrar.
 
@@ -90,7 +90,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| ✅ | 2 (estimado) | 1 | [`A4-bloqueada.png`](../evidencias/produccion/A4-bloqueada.png) |
+| Completó | 2 (estimado) | 1 | [`A4-bloqueada.png`](../evidencias/produccion/A4-bloqueada.png) |
 
 **Observaciones:** La cuenta bloqueada se ve enseguida: hay un aviso arriba («1 cuenta(s) bloqueada(s)»), la etiqueta *Bloqueada* con la hora y un botón verde «Desbloquear». La bitácora registra el desbloqueo.
 
@@ -109,7 +109,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| ✅ | 1 (estimado) | 1 | [`A3-usuarios.png`](../evidencias/produccion/A3-usuarios.png) |
+| Completó | 1 (estimado) | 1 | [`A3-usuarios.png`](../evidencias/produccion/A3-usuarios.png) |
 
 **Observaciones:** «Descargar respaldo SQL» está a la vista en *Usuarios*. El archivo trae la huella SHA-256 al final. Falta explicar en pantalla para qué sirve la huella.
 

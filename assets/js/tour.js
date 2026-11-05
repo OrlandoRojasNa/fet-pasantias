@@ -52,8 +52,8 @@
       { el: '#tour-alliance', title: 'Tu alianza', text: 'Cupos de pasantía en uso y disponibles. Cada pasante aceptado ocupa un cupo hasta que su pasantía termina.' },
       { el: '#tour-filters', title: 'Filtra por tipo', text: 'Muestra solo convocatorias de pasantía u ofertas laborales.' },
       { el: '#tour-new-opp', title: 'Nueva publicación', text: is('company') ? 'Crea la convocatoria u oferta y envíala a verificación. La FET la revisa antes de mostrarla a los estudiantes.' : 'Registra una publicación; puedes dejarla verificada directamente.' },
-      { el: '#tour-opps', title: 'Publicaciones', text: is('student') ? 'Pulsa «Postularme» o «Aplicar con mi hoja de vida». En las ofertas laborales la hoja de vida en PDF es obligatoria.' : 'Cada tarjeta muestra estado, cierre y postulaciones. Cambia el estado desde el selector (con «Publicada» la verificas).' },
-      { el: '#tour-apps', title: is('student') ? 'Mis postulaciones' : 'Postulaciones recibidas', text: is('student') ? 'Sigue el estado de cada postulación. Si te aceptan en una pasantía, aparece en «Pasantías».' : 'Descarga la hoja de vida y cambia el estado. Al aceptar una postulación de pasantía se crea la pasantía y se ocupa un cupo.' }
+      { el: '#tour-opps', title: 'Publicaciones', text: is('student') ? 'Pulsa «Postularme» o «Aplicar con mi hoja de vida». En las ofertas laborales la hoja de vida en PDF es obligatoria.' : 'Cada tarjeta muestra estado, cierre y postulaciones. Pulsa «Verificar y publicar» para que los estudiantes la vean; el selector sirve para cerrarla o devolverla a borrador.' },
+      { el: '#tour-apps', title: is('student') ? 'Mis postulaciones' : 'Postulaciones recibidas', text: is('student') ? 'Sigue el estado de cada postulación. Si te aceptan en una pasantía, aparece en «Pasantías».' : 'Descarga la hoja de vida y usa «Aceptar» o «No seleccionar». Al aceptar una postulación de pasantía se crea la pasantía y se ocupa un cupo.' }
     ],
     internships: detail ? [
       { el: '#tour-int-info', title: 'Datos de la pasantía', text: 'Estudiante, empresa evaluadora, docente líder asignado, periodo y cuántos documentos están aprobados.' },

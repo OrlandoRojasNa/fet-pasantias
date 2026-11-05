@@ -55,6 +55,7 @@ if(has_role('company')){
     app_header('Panel de empresa','EMPRESA ALIADA');
     ?>
     <section class="welcome-banner" id="tour-welcome"><div><span class="eyebrow">HOLA, <?= e($first) ?></span><h2>Tus pasantes y convocatorias.</h2><p>Publica convocatorias con los cupos de tu alianza, elige a tus pasantes, avala sus documentos y evalúa su desempeño.</p></div><?= $dateCard ?></section>
+    <?php require __DIR__.'/includes/alliance-strip.php'; ?>
     <section class="metric-grid" id="tour-metrics">
      <?= $metric('handshake','ods17',$alliance?((int)$alliance['available'].' de '.(int)$alliance['slots']):'Sin alianza','Cupos de pasantía disponibles','opportunities.php','Ver mi alianza') ?>
      <?= $metric('briefcase','ods8',$stats['published'],'Publicaciones abiertas','opportunities.php','Gestionar') ?>

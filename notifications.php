@@ -13,7 +13,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){ require_csrf(); query('UPDATE notificat
 $items=rows('SELECT * FROM notifications WHERE user_id=? ORDER BY created_at DESC,id DESC LIMIT 100',[$u['id']]);
 app_header('Avisos','TABLERO Y AVISOS');
 ?>
-<div class="page-actions"><p>Aquí llegan los compromisos asignados, los cambios en tus postulaciones y las solicitudes que requieren tu revisión.</p><form method="post"><input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>"><button class="button button-ghost"><?= icon('check',15) ?>Marcar todos como leídos</button></form></div>
+<div class="page-actions"><p>Aquí llegan los avisos de tus pasantías y postulaciones: documentos por revisar, correcciones, evaluaciones y resultados.</p><form method="post"><input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>"><button class="button button-ghost"><?= icon('check',15) ?>Marcar todos como leídos</button></form></div>
 <section class="panel notice-list">
 <?php if(!$items):?><div class="empty"><?= icon('bell',28) ?><p>No tienes avisos. Cuando alguien te asigne un compromiso o revise tu postulación, aparecerá aquí.</p></div><?php endif;?>
 <?php foreach($items as $n):?><a class="notice<?= $n['read_at']?'':' unread' ?>" href="<?= e(url('notifications.php?open='.(int)$n['id'])) ?>"><span class="kpi-icon tone-<?= $n['read_at']?'slate':'fet' ?>"><?= icon('bell',18) ?></span><div><strong><?= e($n['title']) ?></strong><p><?= e($n['body']) ?></p></div><time><?= e(fecha_es($n['created_at'],'short')) ?> · <?= e(date('H:i',strtotime($n['created_at']))) ?></time></a><?php endforeach;?>

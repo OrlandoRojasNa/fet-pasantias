@@ -68,13 +68,13 @@ El proceso pasa de un perfil a otro, así que las tareas se hacen en este orden.
 
 Por cada tarea, el participante (o quien observe) anota:
 
-- **Resultado:** ✅ Completó sin ayuda · 🟡 Completó con ayuda · ❌ No completó.
+- **Resultado:** *Completó* (sin ayuda), *Con ayuda* o *No completó*.
 - **Tiempo** aproximado en minutos.
 - **Dificultad** de 1 (muy fácil) a 5 (muy difícil).
 - **Observaciones:** qué confundió, qué esperaba encontrar o qué error vio.
 - **Evidencia:** una captura de pantalla del resultado, guardada en `evidencias/` con el código de la tarea, por ejemplo `evidencias/S2-postulacion.png`.
 
-Regla para quien observe: no ayudar mientras la persona intenta la tarea. Si pasan más de 3 minutos sin avanzar, se puede dar una pista y se marca 🟡.
+Regla para quien observe: no ayudar mientras la persona intenta la tarea. Si pasan más de 3 minutos sin avanzar, se puede dar una pista y la tarea se registra como *Con ayuda*.
 
 ## Después de la sesión
 

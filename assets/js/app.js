@@ -21,6 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-confirm]').forEach(form => form.addEventListener('submit', event => {
     if (!window.confirm(form.dataset.confirm)) event.preventDefault();
   }));
+  document.querySelectorAll('[data-confirm-click]').forEach(button => button.addEventListener('click', event => {
+    if (!window.confirm(button.dataset.confirmClick)) event.preventDefault();
+  }));
+
+  /* Nueva alianza: los datos de la cuenta nueva solo se piden si no se elige una cuenta existente. */
+  document.querySelectorAll('[data-toggle-new-account]').forEach(select => {
+    const sync = () => select.closest('form').querySelectorAll('[data-new-account]').forEach(el => { el.hidden = select.value !== ''; });
+    select.addEventListener('change', sync); sync();
+  });
 
   const menu = document.querySelector('[data-menu]');
   const sidebar = document.querySelector('[data-sidebar]');

@@ -236,12 +236,12 @@ En **Convocatorias y empleo** aparece la franja de tu alianza: código del conve
 
    ![Nueva publicación](img/12-empresa-publicacion-formulario.png)
 
-4. La publicación queda **En revisión**. Un docente líder o el administrador la verifica; cuando la publica, los estudiantes ya la ven. Puedes pasarla a **Borrador** o **Cerrada** cuando quieras con **Actualizar**.
+4. La publicación queda **En revisión**. Un docente líder o el administrador la verifica; cuando la publica, los estudiantes ya la ven. Puedes pasarla a **Borrador** o **Cerrada** cuando quieras: elige el estado y pulsa **Cambiar estado**.
 
 ### 7.4 Revisar postulaciones y aceptar pasantes
 
 1. Baja hasta **Postulaciones recibidas**. Verás el estudiante, su motivación y el enlace a su **hoja de vida**.
-2. Cambia el estado a **En revisión**, **Aceptada** o **No seleccionada** y pulsa **Guardar**.
+2. Usa los botones de cada postulación: **Aceptar**, **En revisión** o **No seleccionar**. La plataforma pide confirmación antes de aceptar o descartar.
 
    ![Postulaciones recibidas](img/19-empresa-postulaciones.png)
 
@@ -279,7 +279,7 @@ Muestra las pasantías en curso, la **cola de documentos esperando calificación
 ### 8.2 Verificar las publicaciones de las empresas
 
 1. Entra a **Convocatorias y empleo**. Las publicaciones **En revisión** aparecen primero.
-2. Revisa el contenido. Si es correcto, elige **Publicada (verificada)** y pulsa **Verificar**. También puedes devolverla a borrador o cerrarla.
+2. Revisa el contenido. Si es correcto, pulsa **Verificar y publicar**. Para devolverla a borrador o cerrarla, elige el estado y pulsa **Cambiar estado**.
 
    ![Verificar publicación](img/14-docente-verificar-publicacion.png)
 

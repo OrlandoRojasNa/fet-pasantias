@@ -127,14 +127,16 @@ app_header('Alianzas empresariales','CUPOS DE PASANTÍA');
 <dialog id="alliance-form"><form method="post" class="modal-form"><input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>"><input type="hidden" name="action" value="create">
  <div class="modal-head"><div><span class="eyebrow">NUEVA ALIANZA</span><h2>Registrar empresa aliada</h2></div><button type="button" data-close aria-label="Cerrar">×</button></div>
  <div class="form-grid">
+  <h3 class="form-section span-2">1. Empresa y convenio</h3>
   <label class="span-2">Razón social<input name="name" maxlength="180" required></label>
   <label>Sector<input name="sector" maxlength="120"></label><label>Código del convenio<input name="agreement_code" maxlength="60" placeholder="Ej. CONV-2026-001"></label>
   <label>Cupos de pasantía<input type="number" name="slots" min="1" max="500" value="2" required></label><label>Inicio<input type="date" name="starts_on" value="<?= e($today) ?>"></label>
   <label>Fin<input type="date" name="ends_on"></label><label>Contacto en la empresa<input name="contact_name" maxlength="150"></label>
   <label>Correo del contacto<input type="email" name="contact_email" maxlength="150"></label><label>Teléfono<input name="contact_phone" maxlength="40"></label>
-  <label class="span-2">Cuenta de la empresa<select name="company_id"><option value="">Crear una cuenta nueva con los datos de abajo</option><?php foreach($freeCompanies as $c):?><option value="<?= (int)$c['id'] ?>"><?= e(($c['program']?:$c['full_name']).' · '.$c['email']) ?></option><?php endforeach;?></select></label>
-  <label>NIT (usuario de acceso)<input name="nit" maxlength="30"></label><label>Correo de acceso<input type="email" name="email" maxlength="150"></label>
-  <label class="span-2">Contraseña inicial (mín. 8 caracteres)<input type="password" name="password" minlength="8" autocomplete="new-password"></label>
+  <h3 class="form-section span-2">2. Cuenta de acceso de la empresa<small>Con esta cuenta la empresa entra a la plataforma. Crea una nueva o elige una que ya exista.</small></h3>
+  <label class="span-2">Cuenta de la empresa<select name="company_id" data-toggle-new-account><option value="">Crear una cuenta nueva con los datos de abajo</option><?php foreach($freeCompanies as $c):?><option value="<?= (int)$c['id'] ?>"><?= e(($c['program']?:$c['full_name']).' · '.$c['email']) ?></option><?php endforeach;?></select></label>
+  <label data-new-account>NIT (usuario de acceso)<input name="nit" maxlength="30"></label><label data-new-account>Correo de acceso<input type="email" name="email" maxlength="150"></label>
+  <label class="span-2" data-new-account>Contraseña inicial (mín. 8 caracteres)<input type="password" name="password" minlength="8" autocomplete="new-password"></label>
   <label class="span-2">Notas<textarea name="notes"></textarea></label>
  </div>
  <p class="hint"><?= icon('alert',14) ?>Si eliges una cuenta existente, no se usan el NIT, el correo ni la contraseña.</p>

@@ -1,4 +1,4 @@
-# Guion de prueba de usuario (sesión simulada) · Estudiante
+# Guion de prueba de usuario, sesión simulada · Estudiante
 
 | Campo | Valor |
 |---|---|
@@ -8,13 +8,13 @@
 | Contraseña | La que entregó el administrador al crear la cuenta (en producción no existe `FET2026*`) |
 | Fecha | 05 / 11 / 2026 |
 | Navegador y equipo | Chromium, pantalla 1366 × 860, servidor de producción en máquina virtual |
-| Observador(a) | Sesión simulada (asistente de IA) |
+| Observador(a) | Sesión simulada (recorrido cognitivo) |
 
-> **Sesión simulada.** Este guion fue diligenciado por el asistente de IA (Claude), asumiendo el papel del participante, sobre el servidor de producción recién instalado (Ubuntu 24.04, HTTPS) el 05/11/2026. El *resultado* de cada tarea se comprobó en la plataforma ([resultados de la ejecución](../resultados-ejecucion-produccion.md)). El *tiempo* es una **estimación** de lo que tardaría una persona que usa la plataforma por primera vez, y la *dificultad* y las *observaciones* salen de una revisión de cada pantalla. **No son la opinión del participante real**: el cuestionario SUS y la firma quedan para la sesión con el equipo, en los guiones originales de la carpeta superior.
+> **Nota.** Este guion corresponde a una sesión simulada, realizada el 5 de noviembre de 2026 sobre el servidor de producción mediante un recorrido cognitivo con apoyo de un asistente de inteligencia artificial (ver el [informe de la sesión simulada](informe-sesion-simulada.md)). El resultado de cada tarea se comprobó en la plataforma; el tiempo es una estimación para una persona que usa la plataforma por primera vez, y la dificultad y las observaciones provienen de la revisión de cada pantalla. No recoge la opinión del participante, por lo que el cuestionario SUS y la firma quedan para la sesión real.
 
 Asumes el papel de un estudiante de Ingeniería de Software que busca pasantía, sube sus documentos y consulta su resultado final.
 
-**Convenciones:** en *Resultado* marca ✅ (completó sin ayuda), 🟡 (completó con ayuda) o ❌ (no completó). La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](../README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../../manual/MANUAL_USUARIO.md).
+**Convenciones:** en *Resultado* escribe *Completó* (sin ayuda), *Con ayuda* o *No completó*. La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](../README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../../manual/MANUAL_USUARIO.md).
 
 ## S1 · Entrar y ubicarse
 
@@ -30,7 +30,7 @@ Asumes el papel de un estudiante de Ingeniería de Software que busca pasantía,
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| ✅ | 2 (estimado) | 1 | [`S1-tutorial.png`](../evidencias/produccion/S1-tutorial.png) |
+| Completó | 2 (estimado) | 1 | [`S1-tutorial.png`](../evidencias/produccion/S1-tutorial.png) |
 
 **Observaciones:** El tutorial se abre solo la primera vez (11 pasos) y vuelve a abrirse con el botón «Tutorial». Los indicadores del inicio muestran 1 convocatoria y 0 ofertas.
 
@@ -50,7 +50,7 @@ Asumes el papel de un estudiante de Ingeniería de Software que busca pasantía,
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| ✅ | 2 (estimado) | 1 | [`S2-postulacion.png`](../evidencias/produccion/S2-postulacion.png) |
+| Completó | 2 (estimado) | 1 | [`S2-postulacion.png`](../evidencias/produccion/S2-postulacion.png) |
 
 **Observaciones:** La convocatoria se encuentra desde el inicio («Abiertas ahora») o desde el menú. El diálogo pide la motivación y la hoja de vida (opcional en pasantías). La tarjeta queda con «Ya te postulaste».
 
@@ -70,7 +70,7 @@ Asumes el papel de un estudiante de Ingeniería de Software que busca pasantía,
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| ✅ | 2 (estimado) | 1 | [`S3-subir.png`](../evidencias/produccion/S3-subir.png) |
+| Completó | 2 (estimado) | 1 | [`S3-subir.png`](../evidencias/produccion/S3-subir.png) |
 
 **Observaciones:** «Subir documento» está arriba en la pasantía. El tipo *Plan de práctica* y el archivo bastan; el título es opcional.
 
@@ -89,7 +89,7 @@ Asumes el papel de un estudiante de Ingeniería de Software que busca pasantía,
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| ✅ | 2 (estimado) | 2 | [`S4-corregir.png`](../evidencias/produccion/S4-corregir.png) |
+| Completó | 2 (estimado) | 2 | [`S4-corregir.png`](../evidencias/produccion/S4-corregir.png) |
 
 **Observaciones:** La fila del documento muestra la observación del docente y la nota 2.5, y el botón «Corregir». Hay que leer la columna de observaciones para saber qué cambiar; la notificación «Documento devuelto con observaciones» ayuda a llegar.
 
@@ -108,7 +108,7 @@ Asumes el papel de un estudiante de Ingeniería de Software que busca pasantía,
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| ✅ | 1 (estimado) | 1 | [`S5-resultado.png`](../evidencias/produccion/S5-resultado.png) |
+| Completó | 1 (estimado) | 1 | [`S5-resultado.png`](../evidencias/produccion/S5-resultado.png) |
 
 **Observaciones:** La pasantía muestra *Finalizada* y *Aprobada* con la justificación del docente y la evaluación de la empresa. En *Avisos*, el texto de la parte superior todavía habla de «compromisos asignados», que ya no existen en la plataforma.
 
@@ -127,7 +127,7 @@ Asumes el papel de un estudiante de Ingeniería de Software que busca pasantía,
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| ✅ | 2 (estimado) | 1 | [`S6-postulado.png`](../evidencias/produccion/S6-postulado.png) |
+| Completó | 2 (estimado) | 1 | [`S6-postulado.png`](../evidencias/produccion/S6-postulado.png) |
 
 **Observaciones:** El filtro *Ofertas laborales* funciona. Sin hoja de vida el formulario no deja enviar, porque es obligatoria en las ofertas. Con ella la tarjeta queda en «Ya te postulaste · Enviada».
 

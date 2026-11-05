@@ -12,7 +12,7 @@
 
 Asumes el papel del administrador de la plataforma, que crea alianzas empresariales (y con ellas cupos de pasantía), gestiona las cuentas y cuida la seguridad y los respaldos.
 
-**Convenciones:** en *Resultado* marca ✅ (completó sin ayuda), 🟡 (completó con ayuda) o ❌ (no completó). La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../manual/MANUAL_USUARIO.md).
+**Convenciones:** en *Resultado* escribe *Completó* (sin ayuda), *Con ayuda* o *No completó*. La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../manual/MANUAL_USUARIO.md).
 
 ## A1 · Registrar una alianza con una empresa nueva
 

@@ -12,7 +12,7 @@
 
 Asumes el papel de un estudiante de Ingeniería de Software que busca pasantía, sube sus documentos y consulta su resultado final.
 
-**Convenciones:** en *Resultado* marca ✅ (completó sin ayuda), 🟡 (completó con ayuda) o ❌ (no completó). La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../manual/MANUAL_USUARIO.md).
+**Convenciones:** en *Resultado* escribe *Completó* (sin ayuda), *Con ayuda* o *No completó*. La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../manual/MANUAL_USUARIO.md).
 
 ## S1 · Entrar y ubicarse
 
