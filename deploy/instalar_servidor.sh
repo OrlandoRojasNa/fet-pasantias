@@ -21,7 +21,7 @@ servicio(){ if command -v systemctl >/dev/null && [ -d /run/systemd/system ]; th
 paso "1/8 Paquetes (Apache, PHP, MariaDB, Git)"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
-apt-get install -y -qq apache2 mariadb-server git openssl php libapache2-mod-php php-mysql php-mbstring php-curl php-xml >/dev/null
+apt-get install -y -qq sudo cron apache2 mariadb-server git openssl php libapache2-mod-php php-mysql php-mbstring php-curl php-xml >/dev/null
 a2enmod -q rewrite headers ssl >/dev/null
 servicio start mariadb; servicio start apache2
 
