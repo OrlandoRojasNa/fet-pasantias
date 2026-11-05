@@ -12,6 +12,8 @@ ADMIN_NOMBRE=${ADMIN_NOMBRE:-"Coordinación de Pasantías"}
 VERSION=${VERSION:-main}
 REPO=${REPO:-https://github.com/OrlandoRojasNa/fet-pasantias.git}
 DIR=${DIR:-/var/www/pasantias-fet}
+# Si ya hay una instalación, se conserva la clave de base de datos de su .env.
+[ -z "${DB_PASS:-}" ] && [ -f "$DIR/.env" ] && DB_PASS=$(grep -E '^DB_PASS=' "$DIR/.env" | cut -d= -f2-)
 DB_PASS=${DB_PASS:-$(openssl rand -base64 24 | tr -dc 'A-Za-z0-9' | head -c 24)}
 paso(){ printf '\n\033[1;32m== %s\033[0m\n' "$*"; }
 servicio(){ if command -v systemctl >/dev/null && [ -d /run/systemd/system ]; then systemctl "$1" "$2"; else service "$2" "$1"; fi; }
@@ -32,7 +34,11 @@ GRANT ALL PRIVILEGES ON fet_intranet.* TO 'pasantias'@'localhost'; FLUSH PRIVILE
 
 paso "3/8 Código ($VERSION)"
 if [ -d "$DIR/.git" ]; then git -C "$DIR" fetch -q --tags origin; else git clone -q "$REPO" "$DIR"; fi
-git -C "$DIR" checkout -q "$VERSION"
+if git -C "$DIR" show-ref -q --verify "refs/remotes/origin/$VERSION"; then
+  git -C "$DIR" checkout -q -B "$VERSION" "origin/$VERSION"   # rama: se actualiza a lo último publicado
+else
+  git -C "$DIR" checkout -q "$VERSION"                        # etiqueta de versión, por ejemplo v2.0.0
+fi
 git -C "$DIR" log --oneline -1
 
 paso "4/8 Configuración (.env de producción) y permisos"

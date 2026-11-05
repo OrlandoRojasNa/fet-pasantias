@@ -19,6 +19,7 @@ function rows(string $sql, array $params=[]): array { return query($sql,$params)
 function row(string $sql, array $params=[]): ?array { $r=query($sql,$params)->fetch(); return $r ?: null; }
 function scalar(string $sql, array $params=[]): mixed { return query($sql,$params)->fetchColumn(); }
 
+function is_production(): bool { return strtolower((string)getenv('APP_ENV'))==='production'; }
 function base_url(): string {
     $configured=getenv('APP_BASE_URL'); if ($configured) return rtrim($configured,'/');
     $script=str_replace('\\','/',$_SERVER['SCRIPT_NAME'] ?? ''); return rtrim(dirname($script),'/.');
