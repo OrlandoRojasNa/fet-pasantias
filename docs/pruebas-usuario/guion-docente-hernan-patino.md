@@ -144,7 +144,7 @@ Asumes el papel del docente que revisa, audita, gestiona y aprueba las pasantía
 
 ## D7 · Reportes y auditoría
 
-**Turno en la sesión:** paso 13 · 
+**Turno en la sesión:** paso 14 · 
 
 **Qué debes lograr (sin mirar el manual):**
 

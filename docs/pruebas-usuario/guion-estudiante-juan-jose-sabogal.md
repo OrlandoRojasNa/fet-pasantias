@@ -103,7 +103,7 @@ Asumes el papel de un estudiante de Ingeniería de Software que busca pasantía,
 
 ## S5 · Consultar el resultado final
 
-**Turno en la sesión:** paso 12 · cuando el docente ya emitió el veredicto.
+**Turno en la sesión:** paso 13 · cuando el docente ya emitió el veredicto.
 
 **Qué debes lograr (sin mirar el manual):**
 
@@ -124,12 +124,12 @@ Asumes el papel de un estudiante de Ingeniería de Software que busca pasantía,
 
 ## S6 · Aplicar a una oferta laboral
 
-**Turno en la sesión:** paso 12 · 
+**Turno en la sesión:** paso 13 · 
 
 **Qué debes lograr (sin mirar el manual):**
 
 1. Filtra las **Ofertas laborales**.
-2. Aplica a *Desarrollador web junior*. Intenta primero enviarla **sin** hoja de vida y luego con ella.
+2. Aplica a la oferta que publicó la empresa en la tarea E6 (en el ambiente de pruebas también aparece *Desarrollador web junior*). Intenta primero enviarla **sin** hoja de vida y luego con ella.
 
 **Resultado esperado:** Sin hoja de vida la plataforma no deja aplicar. Con la hoja de vida en PDF, la postulación queda registrada.
 

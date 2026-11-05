@@ -39,7 +39,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 ## A2 · Ampliar los cupos de la alianza
 
-**Turno en la sesión:** paso 14 · al final de la sesión.
+**Turno en la sesión:** paso 15 · al final de la sesión.
 
 **Qué debes lograr (sin mirar el manual):**
 
@@ -60,7 +60,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 ## A3 · Crear un usuario y cambiar una contraseña
 
-**Turno en la sesión:** paso 14 · 
+**Turno en la sesión:** paso 15 · 
 
 **Qué debes lograr (sin mirar el manual):**
 
@@ -82,7 +82,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 ## A4 · Desbloquear una cuenta
 
-**Turno en la sesión:** paso 14 · pide a un compañero que, antes de esta tarea, intente entrar 5 veces con una clave equivocada en la cuenta estudiante@fet.edu.co.
+**Turno en la sesión:** paso 15 · pide a un compañero que, antes de esta tarea, intente entrar 5 veces con una clave equivocada en la cuenta juan.sabogal@fet.edu.co (en el ambiente de pruebas también sirve estudiante@fet.edu.co).
 
 **Qué debes lograr (sin mirar el manual):**
 
@@ -90,7 +90,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 2. Desbloquéala.
 3. Comprueba en *Reportes y auditoría* que el desbloqueo quedó registrado.
 
-**Resultado esperado:** La cuenta vuelve a entrar con `FET2026*` y la bitácora muestra el desbloqueo.
+**Resultado esperado:** La cuenta vuelve a entrar con su contraseña correcta y la bitácora muestra el desbloqueo.
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
@@ -104,7 +104,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 ## A5 · Descargar el respaldo de la base de datos
 
-**Turno en la sesión:** paso 14 · 
+**Turno en la sesión:** paso 15 · 
 
 **Qué debes lograr (sin mirar el manual):**
 

@@ -18,6 +18,31 @@
 
   /* Textos del menú según el perfil: cada uno explica para qué le sirve ese módulo a quien lo usa. */
   const navText = {
+    dashboard: ['Inicio', is('student') ? 'Tu panel: convocatorias abiertas, tus postulaciones y el avance de tu pasantía.' : is('company') ? 'El panel de tu empresa: cupos de la alianza, convocatorias, postulaciones y pasantes.' : 'El resumen del día: pasantías activas, documentos por revisar y convocatorias por verificar.'],
+    internships: ['Pasantías', is('student') ? 'Sube los documentos de tu pasantía, corrige los devueltos y consulta notas y resultado.' : is('company') ? 'Tus pasantes: avala sus documentos y evalúa su desempeño.' : 'Seguimiento de cada pasantía: documentos, calificaciones, veredicto final e historial.'],
+    opportunities: ['Convocatorias y empleo', is('student') ? 'Postúlate a convocatorias de pasantía y aplica a ofertas laborales con tu hoja de vida.' : is('company') ? 'Publica convocatorias de pasantía (según tus cupos) y ofertas laborales, y revisa las postulaciones.' : 'Verifica las publicaciones de las empresas antes de que las vean los estudiantes.'],
+    alliances: ['Alianzas', 'Empresas aliadas, su vigencia y sus cupos de pasantía.'],
+    reports: ['Reportes y auditoría', 'Resultados por periodo, exportación a Excel (CSV) y bitácora de quién hizo qué.'],
+    users: ['Usuarios', 'Cuentas, perfiles, contraseñas, desbloqueos y respaldo de la base de datos.'],
+    guide: ['Guía de uso', 'El flujo de tu perfil, cada módulo explicado y preguntas frecuentes.']
+  };
+
+  /* Resumen inicial del recorrido: qué hace cada perfil en la plataforma. */
+  const roleIntro = {
+    student: 'Como estudiante te postulas a convocatorias de pasantía, subes los documentos de tu práctica, corriges los que te devuelvan y consultas tu resultado final.',
+    company: 'Como empresa aliada publicas convocatorias según tus cupos, eliges a tus pasantes, avalas sus documentos y evalúas su desempeño.',
+    leader: 'Como docente líder verificas convocatorias, calificas los documentos de las pasantías, emites el veredicto final y consultas la auditoría.',
+    admin: 'Como administrador registras las alianzas y sus cupos, gestionas las cuentas, supervisas las pasantías y respaldas la información.'
+  };
+
+  const intro = [
+    { el: '#tour-sidebar', title: 'Bienvenido a Pasantías FET', text: (roleIntro[role] ? roleIntro[role] + ' ' : '') + 'Este es el menú principal; te mostramos para qué sirve cada opción.' },
+    { el: '#tour-help', title: 'Tutorial siempre disponible', text: 'Con este botón vuelves a ver el recorrido de la pantalla en la que estés.' },
+    { el: '#tour-bell', title: 'Avisos', text: 'La campana muestra cuántos avisos tienes sin leer: documentos por revisar, postulaciones, resultados y más.' },
+    { el: '#tour-user', title: 'Tu cuenta', text: 'Aquí ves tu nombre y perfil. El ícono de salida cierra la sesión de forma segura.' }
+  ];
+
+  const pages = {
     dashboard: [
       { el: '#tour-welcome', title: 'Tu panel', text: 'El panel resume lo más importante para tu perfil y la fecha de hoy.' },
       { el: '#tour-metrics', title: 'Cifras rápidas', text: 'Cada tarjeta lleva al módulo correspondiente. Pulsa el enlace inferior para ir directo.' },

@@ -27,6 +27,18 @@ La contraseña de las cuentas es `FET2026*`. La asignación de perfiles se puede
 
 Si se hace en un solo computador, cada participante usa una ventana de **incógnito** distinta o un navegador distinto, para que las sesiones no se mezclen.
 
+## Si la sesión se hace en el servidor de producción
+
+El servidor de producción no trae cuentas de demostración ni la clave `FET2026*`. Antes del paso 1:
+
+1. Orlando entra con el administrador inicial que se creó al instalar (sección 5.5 o 5.0 del [manual de despliegue](../MANUAL_DESPLIEGUE.md)).
+2. En **Usuarios → Crear usuario** crea la cuenta de Hernán (perfil *Docente líder*, `hernan.patino@fet.edu.co`) y la de Juan José (perfil *Estudiante*, `juan.sabogal@fet.edu.co`), cada una con una contraseña propia.
+3. Les entrega la contraseña a cada uno en persona. La cuenta de la empresa la crea Orlando en la tarea A1.
+
+En los guiones, donde dice `FET2026*`, cada participante usa la contraseña que recibió.
+
+El resultado de ejecutar estos guiones en un servidor de producción recién instalado está en [resultados-ejecucion-produccion.md](resultados-ejecucion-produccion.md).
+
 ## Orden de la sesión
 
 El proceso pasa de un perfil a otro, así que las tareas se hacen en este orden. Cada guion indica en qué momento le toca a cada participante.
@@ -44,10 +56,11 @@ El proceso pasa de un perfil a otro, así que las tareas se hacen en este orden.
 | 9 | Hernán (Docente) | D4: califica el documento con una nota menor a 3.0 y lo devuelve. |
 | 10 | Juan José (Estudiante) | S4: corrige el documento devuelto. |
 | 11 | Hernán (Docente) | D5 y D6: aprueba la corrección y emite el veredicto final. |
-| 12 | Juan José (Estudiante) | S5 y S6: consulta su resultado, sus notificaciones y se postula a la oferta laboral. |
-| 13 | Hernán (Docente) | D7: revisa reportes y auditoría y exporta el CSV. |
-| 14 | Orlando (Administrador) | A2 a A5: amplía cupos, gestiona usuarios, desbloquea una cuenta y descarga el respaldo. |
-| 15 | Todos | Responden el cuestionario de satisfacción (SUS) de su guion. |
+| 12 | Orlando (Empresa) | E6: publica una oferta laboral. Hernán la verifica para que quede publicada. |
+| 13 | Juan José (Estudiante) | S5 y S6: consulta su resultado, sus notificaciones y se postula a la oferta laboral. |
+| 14 | Hernán (Docente) | D7: revisa reportes y auditoría y exporta el CSV. |
+| 15 | Orlando (Administrador) | A2 a A5: amplía cupos, gestiona usuarios, desbloquea una cuenta y descarga el respaldo. |
+| 16 | Todos | Responden el cuestionario de satisfacción (SUS) de su guion. |
 
 **Duración estimada:** 60 a 75 minutos.
 

@@ -10,6 +10,7 @@ const logo='data:image/png;base64,'+fs.readFileSync(path.join(root,'assets/img/l
 const docs=[
  {md:'docs/manual/MANUAL_USUARIO.md',pdf:'docs/pdf/Manual_de_Usuario_Pasantias_FET_v2.0.0.pdf',title:'Manual de usuario',sub:'Guía de uso por perfil: estudiante, empresa aliada, docente líder de pasantías y administrador'},
  {md:'docs/pruebas-despliegue/INFORME_DESPLIEGUE.md',pdf:'docs/pdf/Informe_Prueba_Despliegue_Pasantias_FET_v2.0.0.pdf',title:'Informe de prueba de despliegue',sub:'Instalación en máquinas virtuales Ubuntu Server 24.04 siguiendo el Manual de despliegue'},
+ {md:'docs/pruebas-usuario/resultados-ejecucion-produccion.md',pdf:'docs/pdf/Resultados_Pruebas_por_Rol_Pasantias_FET_v2.0.0.pdf',title:'Resultados de las pruebas por rol',sub:'Ejecución de los guiones de estudiante, empresa, docente y administrador en el servidor de producción'},
  {md:'docs/MANUAL_DESPLIEGUE.md',pdf:'docs/pdf/Manual_de_Despliegue_Pasantias_FET_v2.0.0.pdf',title:'Manual de despliegue',sub:'Instalación, configuración, puesta en marcha, operación y actualización'},
 ];
 const css=`
@@ -55,6 +56,8 @@ pre.mermaid{background:none;border:0;text-align:center}
   const p=await br.newPage();
   await p.goto('file://'+tmp,{waitUntil:'load'});
   await p.waitForFunction(()=>window.__done===true,{timeout:30000});
+  // Las tablas largas pueden partirse entre páginas (sin cortar filas) para no dejar páginas en blanco.
+  await p.evaluate(()=>document.querySelectorAll('table').forEach(t=>{if(t.rows.length>14){t.style.breakInside='auto';[...t.rows].forEach(r=>r.style.breakInside='avoid');}}));
   await p.pdf({path:path.join(root,d.pdf),format:'Letter',printBackground:true,displayHeaderFooter:true,
    headerTemplate:`<div style="font-size:7.5px;color:#7a8a80;width:100%;padding:0 18mm;display:flex;justify-content:space-between"><span>Pasantías FET 2.0.0</span><span>${d.title}</span></div>`,
    footerTemplate:`<div style="font-size:7.5px;color:#7a8a80;width:100%;padding:0 18mm;display:flex;justify-content:space-between"><span>Fundación Escuela Tecnológica de Neiva</span><span>Página <span class="pageNumber"></span> de <span class="totalPages"></span></span></div>`,

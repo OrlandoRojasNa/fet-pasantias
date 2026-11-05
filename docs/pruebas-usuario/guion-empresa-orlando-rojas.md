@@ -122,15 +122,15 @@ Asumes el papel de una empresa con alianza vigente con la FET, que publica convo
 
 ---
 
-## E6 · Publicar una oferta laboral (opcional)
+## E6 · Publicar una oferta laboral
 
-**Turno en la sesión:** paso 14 · al final de la sesión.
+**Turno en la sesión:** paso 12 · cuando el docente ya emitió el veredicto final. Al terminar, avisa a Hernán para que la verifique.
 
 **Qué debes lograr (sin mirar el manual):**
 
 1. Crea una publicación de tipo *Oferta laboral* y envíala a verificación.
 
-**Resultado esperado:** La oferta queda *En revisión* y no ocupa cupos de la alianza.
+**Resultado esperado:** La oferta queda *En revisión* y no ocupa cupos de la alianza. Cuando Hernán la verifica, queda *Publicada* y Juan José la puede ver.
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|

@@ -167,7 +167,11 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             flash('success',['endorse'=>'Documento avalado.','approve'=>'Documento aprobado.','return'=>'Documento devuelto al estudiante.'][$decision].($grade!==null?' Calificación: '.number_format($grade,1).'.':''));
             $back='internships.php?id='.$i['id'];
         }
-    }catch(Throwable $e){ flash('error',$e->getMessage()); }
+    }catch(Throwable $e){
+        flash('error',$e->getMessage());
+        // Si el error ocurre dentro de una pasantía, se vuelve a su detalle y no al listado.
+        if(isset($i['id'])) $back='internships.php?id='.(int)$i['id'];
+    }
     redirect($back);
 }
 
