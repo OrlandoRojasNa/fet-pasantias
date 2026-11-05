@@ -11,6 +11,7 @@ const docs=[
  {md:'docs/manual/MANUAL_USUARIO.md',pdf:'docs/pdf/Manual_de_Usuario_Pasantias_FET_v2.0.0.pdf',title:'Manual de usuario',sub:'Guía de uso por perfil: estudiante, empresa aliada, docente líder de pasantías y administrador'},
  {md:'docs/pruebas-despliegue/INFORME_DESPLIEGUE.md',pdf:'docs/pdf/Informe_Prueba_Despliegue_Pasantias_FET_v2.0.0.pdf',title:'Informe de prueba de despliegue',sub:'Instalación en máquinas virtuales Ubuntu Server 24.04 siguiendo el Manual de despliegue'},
  {md:'docs/pruebas-usuario/resultados-ejecucion-produccion.md',pdf:'docs/pdf/Resultados_Pruebas_por_Rol_Pasantias_FET_v2.0.0.pdf',title:'Resultados de las pruebas por rol',sub:'Ejecución de los guiones de estudiante, empresa, docente y administrador en el servidor de producción'},
+ {md:'docs/pruebas-usuario/simulacion/formato-resultados-simulacion.md',pdf:'docs/pdf/Formato_Resultados_Simulacion_Pasantias_FET_v2.0.0.pdf',title:'Formato de resultados: sesión simulada',sub:'Plan de pruebas recorrido en el papel de cada participante sobre el servidor de producción'},
  {md:'docs/MANUAL_DESPLIEGUE.md',pdf:'docs/pdf/Manual_de_Despliegue_Pasantias_FET_v2.0.0.pdf',title:'Manual de despliegue',sub:'Instalación, configuración, puesta en marcha, operación y actualización'},
 ];
 const css=`
