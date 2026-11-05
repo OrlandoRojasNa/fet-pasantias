@@ -15,6 +15,8 @@ Plataforma web de la Fundación Escuela Tecnológica de Neiva «Jesús Oviedo P�
 
 5. Abre `http://localhost/PruebaFet/`.
 
+> Para un servidor real usa `php database/install.php --produccion --admin-correo=... --admin-identificacion=... --admin-clave=...`, que no carga cuentas ni datos de demostración. Los pasos completos están en el [manual de despliegue](docs/MANUAL_DESPLIEGUE.md).
+
 ## Cuentas de demostración
 
 Todas usan la contraseña `FET2026*`.
@@ -47,6 +49,10 @@ Inicia sesión con los cuatro perfiles y verifica 8 flujos: acceso, permisos por
 
 ## Documentación
 
+- [`docs/MANUAL_DESPLIEGUE.md`](docs/MANUAL_DESPLIEGUE.md): despliegue en producción (Linux o Windows, HTTPS, seguridad, respaldos, actualización y reversión) y ambiente de pruebas con XAMPP.
+- [`docs/pdf/`](docs/pdf/): ambos manuales en PDF, listos para entregar. Se regeneran con `node docs/pdf/generar_pdf.js`.
+- [`docs/manual/MANUAL_USUARIO.md`](docs/manual/MANUAL_USUARIO.md): manual de usuario por perfil (estudiante, empresa, docente líder y administrador), con capturas.
+- [`docs/pruebas-usuario/`](docs/pruebas-usuario/README.md): plan, guiones por integrante y formato de resultados de las pruebas de usuario.
 - `docs/ARQUITECTURA.md`: capas, componentes, perfiles, datos, decisiones y flujo principal.
 - `REQUISITOS-Intranet-FET.md`: alcance de la versión 2.0.
 - `docs/archivo-clase/`: material de entregas anteriores.

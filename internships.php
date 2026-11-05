@@ -272,7 +272,7 @@ if(isset($_GET['id'])){
     <section class="panel" id="tour-int-history"><div class="panel-head"><div><span class="eyebrow">AUDITORÍA</span><h2>Historial de la pasantía</h2></div><span class="muted-inline">Visible solo para docentes líderes y administración</span></div>
     <div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Usuario</th><th>Acción</th><th>Detalle</th></tr></thead><tbody>
     <?php if(!$history):?><tr><td colspan="4" class="empty">Sin eventos registrados.</td></tr><?php endif;?>
-    <?php foreach($history as $h):?><tr><td><?= e(date('d/m/Y H:i',strtotime($h['created_at']))) ?></td><td><?= e($h['full_name']?:'Sistema') ?><small><?= e($h['role']?role_label($h['role']):'') ?></small></td><td><?= e($actionLabel[$h['action']]??$h['action']) ?></td><td><?= e(trim(($h['entity_type']!=='internship'&&isset($docTitle[(int)$h['entity_id']])?'«'.$docTitle[(int)$h['entity_id']].'» ':'').($h['entity_type']==='evidence'?'':(string)$h['details']))) ?></td></tr><?php endforeach;?>
+    <?php foreach($history as $h):?><tr><td><?= e(date('d/m/Y H:i',strtotime($h['created_at']))) ?></td><td><?= e($h['full_name']?:'Sistema') ?><small><?= e($h['role']?role_label($h['role']):'') ?></small></td><td><?= e($actionLabel[$h['action']]??$h['action']) ?></td><td><?= e(trim(($h['entity_type']!=='internship'&&isset($docTitle[(int)$h['entity_id']])?'«'.$docTitle[(int)$h['entity_id']].'» ':'').($h['entity_type']==='evidence'?'':audit_detail($h['details'])))) ?></td></tr><?php endforeach;?>
     </tbody></table></div></section>
     <?php endif;?>
 
