@@ -1,18 +1,17 @@
 <?php $unread=unread_notifications(); $notes=latest_notifications(6); ?>
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Intranet Privada de la Fundación Escuela Tecnológica de Neiva Jesús Oviedo Pérez · Campus Rivera, Huila">
+<meta name="description" content="Plataforma de pasantías de la Fundación Escuela Tecnológica de Neiva Jesús Oviedo Pérez · Campus Rivera, Huila">
 <title><?= e($title) ?> | <?= e(APP_NAME) ?></title>
 <link rel="icon" type="image/png" href="<?= e(url('assets/img/favicon.png')) ?>"><link rel="apple-touch-icon" href="<?= e(url('assets/img/apple-touch-icon.png')) ?>">
 <link rel="stylesheet" href="<?= e(url('assets/css/styles.css')) ?>?v=<?= e(APP_VERSION) ?>"></head>
 <body class="app-body" data-user="<?= (int)$u['id'] ?>" data-role="<?= e($u['role']) ?>" data-page="<?= e(basename($current,'.php')) ?>"><a class="skip-link" href="#contenido">Saltar al contenido</a><div class="app-frame">
 <aside class="sidebar" data-sidebar id="tour-sidebar">
- <a class="side-brand" href="<?= e(url('dashboard.php')) ?>" aria-label="Inicio de la Intranet Privada FET"><img src="<?= e(url('assets/img/logo-fet-white.png')) ?>" alt="Fundación Escuela Tecnológica de Neiva Jesús Oviedo Pérez" width="178" height="97"></a>
- <span class="side-caption">Intranet privada</span>
+ <a class="side-brand" href="<?= e(url('dashboard.php')) ?>" aria-label="Inicio de Pasantías FET"><img src="<?= e(url('assets/img/logo-fet-white.png')) ?>" alt="Fundación Escuela Tecnológica de Neiva Jesús Oviedo Pérez" width="178" height="97"></a>
+ <span class="side-caption">Gestión de pasantías</span>
  <nav class="side-nav" aria-label="Navegación principal">
  <?php foreach(nav_items() as [$href,$label,$ic,$roles,$tone]): if($roles&&!has_role(...$roles)) continue; ?><a class="<?= $current===$href?'active':'' ?>" href="<?= e(url($href)) ?>" data-tour-nav="<?= e(basename($href,'.php')) ?>"<?= $current===$href?' aria-current="page"':'' ?>><span class="nav-icon tone-<?= e($tone) ?>"><?= icon($ic,18) ?></span><?= e($label) ?></a><?php endforeach; ?>
  </nav>
- <div class="ods-mini"><span>ODS priorizados</span><div><b class="ods ods-8" title="Trabajo decente y crecimiento económico">8</b><b class="ods ods-9" title="Industria, innovación e infraestructura">9</b><b class="ods ods-17" title="Alianzas para lograr los objetivos">17</b></div></div>
 </aside>
 <div class="app-main"><header class="topbar"><button class="menu-toggle" type="button" data-menu aria-label="Abrir menú" aria-expanded="false"><?= icon('menu',20) ?></button><div class="topbar-title"><span class="eyebrow"><?= e($eyebrow) ?></span><h1><?= e($title) ?></h1></div>
  <div class="top-actions">

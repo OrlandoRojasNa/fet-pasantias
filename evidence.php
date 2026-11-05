@@ -5,14 +5,10 @@ require __DIR__.'/includes/bootstrap.php';
 require_auth();
 $u=current_user();
 $type=$_GET['type']??''; $id=(int)($_GET['id']??0); $rec=null;
-if($type==='commitment'){
-    $rec=row('SELECT evidence_file,evidence_name,responsible_id FROM commitments WHERE id=?',[$id]);
-    if($rec&&has_role('student')&&(int)$rec['responsible_id']!==$u['id']) $rec=null;
-    if(has_role('company')) $rec=null;
-}elseif($type==='milestone'){
-    $rec=row('SELECT m.evidence_file,m.evidence_name,m.project_id FROM milestones m WHERE m.id=?',[$id]);
-    if($rec&&has_role('student')&&!scalar('SELECT COUNT(*) FROM project_members WHERE project_id=? AND user_id=?',[$rec['project_id'],$u['id']])) $rec=null;
-    if(has_role('company')) $rec=null;
+if($type==='cv'){
+    // Hoja de vida: la ve el estudiante que la subió, la empresa dueña de la publicación, los docentes líderes y el administrador.
+    $rec=row('SELECT a.cv_file evidence_file,a.cv_name evidence_name,a.user_id,o.created_by FROM applications a JOIN opportunities o ON o.id=a.opportunity_id WHERE a.id=?',[$id]);
+    if($rec&&!has_role('admin','leader')&&!in_array((int)$u['id'],[(int)$rec['user_id'],(int)$rec['created_by']],true)) $rec=null;
 }elseif($type==='internship'){
     $rec=row('SELECT d.file evidence_file,d.file_name evidence_name,i.student_id,i.company_id,i.teacher_id FROM internship_documents d JOIN internships i ON i.id=d.internship_id WHERE d.id=?',[$id]);
     if($rec&&!can_view_internship($rec)) $rec=null;

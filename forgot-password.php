@@ -14,7 +14,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         }catch(Throwable){}
     }
 }
-?><!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Recuperar acceso | Intranet FET</title><link rel="icon" type="image/png" href="<?= e(url('assets/img/favicon.png')) ?>"><link rel="stylesheet" href="<?= e(url('assets/css/styles.css')) ?>?v=<?= e(APP_VERSION) ?>"></head>
+?><!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Recuperar acceso | Pasantías FET</title><link rel="icon" type="image/png" href="<?= e(url('assets/img/favicon.png')) ?>"><link rel="stylesheet" href="<?= e(url('assets/css/styles.css')) ?>?v=<?= e(APP_VERSION) ?>"></head>
 <body class="auth-page"><main class="recovery-card"><img class="auth-logo" src="<?= e(url('assets/img/logo-fet.png')) ?>" alt="Fundación Escuela Tecnológica de Neiva" width="170" height="93">
 <h1>Recupera tu acceso</h1><p>Escribe tu correo. Si la cuenta existe, el administrador técnico recibirá la solicitud y te asignará una contraseña nueva. Por seguridad, la respuesta no confirma si el correo está registrado.</p>
 <?php if($sent):?><div class="alert alert-success"><?= icon('check-circle',18) ?><span>Solicitud enviada. Si el correo está registrado, el administrador ya fue avisado.</span></div><?php endif;?><?php if($error):?><div class="alert alert-error"><?= icon('alert',18) ?><span><?= e($error) ?></span></div><?php endif;?>

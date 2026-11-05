@@ -368,3 +368,13 @@ a.bar-row:hover{background:#f5f9f6}
 }
 @media(max-width:640px){.topbar .eyebrow{display:none}.metric-grid{grid-template-columns:1fr 1fr;gap:10px}.metric{padding:14px;grid-template-columns:1fr}.metric strong{font-size:22px}}
 .app-footer{padding-right:96px}@media(max-width:640px){.app-footer{padding-right:76px}}
+
+/* Alianzas y cupos de pasantía (versión 2.0) */
+.kpi-strip.four{grid-template-columns:repeat(4,1fr)}
+.alliance-strip{display:grid;grid-template-columns:auto 1fr minmax(140px,220px);align-items:center;gap:14px;margin-bottom:18px;padding:16px 18px;background:#fff;border:1px solid var(--line);border-radius:14px}
+.alliance-strip strong{display:block;font-size:14px}.alliance-strip small{color:var(--muted);font-size:12px}
+.slots-bar{height:8px;margin:6px 0 4px;background:#e8edef;border-radius:999px;overflow:hidden;min-width:90px}
+.slots-bar i{display:block;height:100%;background:var(--ods-17);border-radius:inherit}
+.status-suspended{background:#fff2dd;color:#93601e}
+@media(max-width:900px){.kpi-strip.four{grid-template-columns:repeat(2,1fr)}.alliance-strip{grid-template-columns:auto 1fr}.alliance-strip .slots-bar{grid-column:1/-1}}
+@media(max-width:640px){.kpi-strip.four{grid-template-columns:1fr}}

@@ -41,9 +41,9 @@ function status_label(string $status): string { return [
     'submitted'=>'Enviada','accepted'=>'Aceptada','rejected'=>'No seleccionada','withdrawn'=>'Retirada',
     'planned'=>'Planeado','active'=>'Activo','paused'=>'En pausa','completed'=>'Completado',
     'pending'=>'Pendiente','in_progress'=>'En curso','blocked'=>'Bloqueado','overdue'=>'Vencido',
-    'prospect'=>'Prospecto','inactive'=>'Inactivo','proposed'=>'Propuesto','expired'=>'Vencido',
-    'approved'=>'Aprobada','cancelled'=>'Cancelada','open'=>'Abierto','fixed'=>'Corregido','verified'=>'Verificado',
-    'practica'=>'Práctica','empleo'=>'Empleo','formacion'=>'Formación'
+    'inactive'=>'Inactivo','expired'=>'Vencida','suspended'=>'Suspendida',
+    'approved'=>'Aprobada','cancelled'=>'Cancelada',
+    'practica'=>'Pasantía','empleo'=>'Oferta laboral','formacion'=>'Formación'
 ][$status]??ucfirst(str_replace('_',' ',$status)); }
 
 function audit(string $action,string $entityType,?int $entityId=null,?string $details=null): void {
@@ -67,7 +67,7 @@ function authenticate(string $identifier,string $password,bool $remember=false):
     $_SESSION['user']=['id'=>(int)$u['id'],'identification'=>$u['identification'],'full_name'=>$u['full_name'],'email'=>$u['email'],'role'=>$u['role'],'program'=>$u['program']];
     $_SESSION['csrf']=bin2hex(random_bytes(32)); audit('login','session',(int)$u['id']);
     if ($remember) create_remember_token((int)$u['id']);
-    return ['ok'=>true,'message'=>'Bienvenido a la Intranet Privada FET.'];
+    return ['ok'=>true,'message'=>'Bienvenido a Pasantías FET.'];
 }
 
 function create_remember_token(int $userId): void {
@@ -90,15 +90,12 @@ function destroy_session(): void { if(current_user()) audit('logout','session',(
 
 function nav_items(): array { return [
     ['dashboard.php','Inicio','home',[],'fet'],
-    ['opportunities.php','Oportunidades','briefcase',[],'ods8'],
     ['internships.php','Pasantías','file',[],'ods8'],
-    ['projects.php','Innovación','rocket',['admin','manager','leader','student'],'ods9'],
-    ['alliances.php','Alianzas','handshake',['admin','manager','leader','student'],'ods17'],
-    ['minutes.php','Actas y compromisos','clipboard',['admin','manager','leader','student'],'fet'],
-    ['reports.php','Indicadores ODS','chart',['admin','manager'],'gold'],
-    ['quality.php','Calidad y pruebas','shield',['admin','manager','leader'],'teal'],
+    ['opportunities.php','Convocatorias y empleo','briefcase',[],'ods9'],
+    ['alliances.php','Alianzas','handshake',['admin','leader'],'ods17'],
+    ['reports.php','Reportes y auditoría','chart',['admin','leader'],'gold'],
     ['users.php','Usuarios','users',['admin'],'slate'],
-    ['guide.php','Guía de uso','compass',[],'gold'],
+    ['guide.php','Guía de uso','compass',[],'teal'],
 ]; }
 
 /** Íconos SVG en línea (trazo de 24 px). Usan currentColor para heredar el color del contenedor. */
@@ -182,23 +179,36 @@ function latest_notifications(int $limit=6): array {
     try { return rows('SELECT * FROM notifications WHERE user_id=? ORDER BY (read_at IS NULL) DESC,created_at DESC LIMIT '.(int)$limit,[$u['id']]); } catch(Throwable) { return []; }
 }
 
-/** Marca como vencidos los compromisos cuya fecha ya pasó. Debe ejecutarse antes de consultarlos. */
-function refresh_overdue_commitments(): void {
-    query("UPDATE commitments SET status='overdue' WHERE due_on<CURDATE() AND status IN ('pending','in_progress')");
+/**
+ * Alianza de una empresa con sus cupos: «used» son las pasantías en curso de esa empresa
+ * y «available» los cupos que quedan para aceptar pasantes. «open» indica si la alianza está vigente.
+ */
+function company_alliance(int $companyId): ?array {
+    $a=row('SELECT * FROM alliances WHERE company_id=?',[$companyId]);
+    if(!$a) return null;
+    $a['used']=(int)scalar("SELECT COUNT(*) FROM internships WHERE company_id=? AND status='active'",[$companyId]);
+    $a['available']=max(0,(int)$a['slots']-$a['used']);
+    $a['open']=$a['status']==='active'&&(!$a['starts_on']||$a['starts_on']<=date('Y-m-d'))&&(!$a['ends_on']||$a['ends_on']>=date('Y-m-d'));
+    return $a;
+}
+/** Lanza un error si la empresa no puede recibir un pasante más (sin alianza vigente o sin cupos). */
+function require_internship_slot(int $companyId): void {
+    $a=company_alliance($companyId);
+    if(!$a||!$a['open']) throw new RuntimeException('La empresa no tiene una alianza vigente con la FET. El administrador debe registrarla o renovarla.');
+    if($a['available']<1) throw new RuntimeException('La alianza de la empresa no tiene cupos disponibles ('.$a['used'].' de '.$a['slots'].' en uso). El administrador puede ampliar los cupos.');
 }
 
 /**
  * Guarda un archivo de evidencia en storage/documents con un nombre aleatorio
  * (nunca el nombre original, para evitar rutas o extensiones peligrosas).
  */
-function store_evidence_upload(string $field): ?array {
+function store_evidence_upload(string $field,array $allowed=['pdf','png','jpg','jpeg','webp','docx','xlsx','pptx','csv','txt','sql','zip']): ?array {
     if(empty($_FILES[$field])||($_FILES[$field]['error']??UPLOAD_ERR_NO_FILE)===UPLOAD_ERR_NO_FILE) return null;
     $f=$_FILES[$field];
     if($f['error']!==UPLOAD_ERR_OK) throw new RuntimeException('No fue posible recibir el archivo.');
     if($f['size']>5*1024*1024) throw new RuntimeException('El archivo supera el límite de 5 MB.');
     $ext=strtolower(pathinfo((string)$f['name'],PATHINFO_EXTENSION));
-    $allowed=['pdf','png','jpg','jpeg','webp','docx','xlsx','pptx','csv','txt','sql','zip'];
-    if(!in_array($ext,$allowed,true)) throw new RuntimeException('Formato no permitido. Usa PDF, imagen, Office, CSV, TXT, SQL o ZIP.');
+    if(!in_array($ext,$allowed,true)) throw new RuntimeException('Formato no permitido. Usa '.strtoupper(implode(', ',$allowed)).'.');
     $stored=bin2hex(random_bytes(12)).'.'.$ext;
     $dir=__DIR__.'/../storage/documents';
     if(!is_dir($dir)) mkdir($dir,0775,true);
@@ -206,10 +216,10 @@ function store_evidence_upload(string $field): ?array {
     return ['stored'=>$stored,'original'=>mb_substr(basename((string)$f['name']),0,180)];
 }
 
-/** Quién puede ver una pasantía y sus documentos: el estudiante, su empresa evaluadora, su docente y la gestión FET. */
+/** Quién puede ver una pasantía y sus documentos: el estudiante, su empresa evaluadora, los docentes líderes y el administrador. */
 function can_view_internship(array $i): bool {
     $u=current_user(); if(!$u) return false;
-    if(has_role('admin','manager')) return true;
+    if(has_role('admin','leader')) return true;
     return in_array((int)$u['id'],[(int)$i['student_id'],(int)$i['company_id'],(int)$i['teacher_id']],true);
 }
 
@@ -223,11 +233,12 @@ function create_internship_from_application(int $applicationId): ?int {
     $existing=scalar('SELECT id FROM internships WHERE application_id=?',[$applicationId]);
     if($existing) return (int)$existing;
     $company=$a['creator_role']==='company'?(int)$a['created_by']:null;
+    if($company) require_internship_slot($company);
     query('INSERT INTO internships(application_id,student_id,company_id,title,organization,starts_on) VALUES(?,?,?,?,?,CURDATE())',[$applicationId,$a['user_id'],$company,$a['title'],$a['organization']]);
     $id=(int)db()->lastInsertId();
     audit('create','internship',$id,$a['title']);
     notify((int)$a['user_id'],'Tu pasantía quedó registrada','«'.$a['title'].'»: ya puedes subir tus documentos de pasantía.','internships.php?id='.$id);
-    notify_roles(['admin','manager'],'Pasantía sin docente asignado','«'.$a['title'].'» necesita un docente que valide los documentos.','internships.php?id='.$id);
+    notify_roles(['leader'],'Nueva pasantía por asignar','«'.$a['title'].'» necesita un docente que valide los documentos.','internships.php?id='.$id);
     return $id;
 }
 

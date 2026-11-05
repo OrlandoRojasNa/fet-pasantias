@@ -1,4 +1,4 @@
-/* Recorrido guiado de la Intranet Privada FET.
+/* Recorrido guiado de Pasantías FET.
  * Resalta elementos reales de cada pantalla y explica su uso según el perfil.
  * Se abre solo la primera vez que cada usuario entra al panel; después, con el botón (?). */
 (() => {
@@ -18,92 +18,47 @@
 
   /* Textos del menú según el perfil: cada uno explica para qué le sirve ese módulo a quien lo usa. */
   const navText = {
-    dashboard: ['Inicio', is('company') ? 'El panel de tu empresa: vacantes creadas, publicadas, en revisión y postulaciones recibidas.' : 'Tu resumen: oportunidades abiertas, proyectos, convenios y tus compromisos próximos.'],
-    opportunities: ['Oportunidades · ODS 8', is('company') ? 'Publica tus vacantes de práctica o empleo y decide sobre los estudiantes que se postulan.' : is('student') ? 'Prácticas, empleos y formación verificados por la FET. Aquí te postulas.' : is('admin', 'manager') ? 'Verifica las vacantes que envían las empresas antes de publicarlas.' : 'Prácticas, empleos y formación verificados por la FET.'],
-    internships: ['Pasantías', is('student') ? 'Sube aquí los documentos de tu pasantía y consulta las observaciones, la evaluación de la empresa y el resultado final.' : is('company') ? 'Revisa y avala los documentos de tus pasantes y registra la evaluación de su desempeño.' : is('leader') ? 'Pasantías que validas: apruebas los documentos y, al final, decides si el estudiante aprueba o reprueba la práctica.' : 'Seguimiento de todas las pasantías: asigna la empresa evaluadora y el docente que valida.'],
-    projects: ['Innovación · ODS 9', 'Proyectos con equipo, hitos y evidencias.'],
-    alliances: ['Alianzas · ODS 17', 'Aliados, convenios y actividades con resultados.'],
-    minutes: ['Actas y compromisos', 'Actas en Formato 1 y compromisos con responsable, fecha y evidencia.'],
-    reports: ['Indicadores ODS', 'Indicadores por periodo y exportación a Excel (CSV).'],
-    quality: ['Calidad y pruebas', 'Comprobaciones automáticas, pruebas de flujos, hallazgos y respaldo.'],
-    users: ['Usuarios', 'Cuentas, perfiles y contraseñas.'],
-    guide: ['Guía de uso', 'Explicación de cada módulo y preguntas frecuentes.']
-  };
-
-  /* Resumen inicial del recorrido: qué hace cada perfil en la plataforma. */
-  const roleIntro = {
-    student: 'Como estudiante buscas oportunidades, te postulas y, cuando una empresa te acepta en una práctica, subes aquí los documentos de tu pasantía. La empresa evalúa tu desempeño y el docente decide si apruebas.',
-    company: 'Como empresa publicas vacantes, eliges a tus pasantes, avalas los documentos que suben y, al final, evalúas su desempeño para que el docente emita el resultado.',
-    leader: 'Como docente lideras proyectos y actas y validas las pasantías que te asignan: apruebas documentos y emites el veredicto final con base en la evaluación de la empresa.',
-    manager: 'Como gestor institucional verificas las vacantes de las empresas, asignas el docente y la empresa de cada pasantía y sigues convenios, actas e indicadores.',
-    admin: 'Como administrador gestionas cuentas y perfiles, verificas vacantes, supervisas las pasantías y respaldas la información.'
-  };
-
-  const intro = [
-    { el: '#tour-sidebar', title: 'Bienvenido a la Intranet Privada FET', text: (roleIntro[role] ? roleIntro[role] + ' ' : '') + 'Este menú reúne solo los módulos de tu perfil.' },
-    { el: '#tour-help', title: 'Tutorial siempre disponible', text: 'Con este botón, o con el círculo (?) de abajo a la derecha, repites la explicación de la pantalla en la que estés.' },
-    { el: '#tour-bell', title: 'Avisos', text: 'La campana muestra cuántos avisos tienes sin leer: compromisos asignados, resultados de postulaciones y solicitudes por revisar.' },
-    { el: '#tour-user', title: 'Tu cuenta', text: 'Aquí ves tu nombre y perfil. El ícono de salida cierra la sesión de forma segura.' }
-  ];
-
-  const pages = {
     dashboard: [
-      { el: '#tour-welcome', title: 'Tu panel', text: is('company') ? 'Este es el panel de tu empresa: vacantes creadas, publicadas, en revisión y postulaciones recibidas.' : 'El panel resume lo más importante para tu perfil y la fecha de hoy.' },
+      { el: '#tour-welcome', title: 'Tu panel', text: 'El panel resume lo más importante para tu perfil y la fecha de hoy.' },
       { el: '#tour-metrics', title: 'Cifras rápidas', text: 'Cada tarjeta lleva al módulo correspondiente. Pulsa el enlace inferior para ir directo.' },
-      { el: '#tour-my-commitments', title: is('company') ? 'Vacantes recientes' : 'Tus compromisos', text: is('company') ? 'Tus últimas vacantes con su estado y número de postulaciones. Los pasantes que aceptes aparecerán en «Pasantías».' : 'Los compromisos de las actas que te asignaron, ordenados por fecha. Un punto rojo indica que ya venció.' },
-      { el: '#tour-ods', title: 'Tres ejes del proyecto', text: 'La intranet organiza el trabajo en torno a los ODS 8, 9 y 17.' }
+      { el: '#tour-my-work', title: is('student') ? 'Mis pasantías' : is('company') ? 'Tus pasantes' : 'Cola de revisión', text: is('student') ? 'Tu pasantía, cuántos documentos van aprobados y si alguno debe corregirse.' : is('company') ? 'Tus pasantes, los documentos por avalar y si falta tu evaluación de desempeño.' : 'Pasantías con documentos esperando tu calificación, empezando por las más antiguas.' }
     ],
     opportunities: [
-      { el: '#tour-filters', title: 'Filtra por tipo', text: 'Muestra solo prácticas, empleos o formación.' },
-      { el: '#tour-new-opp', title: 'Crear una oportunidad', text: is('company') ? 'Registra tu vacante y envíala a revisión. La FET la verifica antes de publicarla y recibirás los postulantes aquí mismo.' : 'Registra una convocatoria. Puedes publicarla verificada o dejarla en revisión.' },
-      { el: '#tour-opps', title: 'Convocatorias', text: is('student') ? 'Pulsa «Postularme» y cuenta por qué te interesa. Verás el resultado en «Mis postulaciones» y en la campana.' : 'Cada tarjeta muestra estado, cierre y número de postulaciones. Cambia el estado desde el selector.' },
-      { el: '#tour-apps', title: is('student') ? 'Mis postulaciones' : 'Postulaciones recibidas', text: is('student') ? 'Sigue el estado de cada postulación. Si una empresa te acepta en una práctica, tu pasantía aparece en «Pasantías».' : 'Cambia el estado de cada postulación; el estudiante recibe un aviso. Al aceptar una postulación a una práctica se crea la pasantía.' }
+      { el: '#tour-alliance', title: 'Tu alianza', text: 'Cupos de pasantía en uso y disponibles. Cada pasante aceptado ocupa un cupo hasta que su pasantía termina.' },
+      { el: '#tour-filters', title: 'Filtra por tipo', text: 'Muestra solo convocatorias de pasantía u ofertas laborales.' },
+      { el: '#tour-new-opp', title: 'Nueva publicación', text: is('company') ? 'Crea la convocatoria u oferta y envíala a verificación. La FET la revisa antes de mostrarla a los estudiantes.' : 'Registra una publicación; puedes dejarla verificada directamente.' },
+      { el: '#tour-opps', title: 'Publicaciones', text: is('student') ? 'Pulsa «Postularme» o «Aplicar con mi hoja de vida». En las ofertas laborales la hoja de vida en PDF es obligatoria.' : 'Cada tarjeta muestra estado, cierre y postulaciones. Cambia el estado desde el selector (con «Publicada» la verificas).' },
+      { el: '#tour-apps', title: is('student') ? 'Mis postulaciones' : 'Postulaciones recibidas', text: is('student') ? 'Sigue el estado de cada postulación. Si te aceptan en una pasantía, aparece en «Pasantías».' : 'Descarga la hoja de vida y cambia el estado. Al aceptar una postulación de pasantía se crea la pasantía y se ocupa un cupo.' }
     ],
     internships: detail ? [
-      { el: '#tour-int-info', title: 'Datos de la pasantía', text: 'Estudiante, empresa evaluadora, docente que valida, periodo y cuántos documentos están aprobados.' },
+      { el: '#tour-int-info', title: 'Datos de la pasantía', text: 'Estudiante, empresa evaluadora, docente líder asignado, periodo y cuántos documentos están aprobados.' },
       { el: '#tour-int-upload', title: 'Subir documento', text: 'Elige el tipo (plan de práctica, informe parcial, informe final, certificado…) y adjunta el archivo. Tu empresa y tu docente reciben un aviso.' },
       { el: '#tour-int-eval', title: 'Evaluar el desempeño', text: 'Al terminar la práctica califica al pasante de 1 a 5 y describe su desempeño. El docente usará esta evaluación para decidir el resultado.' },
       { el: '#tour-int-verdict', title: 'Veredicto final', text: 'Con promedio de notas de 3.0 o más la pasantía se aprueba; con menos de 3.0 se reprueba. La plataforma sugiere el resultado; tú lo confirmas con una justificación. El veredicto no se puede cambiar.' },
-      { el: '#tour-int-assign', title: 'Asignar responsables', text: 'Define la empresa evaluadora, el docente que valida y el periodo de la pasantía.' },
+      { el: '#tour-int-assign', title: 'Asignar responsables', text: 'Define la empresa evaluadora, el docente líder asignado, el periodo y el estado de la pasantía.' },
       { el: '#tour-int-final', title: 'Evaluación final', text: is('student') ? 'Aquí verás la calificación y los comentarios de la empresa y, al final, el resultado y la justificación del docente.' : is('company') ? 'Tu evaluación de desempeño queda aquí y el docente la ve. Cuando él decida, verás el resultado.' : 'Evaluación de la empresa a la izquierda y veredicto del docente a la derecha.' },
+      { el: '#tour-int-history', title: 'Historial de auditoría', text: 'Quién subió, revisó, calificó o descargó cada documento y cuándo. Solo lo ven los docentes líderes y el administrador.' },
       { el: '#tour-int-docs', title: 'Documentos de la pasantía', text: is('student') ? 'Cada documento muestra su estado. Si te lo devuelven, lee la observación y pulsa «Corregir» para subir la nueva versión.' : is('company') ? 'Descarga cada documento y pulsa «Revisar» para avalarlo o devolverlo con observaciones.' : is('leader') ? 'Pulsa «Revisar», escribe la nota de 0.0 a 5.0 y aprueba el documento (3.0 o más) o devuélvelo con observaciones.' : 'Estado de cada documento y las observaciones de la empresa y el docente.' }
     ] : [
-      { el: '#tour-int-intro', title: 'Pasantías', text: is('student') ? 'Tu pasantía se crea cuando una empresa acepta tu postulación a una práctica.' : is('company') ? 'Aquí están los estudiantes que aceptaste como pasantes.' : is('leader') ? 'Aquí están las pasantías que te asignaron para validar.' : 'Todas las pasantías de la FET y su avance.' },
+      { el: '#tour-int-intro', title: 'Pasantías', text: is('student') ? 'Tu pasantía se crea cuando una empresa acepta tu postulación a una práctica.' : is('company') ? 'Aquí están los estudiantes que aceptaste como pasantes.' : 'Todas las pasantías de la FET y su avance.' },
       { el: '#tour-int-new', title: 'Registrar pasantía', text: 'Registra una pasantía a mano cuando no viene de una postulación, con su estudiante, empresa y docente.' },
       { el: '#tour-int-list', title: 'Seguimiento', text: 'Cada fila muestra la empresa, el docente, cuántos documentos están aprobados o por revisar y el estado o resultado final. Pulsa «Abrir» para ver el detalle.' }
     ],
-    projects: [
-      { el: '#tour-new-project', title: 'Nuevo proyecto', text: 'Define nombre, ODS, líder y fechas. El líder queda como integrante del equipo.' },
-      { el: '#tour-projects', title: 'Seguimiento de proyectos', text: 'El porcentaje se calcula con los hitos completados. En cada hito puedes escribir la evidencia o adjuntar un archivo, y agregar integrantes al equipo.' }
-    ],
     alliances: [
-      { el: '#tour-new-partner', title: 'Aliados y convenios', text: 'Registra primero el aliado y luego el convenio con su responsable, vigencia y referencia de evidencia.' },
-      { el: '#tour-agreements', title: 'Convenios', text: 'Cada convenio acumula actividades con resultados. Así se mide el ODS 17.' }
-    ],
-    minutes: detail ? [
-      { el: '#tour-acta', title: 'Acta en Formato 1', text: 'El acta conserva la estructura institucional: participantes, objetivos, desarrollo, compromisos, conclusión, agenda y firmas. Pulsa «Imprimir o guardar PDF» para obtener el documento.' },
-      { el: '#tour-commitments', title: 'Compromisos del acta', text: 'La barra muestra cuántos están cumplidos. El responsable pulsa «Actualizar» para registrar la evidencia.' }
-    ] : [
-      { el: '#tour-kpis', title: 'Cumplimiento', text: 'Actas registradas, compromisos cumplidos, pendientes, vencidos y el porcentaje general de cumplimiento.' },
-      { el: '#tour-new-minute', title: 'Registrar un acta', text: 'El formulario sigue el Formato 1 de la FET. Después de guardarla, agrega sus compromisos desde el detalle.' },
-      { el: '#tour-minutes', title: 'Actas 1 a 6', text: 'Cada tarjeta abre el acta completa y muestra el avance de sus compromisos.' },
-      { el: '#tour-matrix', title: 'Matriz de compromisos', text: 'Filtra por acta, responsable o estado. Con «Actualizar» registras el avance y adjuntas la evidencia; sin evidencia no se puede completar.' }
+      { el: '#tour-new-alliance', title: 'Nueva alianza', text: 'Registra la empresa, crea su cuenta de acceso (NIT o correo y contraseña inicial) y define sus cupos de pasantía.' },
+      { el: '#tour-alliance-kpis', title: 'Cupos', text: 'Alianzas vigentes, cupos totales, pasantes en curso y cupos disponibles.' },
+      { el: '#tour-alliances', title: 'Empresas aliadas', text: is('admin') ? 'Pulsa «Editar o ampliar» para subir los cupos, renovar la vigencia o suspender la alianza.' : 'Ocupación de cupos y convocatorias abiertas de cada empresa.' }
     ],
     reports: [
-      { el: '#tour-period', title: 'Reporte por periodo', text: 'Elige las fechas y pulsa «Aplicar». «Exportar CSV» descarga los indicadores para abrirlos en Excel.' },
-      { el: '#tour-indicators', title: 'Indicadores ODS', text: 'Cada indicador muestra su meta y cuántos registros se usaron en el cálculo.' },
-      { el: '#tour-compliance', title: 'Cumplimiento por acta', text: 'Compara cuántos compromisos de cada acta se cumplieron.' },
-      { el: '#tour-audit', title: 'Auditoría', text: 'Registro de quién hizo qué y cuándo.' }
-    ],
-    quality: [
-      { el: '#tour-checks', title: 'Comprobaciones automáticas', text: 'Se recalculan en cada visita: control de acceso, CSRF, contraseñas, llaves foráneas, evidencias y auditoría.' },
-      { el: '#tour-flows', title: 'Flujos de prueba', text: 'Resultado de la prueba automática que inicia sesión con cada perfil. Abre un flujo para ver cada verificación.' },
-      { el: '#hallazgos', title: 'Hallazgos', text: 'Registra defectos con prioridad y responsable y cambia su estado hasta verificarlos.' },
-      { el: '#tour-backup', title: 'Respaldo SQL', text: 'Descarga una copia completa de la base de datos con su huella SHA-256 para verificarla.' }
+      { el: '#tour-period', title: 'Reporte por periodo', text: 'Elige las fechas y pulsa «Aplicar». «Exportar CSV» descarga el detalle para Excel.' },
+      { el: '#tour-indicators', title: 'Resumen', text: 'Pasantías, resultados, nota promedio y documentos pendientes.' },
+      { el: '#tour-compliance', title: 'Por alianza', text: 'Ocupación de cupos y resultados de cada empresa.' },
+      { el: '#tour-audit', title: 'Bitácora de auditoría', text: 'Registro de quién hizo qué y cuándo. Filtra por usuario.' }
     ],
     users: [
       { el: '#tour-new-user', title: 'Crear usuario', text: 'Asigna identificación, correo, perfil y una contraseña inicial de al menos ocho caracteres.' },
-      { el: '#tour-users-table', title: 'Cuentas', text: 'Cambia el perfil, restablece la contraseña o desactiva una cuenta. No puedes desactivar tu propia cuenta.' }
+      { el: '#tour-backup', title: 'Respaldo SQL', text: 'Descarga una copia completa de la base de datos con su huella SHA-256 para verificarla.' },
+      { el: '#tour-users-table', title: 'Cuentas', text: 'Cambia el perfil, desbloquea, restablece la contraseña o desactiva una cuenta. No puedes modificar tu propia cuenta.' }
     ],
     guide: [
       { el: '#tour-guide-hero', title: 'Guía de uso', text: 'Aquí encuentras el flujo de trabajo de tu perfil, la descripción de cada módulo y las preguntas frecuentes.' }

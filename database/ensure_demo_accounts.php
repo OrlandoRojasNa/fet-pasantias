@@ -11,12 +11,14 @@ try{
         $config['password'],
         [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]
     );
-    $pdo->exec("ALTER TABLE users MODIFY role ENUM('admin','manager','leader','student','company') NOT NULL DEFAULT 'student'");
+    $pdo->exec("UPDATE users SET role='admin' WHERE role='manager'");
+    $pdo->exec("ALTER TABLE users MODIFY role ENUM('admin','leader','student','company') NOT NULL DEFAULT 'student'");
 
     $password='FET2026*';
     $hash=password_hash($password,PASSWORD_DEFAULT);
     $accounts=[
         ['1000000001','Administrador FET','admin@fet.edu.co','admin','Tecnología'],
+        ['1000000003','Miguel Antonio Urbano Silva','docente@fet.edu.co','leader','Ingeniería de Software'],
         ['1076502055','Estudiante Demostración','estudiante@fet.edu.co','student','Ingeniería de Software'],
         ['900123456','Empresa de Pasantías Demo','empresa@fet.edu.co','company','Empresa Aliada de Pasantías'],
     ];
