@@ -4,7 +4,7 @@
 
 ## 1. Resumen por tarea
 
-Copia aquí el resultado de cada guion: ✅ completó sin ayuda · 🟡 completó con ayuda · ❌ no completó.
+Copia aquí el resultado de cada guion: *Completó* (sin ayuda), *Con ayuda* o *No completó*.
 
 | Código | Participante | Tarea | Resultado | Tiempo (min) | Dificultad (1-5) | Observación principal |
 |---|---|---|---|---|---|---|
@@ -33,7 +33,7 @@ Copia aquí el resultado de cada guion: ✅ completó sin ayuda · 🟡 complet�
 | S5 | Juan José (Estudiante) | Consultar resultado final | | | | |
 | S6 | Juan José (Estudiante) | Aplicar a oferta laboral | | | | |
 
-**Tasa de éxito:** tareas ✅ ______ de 24 (____ %) · con ayuda 🟡 ______ · no completadas ❌ ______
+**Tasa de éxito:** tareas completadas sin ayuda ______ de 24 (____ %); con ayuda ______; no completadas ______.
 
 ## 2. Satisfacción (SUS)
 
@@ -67,6 +67,6 @@ Severidad: **Alta** (impide completar la tarea) · **Media** (la tarea se comple
 
 - **Lo que funcionó bien:**
 - **Lo que hay que mejorar:**
-- **Decisión:** ☐ Lista para entrega · ☐ Lista con ajustes menores · ☐ Requiere correcciones antes de la entrega
+- **Decisión** (marca una con X): ( ) Lista para entrega · ( ) Lista con ajustes menores · ( ) Requiere correcciones antes de la entrega
 
 **Responsables:** Juan José Sabogal García · Hernán Felipe Patiño Rico · Orlando Rojas Narváez

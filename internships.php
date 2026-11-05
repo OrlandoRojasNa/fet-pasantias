@@ -77,7 +77,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             query('UPDATE internships SET company_rating=?,company_evaluation=?,company_evaluated_at=NOW() WHERE id=?',[$rating,$text,$i['id']]);
             audit('evaluate','internship',(int)$i['id'],'calificación '.$rating);
             if($i['teacher_id']) notify((int)$i['teacher_id'],'Evaluación de desempeño recibida','La empresa calificó a '.$i['student'].' con '.$rating.'/5 en «'.$i['title'].'».','internships.php?id='.$i['id']);
-            notify((int)$i['student_id'],'La empresa evaluó tu desempeño','Ya puedes ver la evaluación de «'.$i['title'].'».','internships.php?id='.$i['id']);
+            $edited=(bool)$i['company_evaluated_at'];
+            notify((int)$i['student_id'],$edited?'La empresa actualizó tu evaluación':'La empresa evaluó tu desempeño',($edited?'Hay cambios en la evaluación de «':'Ya puedes ver la evaluación de «').$i['title'].'».','internships.php?id='.$i['id']);
             flash('success','Evaluación de desempeño guardada. El docente ya puede verla.');
             $back='internships.php?id='.$i['id'];
         }elseif($action==='verdict'){
@@ -122,7 +123,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             query("UPDATE internship_documents SET file=?,file_name=?,status='submitted',endorsed_at=NULL,approved_at=NULL,grade=NULL,graded_by=NULL,graded_at=NULL WHERE id=?",[$file['stored'],$file['original'],$d['id']]);
             $note=post_str('comment');
             if($note!=='') query('INSERT INTO document_comments(document_id,user_id,decision,body) VALUES(?,?,?,?)',[$d['id'],$uid,'resubmit',$note]);
-            audit('resubmit','internship_document',(int)$d['id']);
+            audit('resubmit','internship_document',(int)$d['id'],$d['title']);
             $msg=$u['full_name'].' corrigió «'.$d['title'].'».';
             if($i['company_id']) notify((int)$i['company_id'],'Documento corregido por avalar',$msg,'internships.php?id='.$i['id']);
             if($i['teacher_id']) notify((int)$i['teacher_id'],'Documento de pasantía corregido',$msg,'internships.php?id='.$i['id']);
@@ -167,7 +168,11 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
             flash('success',['endorse'=>'Documento avalado.','approve'=>'Documento aprobado.','return'=>'Documento devuelto al estudiante.'][$decision].($grade!==null?' Calificación: '.number_format($grade,1).'.':''));
             $back='internships.php?id='.$i['id'];
         }
-    }catch(Throwable $e){ flash('error',$e->getMessage()); }
+    }catch(Throwable $e){
+        flash('error',$e->getMessage());
+        // Si el error ocurre dentro de una pasantía, se vuelve a su detalle y no al listado.
+        if(isset($i['id'])) $back='internships.php?id='.(int)$i['id'];
+    }
     redirect($back);
 }
 

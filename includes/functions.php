@@ -19,6 +19,7 @@ function rows(string $sql, array $params=[]): array { return query($sql,$params)
 function row(string $sql, array $params=[]): ?array { $r=query($sql,$params)->fetch(); return $r ?: null; }
 function scalar(string $sql, array $params=[]): mixed { return query($sql,$params)->fetchColumn(); }
 
+function is_production(): bool { return strtolower((string)getenv('APP_ENV'))==='production'; }
 function base_url(): string {
     $configured=getenv('APP_BASE_URL'); if ($configured) return rtrim($configured,'/');
     $script=str_replace('\\','/',$_SERVER['SCRIPT_NAME'] ?? ''); return rtrim(dirname($script),'/.');
@@ -218,8 +219,9 @@ function store_evidence_upload(string $field,array $allowed=['pdf','png','jpg','
     if(!in_array($ext,$allowed,true)) throw new RuntimeException('Formato no permitido. Usa '.strtoupper(implode(', ',$allowed)).'.');
     $stored=bin2hex(random_bytes(12)).'.'.$ext;
     $dir=__DIR__.'/../storage/documents';
-    if(!is_dir($dir)) mkdir($dir,0775,true);
+    if(!is_dir($dir)) mkdir($dir,0750,true);
     if(!move_uploaded_file($f['tmp_name'],$dir.'/'.$stored)) throw new RuntimeException('No fue posible guardar el archivo.');
+    @chmod($dir.'/'.$stored,0640); // move_uploaded_file deja el archivo con permisos 0666: solo el servidor web debe leerlo.
     return ['stored'=>$stored,'original'=>mb_substr(basename((string)$f['name']),0,180)];
 }
 

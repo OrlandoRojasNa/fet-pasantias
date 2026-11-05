@@ -378,3 +378,4 @@ a.bar-row:hover{background:#f5f9f6}
 .status-suspended{background:#fff2dd;color:#93601e}
 @media(max-width:900px){.kpi-strip.four{grid-template-columns:repeat(2,1fr)}.alliance-strip{grid-template-columns:auto 1fr}.alliance-strip .slots-bar{grid-column:1/-1}}
 @media(max-width:640px){.kpi-strip.four{grid-template-columns:1fr}}
+.form-section{margin:6px 0 -4px;font-size:14px;color:var(--green);border-bottom:1px solid var(--line);padding-bottom:6px}.form-section small{display:block;font-weight:400;color:var(--muted,#5f6f68);font-size:12.5px;margin-top:3px}[data-new-account][hidden]{display:none}

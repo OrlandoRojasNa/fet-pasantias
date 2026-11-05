@@ -56,7 +56,15 @@ if(($_GET['formato']??'')==='csv'){
 $who=(int)($_GET['usuario']??0);
 $auditWhere='a.created_at BETWEEN ? AND ?'; $auditArgs=$range;
 if($who){ $auditWhere.=' AND a.user_id=?'; $auditArgs[]=$who; }
-$recent=rows("SELECT a.*,u.full_name,u.role FROM audit_events a LEFT JOIN users u ON u.id=a.user_id WHERE $auditWhere AND a.action NOT IN ('login','logout') ORDER BY a.created_at DESC,a.id DESC LIMIT 60",$auditArgs);
+// Nombre legible del elemento afectado (título de la publicación, del documento, de la pasantía, empresa o usuario).
+$recent=rows("SELECT a.*,u.full_name,u.role,COALESCE(o.title,i.title,CONCAT(d.title,' · ',di.title),al.name,eu.full_name,ao.title) AS entity_name FROM audit_events a LEFT JOIN users u ON u.id=a.user_id
+ LEFT JOIN opportunities o ON a.entity_type='opportunity' AND o.id=a.entity_id
+ LEFT JOIN internships i ON a.entity_type='internship' AND i.id=a.entity_id
+ LEFT JOIN internship_documents d ON a.entity_type='internship_document' AND d.id=a.entity_id LEFT JOIN internships di ON di.id=d.internship_id
+ LEFT JOIN alliances al ON a.entity_type='alliance' AND al.id=a.entity_id
+ LEFT JOIN users eu ON a.entity_type='user' AND eu.id=a.entity_id
+ LEFT JOIN applications ap ON a.entity_type='application' AND ap.id=a.entity_id LEFT JOIN opportunities ao ON ao.id=ap.opportunity_id
+ WHERE $auditWhere AND a.action NOT IN ('login','logout') ORDER BY a.created_at DESC,a.id DESC LIMIT 60",$auditArgs);
 $people=rows("SELECT id,full_name FROM users ORDER BY full_name");
 $actionLabels=['apply'=>'Postulación','status'=>'Cambio de estado','create'=>'Creación','update'=>'Edición','assign'=>'Asignación','upload'=>'Documento subido','resubmit'=>'Corrección subida','review'=>'Revisión de documento','evaluate'=>'Evaluación de empresa','verdict'=>'Veredicto final','backup'=>'Respaldo SQL','export'=>'Exportación','download'=>'Descarga','password'=>'Cambio de contraseña','role'=>'Cambio de perfil','unlock'=>'Desbloqueo'];
 $entityLabels=['opportunity'=>'Publicación','application'=>'Postulación','internship'=>'Pasantía','internship_document'=>'Documento','alliance'=>'Alianza','user'=>'Usuario','database'=>'Base de datos','report'=>'Reporte','evidence'=>'Archivo'];
@@ -90,6 +98,6 @@ app_header('Reportes y auditoría','PASANTÍAS FET');
 <form method="get" class="inline-form"><input type="hidden" name="desde" value="<?= e($from) ?>"><input type="hidden" name="hasta" value="<?= e($to) ?>"><select name="usuario" aria-label="Filtrar por usuario"><option value="">Todos los usuarios</option><?php foreach($people as $p):?><option value="<?= (int)$p['id'] ?>" <?= $who===(int)$p['id']?'selected':'' ?>><?= e($p['full_name']) ?></option><?php endforeach;?></select><button class="button button-small">Filtrar</button></form></div>
 <div class="table-wrap"><table><thead><tr><th>Fecha</th><th>Usuario</th><th>Acción</th><th>Elemento</th><th>Detalle</th></tr></thead><tbody>
 <?php if(!$recent):?><tr><td colspan="5" class="empty">Sin actividad en el periodo.</td></tr><?php endif;?>
-<?php foreach($recent as $r):?><tr><td><?= e(date('d/m/Y H:i',strtotime($r['created_at']))) ?></td><td><?= e($r['full_name']?:'Sistema') ?><small><?= e($r['role']?role_label($r['role']):'') ?></small></td><td><?= e($actionLabels[$r['action']]??$r['action']) ?></td><td><?= e(($entityLabels[$r['entity_type']]??$r['entity_type']).($r['entity_id']?' #'.$r['entity_id']:'')) ?></td><td><?= e($r['details']!==null&&$r['details']!==''?audit_detail($r['details']):'—') ?></td></tr><?php endforeach;?>
+<?php foreach($recent as $r):?><tr><td><?= e(date('d/m/Y H:i',strtotime($r['created_at']))) ?></td><td><?= e($r['full_name']?:'Sistema') ?><small><?= e($r['role']?role_label($r['role']):'') ?></small></td><td><?= e($actionLabels[$r['action']]??$r['action']) ?></td><td><?= e($entityLabels[$r['entity_type']]??$r['entity_type']) ?><?php if($r['entity_name']):?><small><?= e($r['entity_name']) ?></small><?php elseif($r['entity_id']):?><small>#<?= (int)$r['entity_id'] ?></small><?php endif;?></td><td><?= e($r['details']!==null&&$r['details']!==''?audit_detail($r['details']):'—') ?></td></tr><?php endforeach;?>
 </tbody></table></div></section>
 <?php app_footer(); ?>

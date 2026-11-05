@@ -28,6 +28,8 @@
 3. [Requisitos y descargas](#3-requisitos-y-descargas)
 4. [Ambientes](#4-ambientes)
 5. [Instalación en producción (servidor Linux)](#5-instalación-en-producción-servidor-linux)
+   - [Instalación automática](#50-instalación-automática-recomendada)
+   - [Probar en una máquina virtual (VirtualBox)](#510-probar-el-despliegue-en-una-máquina-virtual-virtualbox)
 6. [Instalación en producción (servidor Windows)](#6-instalación-en-producción-servidor-windows)
 7. [Verificación posterior al despliegue](#7-verificación-posterior-al-despliegue)
 8. [Puesta en marcha](#8-puesta-en-marcha)
@@ -135,6 +137,32 @@ flowchart LR
 
 Los comandos se ejecutan en Ubuntu Server con un usuario que tenga `sudo`. Reemplaza `pasantias.fet.edu.co` por el dominio real.
 
+### 5.0 Instalación automática (recomendada)
+
+El script `deploy/instalar_servidor.sh` ejecuta en orden los pasos 5.1 a 5.9 y deja programado el respaldo diario. Úsalo en un servidor Ubuntu 22.04 o 24.04 recién instalado:
+
+```bash
+sudo apt install -y git
+git clone https://github.com/OrlandoRojasNa/fet-pasantias.git ~/fet-pasantias
+cd ~/fet-pasantias
+sudo DOMINIO=pasantias.fet.edu.co \
+     ADMIN_CORREO=coordinacion.pasantias@fet.edu.co \
+     ADMIN_ID=NUMERO_DE_DOCUMENTO \
+     ADMIN_CLAVE='ClaveSegura2026' \
+     bash deploy/instalar_servidor.sh
+```
+
+| Variable | Obligatoria | Uso |
+|---|---|---|
+| `DOMINIO` | Sí | Nombre del sitio, por ejemplo `pasantias.fet.edu.co`. |
+| `ADMIN_CORREO`, `ADMIN_ID`, `ADMIN_CLAVE` | Sí | Datos del administrador inicial. La clave debe tener 10 caracteres o más, con letras y números. |
+| `ADMIN_NOMBRE` | No | Nombre visible del administrador. |
+| `VERSION` | No | Etiqueta o rama a instalar (por defecto `main`). Por ejemplo `v2.0.0`. |
+| `CERTBOT=1` | No | Pide un certificado de Let's Encrypt. Requiere un dominio público que apunte al servidor. Sin esta variable, el script usa un certificado autofirmado. |
+| `DB_PASS` | No | Clave del usuario de base de datos. Si no se da, se genera una aleatoria; si ya existe un `.env`, se conserva la suya. |
+
+El script se puede volver a ejecutar sin perder datos. El resto de esta sección explica los mismos pasos uno por uno, para quien prefiera hacerlo a mano o necesite adaptarlos.
+
 ### 5.1 Instalar los paquetes
 
 ```bash
@@ -202,6 +230,7 @@ sudo find /var/www/pasantias-fet -type d -exec chmod 750 {} \;
 sudo find /var/www/pasantias-fet -type f -exec chmod 640 {} \;
 sudo chown -R www-data:www-data /var/www/pasantias-fet/storage
 sudo chmod 640 /var/www/pasantias-fet/.env
+sudo git -C /var/www/pasantias-fet config core.fileMode false   # que git no tome los permisos como cambios al actualizar
 ```
 
 ### 5.5 Crear la base de datos y el administrador inicial
@@ -267,6 +296,23 @@ sudo certbot --apache -d pasantias.fet.edu.co --redirect
 
 Certbot instala el certificado, redirige HTTP a HTTPS y lo renueva automáticamente. Con HTTPS activo, la plataforma marca la cookie de sesión como segura.
 
+**Servidor interno sin dominio público.** Si el servidor solo es accesible dentro de la red de la FET, Certbot no puede validar el dominio. En ese caso usa el certificado de la institución o, para pruebas, uno autofirmado (el navegador mostrará una advertencia):
+
+```bash
+sudo a2enmod ssl
+sudo openssl req -x509 -nodes -days 825 -newkey rsa:2048 -subj "/CN=pasantias.fet.edu.co" \
+  -keyout /etc/ssl/private/pasantias-fet.key -out /etc/ssl/certs/pasantias-fet.crt
+```
+
+Luego crea `/etc/apache2/sites-available/pasantias-fet-ssl.conf` con un `<VirtualHost *:443>` igual al de la sección 5.6, más `SSLEngine on`, `SSLCertificateFile` y `SSLCertificateKeyFile`. Agrega la redirección al sitio del puerto 80:
+
+```apache
+RewriteEngine On
+RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,R=301]
+```
+
+Activa ambos sitios con `sudo a2ensite pasantias-fet-ssl.conf` y recarga Apache.
+
 ### 5.8 Ajustar PHP para producción
 
 Edita `/etc/php/8.*/apache2/php.ini` y deja estos valores:
@@ -294,6 +340,21 @@ sudo ufw enable
 
 La base de datos solo escucha en `127.0.0.1`, así que no hay que abrir el puerto 3306.
 
+### 5.10 Probar el despliegue en una máquina virtual (VirtualBox)
+
+Antes de instalar en el servidor de la FET, se puede ensayar todo en una máquina virtual del propio computador:
+
+1. Descarga e instala **VirtualBox** (https://www.virtualbox.org/wiki/Downloads) y la imagen ISO de **Ubuntu Server 24.04 LTS** (https://ubuntu.com/download/server).
+2. En VirtualBox, crea una máquina nueva de tipo **Linux / Ubuntu (64-bit)** con 2 GB de RAM, 2 CPU y un disco de 20 GB, y asígnale la ISO.
+3. En **Configuración → Red**, elige **Adaptador puente** para que la máquina tenga una IP de tu red. Con **NAT**, agrega en **Reenvío de puertos** las reglas `8080 → 80` y `8443 → 443`.
+4. Instala Ubuntu Server con las opciones por defecto y marca **Install OpenSSH server**.
+5. Dentro de la máquina, ejecuta la [instalación automática](#50-instalación-automática-recomendada) con `DOMINIO=pasantias.local`.
+6. Consulta la IP de la máquina con `ip -4 addr`. En tu computador, agrega al archivo de hosts la línea `IP_DE_LA_VM  pasantias.local`. En Windows el archivo es `C:\Windows\System32\drivers\etc\hosts` y se edita como administrador.
+7. Abre `https://pasantias.local/` (o `https://localhost:8443/` si usaste NAT). Acepta la advertencia del certificado autofirmado y entra con el administrador inicial.
+8. Recorre la [verificación de la sección 7](#7-verificación-posterior-al-despliegue).
+
+El informe de una ejecución completa de este ensayo, con sus evidencias, está en [`docs/pruebas-despliegue/INFORME_DESPLIEGUE.md`](pruebas-despliegue/INFORME_DESPLIEGUE.md).
+
 ---
 
 ## 6. Instalación en producción (servidor Windows)
@@ -320,16 +381,16 @@ Para un servidor Windows de la institución:
 
 Marca cada punto antes de anunciar el lanzamiento:
 
-| # | Verificación | Resultado esperado | ✔ |
+| # | Verificación | Resultado esperado | Cumple |
 |---|---|---|---|
-| 1 | Abrir `https://pasantias.fet.edu.co/` | Carga la pantalla de acceso con candado HTTPS | ☐ |
-| 2 | Abrir `http://pasantias.fet.edu.co/` | Redirige automáticamente a HTTPS | ☐ |
-| 3 | Entrar con el administrador inicial | Abre el *Panel de pasantías* | ☐ |
-| 4 | Abrir `/.env`, `/config/database.php`, `/database/install.php` y `/storage/` | *403 Forbidden* o *404*, nunca su contenido | ☐ |
-| 5 | Entrar con `admin@fet.edu.co` y `FET2026*` | **Debe fallar**: no hay cuentas de demostración | ☐ |
-| 6 | **Usuarios → Descargar respaldo SQL** | Se descarga el `.sql` con su huella SHA-256 | ☐ |
-| 7 | Crear una alianza de prueba, subir un PDF y descargarlo | El archivo se guarda en `storage/documents` y se descarga | ☐ |
-| 8 | Revisar `/var/log/apache2/pasantias-fet-error.log` | Sin errores de PHP | ☐ |
+| 1 | Abrir `https://pasantias.fet.edu.co/` | Carga la pantalla de acceso con candado HTTPS |   |
+| 2 | Abrir `http://pasantias.fet.edu.co/` | Redirige automáticamente a HTTPS |   |
+| 3 | Entrar con el administrador inicial | Abre el *Panel de pasantías* |   |
+| 4 | Abrir `/.env`, `/config/database.php`, `/database/install.php` y `/storage/` | *403 Forbidden* o *404*, nunca su contenido |   |
+| 5 | Entrar con `admin@fet.edu.co` y `FET2026*` | **Debe fallar**: no hay cuentas de demostración |   |
+| 6 | **Usuarios → Descargar respaldo SQL** | Se descarga el `.sql` con su huella SHA-256 |   |
+| 7 | Crear una alianza de prueba, subir un PDF y descargarlo | El archivo se guarda en `storage/documents` y se descarga |   |
+| 8 | Revisar `/var/log/apache2/pasantias-fet-error.log` | Sin errores de PHP |   |
 
 Después de la verificación 7, suspende la alianza de prueba desde **Alianzas → Editar o ampliar** y desactiva su cuenta en **Usuarios**.
 
@@ -358,6 +419,7 @@ Crea el archivo `/usr/local/bin/respaldo-pasantias.sh`:
 ```bash
 #!/bin/bash
 set -e
+umask 077                                     # los respaldos solo los lee root
 DESTINO=/var/backups/pasantias-fet
 FECHA=$(date +%F)
 mkdir -p "$DESTINO"
@@ -432,19 +494,19 @@ Si la actualización cambió la base de datos, restaura además el respaldo toma
 
 ## 11. Lista de control de seguridad
 
-| ✔ | Control |
+| Cumple | Control |
 |---|---|
-| ☐ | Instalación hecha con `--produccion` y `APP_ENV=production`, sin cuentas de demostración. |
-| ☐ | La base de datos usa un usuario propio con contraseña larga, no `root`. |
-| ☐ | El `.env` tiene permisos 640 y no está en el repositorio. |
-| ☐ | HTTPS activo, con redirección desde HTTP. |
-| ☐ | `display_errors = Off` en PHP. |
-| ☐ | `AllowOverride All` activo, para que el `.htaccess` bloquee las carpetas internas. |
-| ☐ | Solo `storage` tiene permisos de escritura para el servidor web. |
-| ☐ | Cortafuegos activo, con el puerto 3306 cerrado al exterior. |
-| ☐ | phpMyAdmin no está expuesto a internet (en Windows, `Require local`). |
-| ☐ | Respaldo diario programado y probado con una restauración. |
-| ☐ | Sistema operativo y PHP actualizados con regularidad. |
+|   | Instalación hecha con `--produccion` y `APP_ENV=production`, sin cuentas de demostración. |
+|   | La base de datos usa un usuario propio con contraseña larga, no `root`. |
+|   | El `.env` tiene permisos 640 y no está en el repositorio. |
+|   | HTTPS activo, con redirección desde HTTP. |
+|   | `display_errors = Off` en PHP. |
+|   | `AllowOverride All` activo, para que el `.htaccess` bloquee las carpetas internas. |
+|   | Solo `storage` tiene permisos de escritura para el servidor web. |
+|   | Cortafuegos activo, con el puerto 3306 cerrado al exterior. |
+|   | phpMyAdmin no está expuesto a internet (en Windows, `Require local`). |
+|   | Respaldo diario programado y probado con una restauración. |
+|   | Sistema operativo y PHP actualizados con regularidad. |
 
 Controles que la aplicación ya trae: contraseñas cifradas con `password_hash`, protección CSRF en todos los formularios, bloqueo de la cuenta tras 5 intentos fallidos, validación de permisos por perfil en cada solicitud, archivos con nombres aleatorios y descargas controladas, y bitácora de auditoría.
 

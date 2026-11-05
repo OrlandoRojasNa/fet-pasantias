@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../config/app.php';
+// Carga el .env desde el inicio (APP_ENV, APP_BASE_URL, conexión) para que aplique en todas las páginas.
+require_once __DIR__ . '/../config/database.php';
 
 $https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 session_name(SESSION_NAME);

@@ -50,9 +50,13 @@ Inicia sesión con los cuatro perfiles y verifica 8 flujos: acceso, permisos por
 ## Documentación
 
 - [`docs/MANUAL_DESPLIEGUE.md`](docs/MANUAL_DESPLIEGUE.md): despliegue en producción (Linux o Windows, HTTPS, seguridad, respaldos, actualización y reversión) y ambiente de pruebas con XAMPP.
-- [`docs/pdf/`](docs/pdf/): ambos manuales en PDF, listos para entregar. Se regeneran con `node docs/pdf/generar_pdf.js`.
+- [`docs/pruebas-despliegue/INFORME_DESPLIEGUE.md`](docs/pruebas-despliegue/INFORME_DESPLIEGUE.md): informe de la prueba de despliegue en máquinas virtuales Ubuntu, con evidencias.
+- [`deploy/instalar_servidor.sh`](deploy/instalar_servidor.sh): instalación automática en un servidor Ubuntu limpio.
+- [`docs/pdf/`](docs/pdf/): los dos manuales y los tres informes en PDF, listos para entregar. Los informes siguen las normas APA 7. Se regeneran con `node docs/pdf/generar_pdf.js`.
 - [`docs/manual/MANUAL_USUARIO.md`](docs/manual/MANUAL_USUARIO.md): manual de usuario por perfil (estudiante, empresa, docente líder y administrador), con capturas.
 - [`docs/pruebas-usuario/`](docs/pruebas-usuario/README.md): plan, guiones por integrante y formato de resultados de las pruebas de usuario.
+- [`docs/pruebas-usuario/resultados-ejecucion-produccion.md`](docs/pruebas-usuario/resultados-ejecucion-produccion.md): ejecución de los guiones de los cuatro perfiles en el servidor de producción (25 de 25), con evidencias.
+- [`docs/pruebas-usuario/simulacion/`](docs/pruebas-usuario/simulacion/README.md): sesión simulada del plan de pruebas: informe en formato APA y los cuatro guiones diligenciados.
 - `docs/ARQUITECTURA.md`: capas, componentes, perfiles, datos, decisiones y flujo principal.
 - `REQUISITOS-Intranet-FET.md`: alcance de la versión 2.0.
 - `docs/archivo-clase/`: material de entregas anteriores.
