@@ -230,6 +230,7 @@ sudo find /var/www/pasantias-fet -type d -exec chmod 750 {} \;
 sudo find /var/www/pasantias-fet -type f -exec chmod 640 {} \;
 sudo chown -R www-data:www-data /var/www/pasantias-fet/storage
 sudo chmod 640 /var/www/pasantias-fet/.env
+sudo git -C /var/www/pasantias-fet config core.fileMode false   # que git no tome los permisos como cambios al actualizar
 ```
 
 ### 5.5 Crear la base de datos y el administrador inicial

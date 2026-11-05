@@ -34,6 +34,7 @@ GRANT ALL PRIVILEGES ON fet_intranet.* TO 'pasantias'@'localhost'; FLUSH PRIVILE
 
 paso "3/8 Código ($VERSION)"
 if [ -d "$DIR/.git" ]; then git -C "$DIR" fetch -q --tags origin; else git clone -q "$REPO" "$DIR"; fi
+git -C "$DIR" config core.fileMode false   # los permisos se ajustan en el paso 4; git no debe verlos como cambios
 if git -C "$DIR" show-ref -q --verify "refs/remotes/origin/$VERSION"; then
   git -C "$DIR" checkout -q -B "$VERSION" "origin/$VERSION"   # rama: se actualiza a lo último publicado
 else
