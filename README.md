@@ -47,6 +47,9 @@ Inicia sesión con los cuatro perfiles y verifica 8 flujos: acceso, permisos por
 
 ## Documentación
 
+- [`docs/MANUAL_DESPLIEGUE.md`](docs/MANUAL_DESPLIEGUE.md): instalación paso a paso en Windows con XAMPP, qué descargar y solución de problemas.
+- [`docs/manual/MANUAL_USUARIO.md`](docs/manual/MANUAL_USUARIO.md): manual de usuario por perfil (estudiante, empresa, docente líder y administrador), con capturas.
+- [`docs/pruebas-usuario/`](docs/pruebas-usuario/README.md): plan, guiones por integrante y formato de resultados de las pruebas de usuario.
 - `docs/ARQUITECTURA.md`: capas, componentes, perfiles, datos, decisiones y flujo principal.
 - `REQUISITOS-Intranet-FET.md`: alcance de la versión 2.0.
 - `docs/archivo-clase/`: material de entregas anteriores.

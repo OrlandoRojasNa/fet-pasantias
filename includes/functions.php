@@ -36,6 +36,13 @@ function require_auth(): void { if (!current_user()) { flash('error','Inicia ses
 function has_role(string ...$roles): bool { $u=current_user(); return $u && in_array($u['role'],$roles,true); }
 function require_role(string ...$roles): void { require_auth(); if (!has_role(...$roles)) { http_response_code(403); require __DIR__.'/403.php'; exit; } }
 function role_label(string $role): string { return ROLE_LABELS[$role]??$role; }
+// Traduce los valores internos que guarda la auditoría (estados y decisiones) para mostrarlos en español.
+function audit_detail(?string $details): string {
+    $d=trim((string)$details);
+    $decisions=['endorse'=>'Avalado por la empresa','approve'=>'Aprobado por el docente','return'=>'Devuelto para corrección'];
+    if(isset($decisions[$d])) return $decisions[$d];
+    return preg_match('/^[a-z_]+$/',$d)?status_label($d):$d;
+}
 function status_label(string $status): string { return [
     'draft'=>'Borrador','review'=>'En revisión','published'=>'Publicada','closed'=>'Cerrada',
     'submitted'=>'Enviada','accepted'=>'Aceptada','rejected'=>'No seleccionada','withdrawn'=>'Retirada',
