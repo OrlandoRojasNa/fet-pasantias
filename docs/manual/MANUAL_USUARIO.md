@@ -1,476 +1,512 @@
-# Manual de usuario
+# Manual de usuario de Pasantías FET 2.0.0
 
-## Pasantías FET · Plataforma de gestión documental de pasantías
+Pasantías FET es la plataforma con la que la Fundación Escuela Tecnológica de Neiva Jesús Oviedo Pérez gestiona el proceso de pasantías de sus estudiantes. En ella se registran las alianzas con las empresas y sus cupos de pasantes, se publican las convocatorias de pasantía y las ofertas laborales, se reciben las postulaciones con la hoja de vida de cada estudiante y se lleva la documentación de cada pasantía, desde el plan de práctica hasta el certificado. El docente líder de pasantías revisa, califica y aprueba esos documentos, y cada acción queda registrada para su auditoría.
 
-| | |
-|---|---|
-| **Producto** | Pasantías FET |
-| **Versión del producto** | 2.0.0 |
-| **Versión del documento** | 1.0 |
-| **Fecha** | Noviembre de 2026 |
-| **Institución** | Fundación Escuela Tecnológica de Neiva «Jesús Oviedo Pérez» · Campus Rivera, Huila |
-| **Elaborado por** | Orlando Rojas Narváez · Hernán Felipe Patiño Rico · Juan José Sabogal García |
-| **Dirigido a** | Estudiantes, empresas aliadas, docentes líderes de pasantías y administradores |
+Este manual explica, perfil por perfil, qué puede hacer cada usuario y cómo hacerlo. Está dirigido a estudiantes, empresas aliadas, docentes líderes de pasantías y administradores. La instalación y el mantenimiento del servidor se tratan en el *Manual de despliegue* (Rojas Narváez et al., 2026). Las capturas de pantalla usan datos de ejemplo, por lo que los nombres, las empresas y las fechas de la plataforma real serán distintos. A lo largo del texto, los nombres de botones, menús y campos aparecen en cursiva, por ejemplo *Nueva publicación*, igual que los estados de los registros, como *En revisión*.
 
-### Control de cambios
+## Perfiles de usuario
 
-| Versión | Fecha | Descripción | Autor |
-|---|---|---|---|
-| 1.0 | 05/11/2026 | Primera versión para el lanzamiento de la versión 2.0.0 | Equipo Pasantías FET |
+La plataforma tiene cuatro perfiles, descritos en la Tabla 1. Cada persona entra con un solo perfil y ve únicamente los módulos que le corresponden.
 
----
+**Tabla 1**
 
-## Contenido
+*Perfiles de usuario de la plataforma*
 
-1. [Introducción](#1-introducción)
-2. [Requisitos para usar la plataforma](#2-requisitos-para-usar-la-plataforma)
-3. [Acceso a la plataforma](#3-acceso-a-la-plataforma)
-4. [Elementos comunes de la pantalla](#4-elementos-comunes-de-la-pantalla)
-5. [El proceso completo en una mirada](#5-el-proceso-completo-en-una-mirada)
-6. [Perfil Estudiante](#6-perfil-estudiante)
-7. [Perfil Empresa aliada](#7-perfil-empresa-aliada)
-8. [Perfil Docente líder de pasantías](#8-perfil-docente-líder-de-pasantías)
-9. [Perfil Administrador](#9-perfil-administrador)
-10. [Reglas del proceso](#10-reglas-del-proceso)
-11. [Mensajes frecuentes del sistema](#11-mensajes-frecuentes-del-sistema)
-12. [Preguntas frecuentes](#12-preguntas-frecuentes)
-13. [Glosario](#13-glosario)
-14. [Soporte](#14-soporte)
-
----
-
-## 1. Introducción
-
-### 1.1 Qué es Pasantías FET
-
-Pasantías FET es la plataforma oficial para gestionar el proceso de pasantías de los estudiantes de la Fundación Escuela Tecnológica de Neiva. Reúne en un solo lugar:
-
-- Las **alianzas empresariales** y sus **cupos** de pasantes.
-- Las **convocatorias de pasantía** y las **ofertas laborales** de las empresas aliadas.
-- Las **postulaciones** de los estudiantes, con su hoja de vida.
-- La **gestión documental** de cada pasantía: plan de práctica, informes, evaluación y certificado.
-- La **revisión, calificación y aprobación** por parte del docente líder, con trazabilidad completa.
-
-### 1.2 Propósito de este manual
-
-Este manual explica, perfil por perfil, qué puede hacer cada usuario y cómo hacerlo paso a paso. Cada proceso incluye capturas de pantalla.
-
-> Las capturas muestran datos de ejemplo. Los nombres, empresas y fechas que verás en tu plataforma serán los reales.
-
-### 1.3 Perfiles de usuario
-
-| Perfil | Quién es | Qué hace en la plataforma |
+| Perfil | Quién lo usa | Qué hace en la plataforma |
 |---|---|---|
-| **Estudiante** | Estudiante de la FET que realiza o busca su pasantía | Se postula a convocatorias y ofertas laborales, sube los documentos de su pasantía y consulta sus notas y su resultado. |
-| **Empresa aliada** | Empresa con convenio vigente con la FET | Publica convocatorias de pasantía (según sus cupos) y ofertas laborales, selecciona pasantes, avala sus documentos y evalúa su desempeño. |
-| **Docente líder de pasantías** | Docente responsable del proceso de pasantías | Verifica las publicaciones, asigna responsables, califica los documentos, emite el veredicto final y audita el proceso. |
-| **Administrador** | Coordinación o área de sistemas | Registra alianzas y cupos, administra las cuentas y los respaldos, y supervisa todo el proceso. |
+| Estudiante | Estudiante de la FET que realiza o busca su pasantía | Se postula a convocatorias y ofertas laborales, sube los documentos de su pasantía y consulta sus notas y su resultado |
+| Empresa aliada | Empresa con convenio vigente con la FET | Publica convocatorias de pasantía según sus cupos y ofertas laborales, selecciona pasantes, avala sus documentos y evalúa su desempeño |
+| Docente líder de pasantías | Docente responsable del proceso de pasantías | Verifica las publicaciones, asigna responsables, califica los documentos, emite el veredicto final y audita el proceso |
+| Administrador | Coordinación de pasantías o área de sistemas | Registra alianzas y cupos, administra las cuentas y los respaldos y supervisa todo el proceso |
 
-### 1.4 Convenciones
+## Requisitos para usar la plataforma
 
-- Los textos en **negrita** son botones, menús o campos de la pantalla, por ejemplo **Nueva publicación**.
-- Los textos en *cursiva* son estados o valores, por ejemplo *En revisión*.
-- > Los recuadros como este son notas o advertencias importantes.
+Para usar la plataforma basta con un equipo conectado a internet, un navegador actualizado y una cuenta creada por el administrador. Los archivos que se suben tienen restricciones de formato y tamaño, que se resumen en la Tabla 2.
 
-## 2. Requisitos para usar la plataforma
+**Tabla 2**
+
+*Requisitos de uso*
 
 | Requisito | Detalle |
 |---|---|
-| Equipo | Computador, tableta o celular con conexión a internet. |
-| Navegador | Google Chrome, Microsoft Edge, Mozilla Firefox o Safari en una versión reciente. |
-| Cuenta | Una cuenta creada por el administrador de la plataforma. |
-| Archivos | Hoja de vida en **PDF**. Documentos de pasantía en PDF, imagen (PNG, JPG, WEBP) u Office (DOCX, XLSX, PPTX), también CSV, TXT o ZIP. Máximo **5 MB** por archivo. |
+| Equipo | Computador, tableta o celular con conexión a internet |
+| Navegador | Google Chrome, Microsoft Edge, Mozilla Firefox o Safari en una versión reciente |
+| Cuenta | Creada por el administrador de la plataforma |
+| Archivos | Hoja de vida en PDF. Documentos de pasantía en PDF, imagen (PNG, JPG o WEBP), Office (DOCX, XLSX o PPTX), CSV, TXT o ZIP. Máximo 5 MB por archivo |
 
-## 3. Acceso a la plataforma
+## Acceso a la plataforma
 
-### 3.1 Cómo obtener una cuenta
+### Obtención de una cuenta
 
-Las cuentas las crea el **administrador** de la plataforma:
+Las cuentas las crea el administrador. A los estudiantes y docentes, la coordinación de pasantías les entrega su usuario y su contraseña inicial. Las empresas reciben su cuenta cuando se registra la alianza con la FET; su usuario es el NIT o el correo de acceso de la empresa.
 
-- **Estudiantes y docentes:** la coordinación de pasantías les entrega su usuario y contraseña inicial.
-- **Empresas:** la cuenta se crea al registrar la alianza con la FET. El usuario es el **NIT** o el correo de acceso de la empresa.
+### Ingreso
 
-### 3.2 Ingresar
+Para ingresar se abre la dirección de la plataforma que entregó la FET, se escribe el número de identificación, el NIT o el correo, junto con la contraseña, y se pulsa *Ingresar* (ver Figura 1). La casilla *Mantener mi sesión en este equipo* solo debe marcarse en un equipo propio, nunca en uno compartido.
 
-1. Abre la dirección de la plataforma que te entregó la FET.
-2. Escribe tu **número de identificación (o NIT) o tu correo** y tu **contraseña**.
-3. Si estás en tu propio equipo, puedes marcar **Mantener mi sesión en este equipo**. No lo marques en equipos compartidos.
-4. Pulsa **Ingresar**.
+**Figura 1**
+
+*Pantalla de acceso*
 
 ![Pantalla de acceso](img/01-login.png)
 
-### 3.3 Olvidé mi contraseña o mi cuenta está bloqueada
+### Contraseña olvidada o cuenta bloqueada
 
-- Después de **5 intentos fallidos**, la cuenta se bloquea temporalmente por seguridad.
-- En la pantalla de acceso pulsa **¿Olvidaste tu contraseña?** y escribe tu correo. El administrador recibe la solicitud y te asigna una contraseña nueva. Por seguridad, la pantalla no confirma si el correo está registrado.
-- El administrador también puede desbloquear tu cuenta desde **Usuarios**.
+Por seguridad, la cuenta se bloquea temporalmente después de cinco intentos fallidos. Si olvidaste la contraseña, pulsa *¿Olvidaste tu contraseña?* en la pantalla de acceso y escribe tu correo: el administrador recibe la solicitud y te asigna una contraseña nueva. La pantalla no confirma si el correo está registrado, para no dar pistas a terceros. El administrador también puede desbloquear la cuenta desde el módulo *Usuarios*.
 
-### 3.4 Cerrar sesión
+### Cierre de sesión
 
-Pulsa el botón de salida, la flecha que está a la derecha de tu nombre en la parte superior. Ciérrala siempre al terminar en un equipo compartido.
+La sesión se cierra con el botón de salida, la flecha que aparece a la derecha del nombre en la parte superior de la pantalla. En un equipo compartido conviene cerrarla siempre al terminar.
 
-## 4. Elementos comunes de la pantalla
+## Elementos comunes de la pantalla
 
-![Elementos comunes](img/15-estudiante-inicio.png)
+Todas las pantallas comparten la misma estructura. A la izquierda está el menú, que muestra solo los módulos del perfil: un estudiante ve *Inicio*, *Pasantías*, *Convocatorias y empleo* y *Guía de uso*; el docente y el administrador ven además *Alianzas* y *Reportes y auditoría*, y el administrador también *Usuarios*. En la parte superior están el botón *Tutorial*, que recorre paso a paso la pantalla actual con explicaciones para cada perfil; la campana de notificaciones, cuyo número indica los avisos sin leer, y el botón de salida.
 
-- **Menú lateral (izquierda):** muestra solo los módulos de tu perfil. Un estudiante ve *Inicio, Pasantías, Convocatorias y empleo* y *Guía de uso*; el docente y el administrador ven además *Alianzas* y *Reportes y auditoría*, y el administrador también *Usuarios*.
-- **Tutorial:** recorre la pantalla actual paso a paso, explicada para tu perfil.
-- **Campana:** tus notificaciones (postulaciones nuevas, documentos devueltos, veredicto, etc.). El número rojo indica cuántas no has leído.
-- **Botón de salida** (flecha a la derecha de tu nombre): cierra la sesión.
-- **Guía de uso:** resumen del flujo de trabajo de tu perfil y respuestas a dudas comunes.
+El módulo *Guía de uso* resume el flujo de trabajo de cada perfil y responde las dudas más comunes (ver Figura 2).
+
+**Figura 2**
+
+*Guía de uso del estudiante*
 
 ![Guía de uso](img/37-estudiante-guia.png)
 
-## 5. El proceso completo en una mirada
+## El proceso de una pasantía
 
-| Paso | Quién | Qué hace |
+El proceso completo pasa por los cuatro perfiles en el orden de la Tabla 3. Cada paso queda registrado en la bitácora de auditoría, con quién lo hizo y cuándo, y genera notificaciones para las personas involucradas.
+
+**Tabla 3**
+
+*Pasos del proceso de una pasantía*
+
+| Paso | Responsable | Acción |
 |---|---|---|
-| 1 | Administrador | Registra la alianza con la empresa y le asigna cupos de pasantes. |
-| 2 | Empresa aliada | Publica la convocatoria de pasantía y la envía a verificación. |
-| 3 | Docente líder | Verifica la convocatoria y la publica para los estudiantes. |
-| 4 | Estudiante | Se postula con su motivación y su hoja de vida. |
-| 5 | Empresa aliada | Acepta la postulación: la plataforma crea la pasantía y ocupa un cupo. |
-| 6 | Docente líder | Se asigna como docente de la pasantía y define sus fechas. |
-| 7 | Estudiante | Sube sus documentos: plan de práctica, informes, certificado. |
-| 8 | Empresa aliada | Avala los documentos y evalúa el desempeño del pasante. |
-| 9 | Docente líder | Califica cada documento de 0.0 a 5.0, o lo devuelve para corrección. |
-| 10 | Docente líder | Emite el veredicto final: aprobada o reprobada. El cupo se libera. |
+| 1 | Administrador | Registra la alianza con la empresa y le asigna cupos de pasantes |
+| 2 | Empresa aliada | Publica la convocatoria de pasantía y la envía a verificación |
+| 3 | Docente líder | Verifica la convocatoria y la publica para los estudiantes |
+| 4 | Estudiante | Se postula con su motivación y su hoja de vida |
+| 5 | Empresa aliada | Acepta la postulación; la plataforma crea la pasantía y ocupa un cupo |
+| 6 | Docente líder | Se asigna como docente de la pasantía y define sus fechas |
+| 7 | Estudiante | Sube sus documentos: plan de práctica, informes y certificado |
+| 8 | Empresa aliada | Avala los documentos y evalúa el desempeño del pasante |
+| 9 | Docente líder | Califica cada documento de 0.0 a 5.0 o lo devuelve para corrección |
+| 10 | Docente líder | Emite el veredicto final, aprobada o reprobada, y el cupo se libera |
 
-Cada paso queda registrado en la **bitácora de auditoría** (quién hizo qué y cuándo) y genera notificaciones para las personas involucradas.
+## Perfil de estudiante
 
----
+### Inicio
 
-## 6. Perfil Estudiante
+Al entrar, el estudiante ve el estado de su pasantía y accesos directos a las convocatorias de pasantía abiertas, a las ofertas laborales, a sus postulaciones en trámite y a los documentos que debe corregir (ver Figura 3).
 
-### 6.1 Inicio
+**Figura 3**
 
-Al entrar ves el estado de tu pasantía y accesos rápidos: convocatorias de pasantía abiertas, ofertas laborales abiertas, tus postulaciones en trámite y los documentos que debes corregir.
+*Inicio del estudiante*
 
 ![Inicio del estudiante](img/15-estudiante-inicio.png)
 
-### 6.2 Buscar y postularse a una convocatoria u oferta laboral
+### Postulación a una convocatoria u oferta laboral
 
-1. Entra a **Convocatorias y empleo**. Usa las pestañas **Todas**, **Pasantías** u **Ofertas laborales** para filtrar.
+Las publicaciones disponibles están en *Convocatorias y empleo*, donde las pestañas *Todas*, *Pasantías* y *Ofertas laborales* permiten filtrarlas (ver Figura 4). Para postularte, pulsa *Postularme* en una convocatoria de pasantía o *Aplicar con mi hoja de vida* en una oferta laboral. En el formulario escribe por qué te interesa y adjunta tu hoja de vida en PDF, de 5 MB como máximo, y pulsa *Enviar postulación* (ver Figura 5). La hoja de vida es obligatoria en las ofertas laborales y opcional, aunque recomendable, en las convocatorias de pasantía.
 
-   ![Convocatorias para el estudiante](img/16-estudiante-convocatorias.png)
+**Figura 4**
 
-2. En la tarjeta que te interese pulsa **Postularme** (pasantía) o **Aplicar con mi hoja de vida** (oferta laboral).
-3. Escribe **¿Por qué te interesa?** y adjunta tu **hoja de vida en PDF** (máximo 5 MB).
-   - En una **oferta laboral** la hoja de vida es **obligatoria**.
-   - En una **convocatoria de pasantía** es **opcional**, pero recomendable.
-4. Pulsa **Enviar postulación**.
+*Convocatorias y ofertas disponibles para el estudiante*
 
-   ![Formulario de postulación](img/17-estudiante-postulacion-formulario.png)
+![Convocatorias para el estudiante](img/16-estudiante-convocatorias.png)
 
-5. La tarjeta queda marcada con **Ya te postulaste** y la postulación aparece en **Mis postulaciones**, con su estado (*Enviada, En revisión, Aceptada, No seleccionada*). Mientras no haya sido aceptada puedes **retirarla**.
+**Figura 5**
 
-   ![Postulación registrada](img/18-estudiante-postulado.png)
+*Formulario de postulación*
 
-### 6.3 Mi pasantía
+![Formulario de postulación](img/17-estudiante-postulacion-formulario.png)
 
-Cuando la empresa **acepta** tu postulación a una pasantía, la plataforma crea tu pasantía automáticamente y te avisa por notificación.
+Después de enviarla, la tarjeta queda marcada con *Ya te postulaste* y la postulación aparece en *Mis postulaciones* con su estado: *Enviada*, *En revisión*, *Aceptada* o *No seleccionada* (ver Figura 6). Mientras no haya sido aceptada, la postulación puede retirarse.
 
-1. Entra a **Pasantías** y pulsa **Abrir** en tu pasantía.
+**Figura 6**
 
-   ![Mis pasantías](img/21-estudiante-pasantias.png)
+*Postulación registrada*
 
-2. En el detalle ves la empresa evaluadora, el docente líder asignado, el periodo, los documentos aprobados y el promedio de notas.
+![Postulación registrada](img/18-estudiante-postulado.png)
 
-   ![Detalle de la pasantía](img/22-estudiante-pasantia-detalle.png)
+### Consulta de la pasantía
 
-### 6.4 Subir un documento
+Cuando la empresa acepta tu postulación a una pasantía, la plataforma crea la pasantía y te avisa con una notificación. Para verla, entra a *Pasantías* y pulsa *Abrir* (ver Figura 7). El detalle muestra la empresa evaluadora, el docente líder asignado, el periodo, los documentos aprobados y el promedio de notas (ver Figura 8).
 
-1. En el detalle de tu pasantía pulsa **Subir documento**.
-2. Elige el **Tipo** (*Plan de práctica, Informe parcial, Informe final, Evaluación de la empresa, Certificado* u *Otro documento*), escribe un **Título** si quieres y selecciona el **Archivo** (PDF, imagen u Office; máximo 5 MB).
-3. Pulsa **Enviar documento**.
+**Figura 7**
 
-   ![Subir documento](img/23-estudiante-subir-documento.png)
+*Listado de pasantías del estudiante*
 
-4. El documento queda **Enviado**. Tu empresa evaluadora y tu docente reciben una notificación.
+![Mis pasantías](img/21-estudiante-pasantias.png)
 
-   ![Documento enviado](img/24-estudiante-documento-enviado.png)
+**Figura 8**
 
-### 6.5 Corregir un documento devuelto
+*Detalle de la pasantía*
 
-Si la empresa o el docente **devuelven** un documento, verás sus observaciones en la columna **Observaciones** y un botón **Corregir**. Púlsalo, adjunta el archivo corregido y explica qué cambiaste. La nota anterior se borra y el documento vuelve a revisión.
+![Detalle de la pasantía](img/22-estudiante-pasantia-detalle.png)
 
-### 6.6 Consultar el resultado final
+### Envío de documentos
 
-Cuando el docente emite el veredicto, la pasantía pasa a **Finalizada** y ves la **evaluación de la empresa**, el **veredicto del docente** (aprobada o reprobada) con su justificación, y la nota de cada documento.
+En el detalle de la pasantía, pulsa *Subir documento*, elige el tipo (*Plan de práctica*, *Informe parcial*, *Informe final*, *Evaluación de la empresa*, *Certificado* u *Otro documento*), escribe un título si lo deseas, selecciona el archivo y pulsa *Enviar documento* (ver Figura 9). El documento queda en estado *Enviado*, y la empresa evaluadora y el docente reciben una notificación (ver Figura 10).
+
+**Figura 9**
+
+*Formulario para subir un documento*
+
+![Subir documento](img/23-estudiante-subir-documento.png)
+
+**Figura 10**
+
+*Documento enviado*
+
+![Documento enviado](img/24-estudiante-documento-enviado.png)
+
+### Corrección de un documento devuelto
+
+Si la empresa o el docente devuelven un documento, sus observaciones aparecen en la columna *Observaciones* junto con el botón *Corregir*. Al pulsarlo se adjunta el archivo corregido y se explica qué se cambió. La nota anterior se borra y el documento vuelve a revisión.
+
+### Consulta del resultado final
+
+Cuando el docente emite el veredicto, la pasantía pasa a *Finalizada*. En ese momento el estudiante puede ver la evaluación de la empresa, el veredicto del docente con su justificación y la nota de cada documento (ver Figura 11).
+
+**Figura 11**
+
+*Resultado final de la pasantía*
 
 ![Resultado final de la pasantía](img/35-estudiante-resultado.png)
 
-### 6.7 Notificaciones
+### Notificaciones
 
-La campana y la página de notificaciones te muestran cada cambio: postulación aceptada, documento avalado, aprobado o devuelto, y veredicto final.
+La campana y la página de avisos muestran cada cambio relevante: la aceptación de una postulación, el aval, la aprobación o la devolución de un documento y el veredicto final (ver Figura 12).
+
+**Figura 12**
+
+*Notificaciones del estudiante*
 
 ![Notificaciones](img/36-estudiante-notificaciones.png)
 
----
+## Perfil de empresa aliada
 
-## 7. Perfil Empresa aliada
+Una empresa solo puede publicar convocatorias de pasantía si tiene una alianza vigente con la FET. El administrador registra esa alianza y define cuántos cupos de pasantes tiene la empresa.
 
-Una empresa solo puede publicar convocatorias de pasantía si tiene una **alianza vigente** con la FET. El administrador crea esa alianza y define cuántos **cupos** de pasantes tiene.
+### Inicio
 
-### 7.1 Inicio
+El inicio de la empresa muestra la franja de su alianza y resume sus pasantes activos, sus convocatorias y las postulaciones recibidas (ver Figura 13).
 
-Resume tus pasantes activos, tus convocatorias y las postulaciones recibidas.
+**Figura 13**
+
+*Inicio de la empresa aliada*
 
 ![Inicio de la empresa](img/10-empresa-inicio.png)
 
-### 7.2 Ver tu alianza y tus cupos
+### Alianza y cupos
 
-En **Convocatorias y empleo** aparece la franja de tu alianza: código del convenio, estado, **cupos en uso**, **cupos disponibles** y fecha de vigencia. Cada pasantía activa ocupa un cupo; al finalizar, el cupo se libera.
+La franja de la alianza aparece también en *Convocatorias y empleo*, con el código del convenio, su estado, los cupos en uso, los cupos disponibles y la fecha de vigencia (ver Figura 14). Cada pasantía activa ocupa un cupo, que se libera cuando la pasantía termina.
+
+**Figura 14**
+
+*Convocatorias de la empresa con la franja de la alianza*
 
 ![Convocatorias de la empresa con la franja de alianza](img/11-empresa-convocatorias.png)
 
-### 7.3 Publicar una convocatoria de pasantía u oferta laboral
+### Publicación de una convocatoria u oferta laboral
 
-1. Pulsa **Nueva publicación**.
-2. Completa el formulario:
-   - **Título** y **Tipo**: *Convocatoria de pasantía* (usa cupos de la alianza) u *Oferta laboral* (opcional, no usa cupos; el estudiante debe adjuntar hoja de vida).
-   - **Modalidad** (presencial, híbrida o remota), **Ubicación** y **Fecha de cierre**.
-   - **Descripción** y **Requisitos**.
-   - **Publicación**: *Enviar a verificación de la FET* o *Guardar borrador*.
-3. Pulsa **Guardar publicación**.
+Para publicar, pulsa *Nueva publicación* y completa el formulario (ver Figura 15). El campo *Tipo* distingue entre la convocatoria de pasantía, que usa los cupos de la alianza, y la oferta laboral, que no los usa y exige que el estudiante adjunte su hoja de vida. Además se indican la modalidad (presencial, híbrida o remota), la ubicación, la fecha de cierre, la descripción y los requisitos. En el campo *Publicación* se elige entre enviarla a verificación de la FET o guardarla como borrador, y se termina con *Guardar publicación*.
 
-   ![Nueva publicación](img/12-empresa-publicacion-formulario.png)
+**Figura 15**
 
-4. La publicación queda **En revisión**. Un docente líder o el administrador la verifica; cuando la publica, los estudiantes ya la ven. Puedes pasarla a **Borrador** o **Cerrada** cuando quieras: elige el estado y pulsa **Cambiar estado**.
+*Formulario de nueva publicación*
 
-### 7.4 Revisar postulaciones y aceptar pasantes
+![Nueva publicación](img/12-empresa-publicacion-formulario.png)
 
-1. Baja hasta **Postulaciones recibidas**. Verás el estudiante, su motivación y el enlace a su **hoja de vida**.
-2. Usa los botones de cada postulación: **Aceptar**, **En revisión** o **No seleccionar**. La plataforma pide confirmación antes de aceptar o descartar.
+La publicación queda *En revisión* hasta que un docente líder o el administrador la verifica; a partir de ese momento los estudiantes pueden verla. Más adelante, la empresa puede pasarla a *Borrador* o *Cerrada* eligiendo el estado y pulsando *Cambiar estado*.
 
-   ![Postulaciones recibidas](img/19-empresa-postulaciones.png)
+### Revisión de postulaciones y aceptación de pasantes
 
-3. Al **aceptar** una postulación a pasantía, la plataforma comprueba que tengas un cupo libre y **crea la pasantía** del estudiante, con tu empresa como evaluadora. Si no hay cupos, te lo indica y no la crea.
+Las postulaciones aparecen en *Postulaciones recibidas*, con el nombre del estudiante, su motivación y el enlace a su hoja de vida. Cada postulación tiene los botones *Aceptar*, *En revisión* y *No seleccionar*, y la plataforma pide confirmación antes de aceptar o descartar (ver Figura 16).
 
-   ![Pasantías de la empresa](img/20-empresa-pasantias.png)
+**Figura 16**
 
-### 7.5 Avalar los documentos del pasante
+*Postulaciones recibidas*
 
-1. En **Pasantías**, abre la pasantía y en la tabla de documentos pulsa **Revisar**.
-2. Elige **Avalar el documento** o **Devolver con observaciones**, escribe tus observaciones (obligatorias si lo devuelves) y pulsa **Guardar decisión**.
+![Postulaciones recibidas](img/19-empresa-postulaciones.png)
 
-   ![Avalar documento](img/25-empresa-avalar-documento.png)
+Al aceptar una postulación a una pasantía, la plataforma comprueba que la empresa tenga un cupo libre y crea la pasantía del estudiante, con la empresa como evaluadora (ver Figura 17). Si no hay cupos disponibles, lo indica y no la crea.
 
-### 7.6 Evaluar el desempeño del pasante
+**Figura 17**
 
-1. En el detalle de la pasantía pulsa **Evaluar desempeño** (o **Editar evaluación** si ya la registraste).
-2. Elige la **Calificación general** de 1 a 5 y escribe los comentarios (responsabilidad, conocimientos, trabajo en equipo, cumplimiento; mínimo 20 caracteres).
-3. Pulsa **Guardar evaluación**. El docente la tiene en cuenta para el veredicto; puedes editarla hasta que el docente emita el veredicto final.
+*Pasantías de la empresa*
 
-   ![Evaluación de desempeño](img/26-empresa-evaluacion.png)
+![Pasantías de la empresa](img/20-empresa-pasantias.png)
 
----
+### Aval de los documentos del pasante
 
-## 8. Perfil Docente líder de pasantías
+Para revisar un documento, abre la pasantía en *Pasantías* y pulsa *Revisar* en la tabla de documentos. Allí se elige *Avalar el documento* o *Devolver con observaciones*, se escriben las observaciones, que son obligatorias cuando el documento se devuelve, y se pulsa *Guardar decisión* (ver Figura 18).
 
-El docente líder revisa, audita, gestiona y aprueba las pasantías. Ve **todas** las pasantías, verifica las publicaciones de las empresas y consulta las alianzas y los reportes.
+**Figura 18**
 
-### 8.1 Inicio
+*Aval de un documento por parte de la empresa*
 
-Muestra las pasantías en curso, la **cola de documentos esperando calificación**, las **publicaciones por verificar** y las pasantías sin responsables.
+![Avalar documento](img/25-empresa-avalar-documento.png)
+
+### Evaluación del desempeño del pasante
+
+En el detalle de la pasantía, el botón *Evaluar desempeño*, o *Editar evaluación* si ya se registró, abre el formulario de la Figura 19. La empresa elige una calificación general de 1 a 5 y describe el desempeño del pasante en al menos 20 caracteres, considerando su responsabilidad, sus conocimientos, el trabajo en equipo y el cumplimiento. El docente tiene en cuenta esta evaluación para el veredicto, y la empresa puede editarla hasta que el veredicto se emita.
+
+**Figura 19**
+
+*Evaluación de desempeño del pasante*
+
+![Evaluación de desempeño](img/26-empresa-evaluacion.png)
+
+## Perfil de docente líder de pasantías
+
+El docente líder revisa, audita, gestiona y aprueba las pasantías. Puede ver todas las pasantías, verifica las publicaciones de las empresas y consulta las alianzas y los reportes.
+
+### Inicio
+
+El inicio del docente muestra las pasantías en curso, los documentos que esperan calificación, las publicaciones por verificar y las pasantías que aún no tienen responsables (ver Figura 20).
+
+**Figura 20**
+
+*Inicio del docente líder*
 
 ![Inicio del docente](img/13-docente-inicio.png)
 
-### 8.2 Verificar las publicaciones de las empresas
+### Verificación de las publicaciones de las empresas
 
-1. Entra a **Convocatorias y empleo**. Las publicaciones **En revisión** aparecen primero.
-2. Revisa el contenido. Si es correcto, pulsa **Verificar y publicar**. Para devolverla a borrador o cerrarla, elige el estado y pulsa **Cambiar estado**.
+En *Convocatorias y empleo*, las publicaciones *En revisión* aparecen primero. Después de revisar su contenido, el docente pulsa *Verificar y publicar* para que los estudiantes puedan verla (ver Figura 21). Si prefiere devolverla a borrador o cerrarla, elige el estado y pulsa *Cambiar estado*. El docente también puede crear sus propias publicaciones con *Nueva publicación* y gestionar las postulaciones de la misma forma que una empresa.
 
-   ![Verificar publicación](img/14-docente-verificar-publicacion.png)
+**Figura 21**
 
-El docente también puede publicar convocatorias propias con **Nueva publicación** y gestionar postulaciones igual que una empresa.
+*Verificación de una publicación*
 
-### 8.3 Revisar las pasantías
+![Verificar publicación](img/14-docente-verificar-publicacion.png)
 
-En **Pasantías** ves la lista completa con estudiante, empresa evaluadora, docente, documentos aprobados y estado. Con **Registrar pasantía** puedes crear una manualmente (por ejemplo, una pasantía gestionada fuera de la plataforma).
+### Revisión de las pasantías
+
+El módulo *Pasantías* presenta la lista completa, con el estudiante, la empresa evaluadora, el docente, los documentos aprobados y el estado de cada pasantía (ver Figura 22). Con *Registrar pasantía* se puede crear una pasantía de forma manual, por ejemplo cuando se gestionó por fuera de la plataforma.
+
+**Figura 22**
+
+*Pasantías vistas por el docente*
 
 ![Pasantías del docente](img/27-docente-pasantias.png)
 
-### 8.4 Asignar responsables
+### Asignación de responsables
 
-En el detalle de una pasantía pulsa **Asignar empresa y docente** para definir la **empresa evaluadora**, el **docente líder asignado**, las fechas de **inicio** y **fin** y el **estado**. La plataforma comprueba que la empresa tenga cupo disponible.
+En el detalle de una pasantía, el botón *Asignar empresa y docente* permite definir la empresa evaluadora, el docente líder asignado, las fechas de inicio y fin y el estado (ver Figura 23). Antes de guardar, la plataforma comprueba que la empresa tenga cupo disponible.
+
+**Figura 23**
+
+*Asignación de empresa y docente*
 
 ![Asignar empresa y docente](img/29-docente-asignar.png)
 
-### 8.5 Calificar los documentos
+### Calificación de los documentos
 
-1. En la tabla **Documentos de la pasantía** pulsa **Revisar**.
-2. Elige **Aprobar el documento** o **Devolver con observaciones**.
-3. Escribe la **Calificación** de 0.0 a 5.0 (con 3.0 o más se aprueba; con menos se devuelve) y tus observaciones.
-4. Pulsa **Guardar decisión**. El estudiante ve la nota y las observaciones.
+En la tabla *Documentos de la pasantía*, el botón *Revisar* abre el diálogo de la Figura 24. El docente elige *Aprobar el documento* o *Devolver con observaciones*, escribe una calificación de 0.0 a 5.0 y sus observaciones, y pulsa *Guardar decisión*. Un documento se aprueba con 3.0 o más; con una nota menor debe devolverse. El estudiante ve la nota y las observaciones. No es necesario esperar el aval de la empresa para calificar.
 
-   ![Calificar documento](img/30-docente-calificar-documento.png)
+**Figura 24**
 
-> No es obligatorio esperar el aval de la empresa para calificar.
+*Calificación de un documento*
 
-### 8.6 Emitir el veredicto final
+![Calificar documento](img/30-docente-calificar-documento.png)
 
-1. En el detalle de la pasantía pulsa **Emitir veredicto final**.
-2. La plataforma sugiere el resultado según el **promedio de notas** (3.0 o más: aprobada). Escribe la **Justificación**, que verá el estudiante (mínimo 20 caracteres).
-3. Pulsa **Registrar veredicto** y confirma. **El veredicto no se puede cambiar después.**
+### Veredicto final
 
-   ![Veredicto final](img/31-docente-veredicto.png)
+El veredicto se emite con el botón *Emitir veredicto final* del detalle de la pasantía. La plataforma sugiere el resultado según el promedio de notas, de modo que con 3.0 o más sugiere aprobar, y el docente escribe una justificación de al menos 20 caracteres que verá el estudiante (ver Figura 25). Al pulsar *Registrar veredicto* se pide una confirmación, porque el veredicto no puede cambiarse después.
 
-4. La pasantía queda **Finalizada**, el cupo de la empresa se libera y el **Historial de la pasantía** muestra todo lo ocurrido.
+**Figura 25**
 
-   ![Pasantía aprobada con historial](img/32-docente-pasantia-aprobada.png)
+*Registro del veredicto final*
 
-### 8.7 Reportes y auditoría
+![Veredicto final](img/31-docente-veredicto.png)
 
-En **Reportes y auditoría** eliges un periodo y ves:
+Una vez registrado el veredicto, la pasantía queda *Finalizada*, el cupo de la empresa se libera y el historial de la pasantía muestra todo lo ocurrido (ver Figura 26).
 
-- Pasantías del periodo, aprobadas/reprobadas, nota promedio y documentos pendientes.
-- **Cupos y resultados por empresa** (ocupación de cada alianza).
-- **Pasantías del periodo** con su resultado.
-- **Bitácora de auditoría**, filtrable por usuario.
+**Figura 26**
 
-Puedes **Exportar CSV** (se abre en Excel) o **Imprimir reporte**.
+*Pasantía aprobada con su historial*
+
+![Pasantía aprobada con historial](img/32-docente-pasantia-aprobada.png)
+
+### Reportes y auditoría
+
+En *Reportes y auditoría* se elige un periodo y se obtienen las cifras de pasantías, aprobadas y reprobadas, la nota promedio y los documentos pendientes; la ocupación de cupos y los resultados de cada empresa; el listado de pasantías del periodo con su resultado, y la bitácora de auditoría, que puede filtrarse por usuario (ver Figura 27). El reporte puede exportarse a un archivo CSV, que se abre en Excel, o imprimirse.
+
+**Figura 27**
+
+*Reportes y auditoría*
 
 ![Reportes y auditoría](img/33-docente-reportes.png)
 
-### 8.8 Consultar las alianzas
+### Consulta de las alianzas
 
-El docente ve las alianzas y los cupos de cada empresa en modo de solo lectura.
+El docente puede consultar las alianzas y los cupos de cada empresa, pero no modificarlos (ver Figura 28).
+
+**Figura 28**
+
+*Alianzas en modo de consulta*
 
 ![Alianzas en modo lectura](img/34-docente-alianzas.png)
 
----
+## Perfil de administrador
 
-## 9. Perfil Administrador
+El administrador registra las alianzas empresariales y, con ellas, los cupos; administra las cuentas de usuario y cuenta con las mismas vistas de supervisión que el docente líder. Su inicio se muestra en la Figura 29.
 
-El administrador crea las alianzas empresariales (y con ellas los cupos), administra las cuentas y tiene las mismas vistas de supervisión que el docente.
+**Figura 29**
 
-### 9.1 Inicio
+*Inicio del administrador*
 
 ![Inicio del administrador](img/02-admin-inicio.png)
 
-### 9.2 Registrar una alianza empresarial
+### Registro de una alianza empresarial
 
-1. Entra a **Alianzas**. Verás las empresas aliadas, su convenio, vigencia, cupos en uso y estado.
+El módulo *Alianzas* presenta las empresas aliadas con su convenio, su vigencia, los cupos en uso y su estado (ver Figura 30).
 
-   ![Alianzas](img/03-admin-alianzas.png)
+**Figura 30**
 
-2. Pulsa **Nueva alianza** y completa:
-   - **Razón social**, **Sector** y **Código del convenio**.
-   - **Cupos de pasantía**: cuántos pasantes puede tener la empresa al mismo tiempo.
-   - **Inicio** y **Fin** de la vigencia.
-   - Datos de **contacto**.
-   - **Cuenta de la empresa**: crea una cuenta nueva (con **NIT**, **correo de acceso** y **contraseña inicial** de mínimo 8 caracteres) o vincula una cuenta de empresa que ya exista.
-3. Pulsa **Registrar alianza**.
+*Listado de alianzas*
 
-   ![Formulario de alianza](img/04-admin-alianza-formulario.png)
+![Alianzas](img/03-admin-alianzas.png)
 
-4. La empresa ya puede entrar con su NIT o correo y publicar convocatorias. Los docentes líderes reciben una notificación.
+Para registrar una alianza se pulsa *Nueva alianza* (ver Figura 31). La primera parte del formulario recoge los datos de la empresa y del convenio: razón social, sector, código del convenio, número de cupos de pasantía, que corresponde a cuántos pasantes puede tener la empresa al mismo tiempo, fechas de inicio y fin de la vigencia y datos de contacto. La segunda parte define la cuenta de acceso de la empresa, que puede crearse con el NIT, un correo de acceso y una contraseña inicial de al menos 8 caracteres, o vincularse a una cuenta de empresa que ya exista. El registro termina con *Registrar alianza*.
 
-   ![Alianza registrada](img/05-admin-alianza-creada.png)
+**Figura 31**
 
-### 9.3 Ampliar cupos, suspender o renovar una alianza
+*Formulario de registro de una alianza*
 
-Pulsa **Editar o ampliar** en la alianza. Puedes cambiar los **cupos** (nunca por debajo de los pasantes activos), el **estado** (*Activo, Suspendida* o *Vencida*), las fechas y el contacto. Una alianza suspendida o vencida no permite publicar ni aceptar pasantes nuevos.
+![Formulario de alianza](img/04-admin-alianza-formulario.png)
+
+Desde ese momento la empresa puede entrar con su NIT o su correo y publicar convocatorias, y los docentes líderes reciben una notificación (ver Figura 32).
+
+**Figura 32**
+
+*Alianza registrada*
+
+![Alianza registrada](img/05-admin-alianza-creada.png)
+
+### Ampliación, suspensión o renovación de una alianza
+
+El botón *Editar o ampliar* de cada alianza permite cambiar los cupos, que nunca pueden quedar por debajo de los pasantes activos; el estado (*Activa*, *Suspendida* o *Vencida*); las fechas y los datos de contacto (ver Figura 33). Una alianza suspendida o vencida no permite publicar convocatorias ni aceptar pasantes nuevos.
+
+**Figura 33**
+
+*Edición de una alianza*
 
 ![Editar alianza](img/06-admin-alianza-editar.png)
 
-### 9.4 Usuarios y permisos
+### Usuarios y permisos
 
-En **Usuarios** ves todas las cuentas por perfil. Desde aquí puedes:
+El módulo *Usuarios* presenta todas las cuentas agrupadas por perfil (ver Figura 34). Desde allí el administrador crea cuentas de cualquier perfil con *Nuevo usuario* (ver Figura 35); en el caso de las empresas es preferible hacerlo desde *Alianzas*, para que la cuenta quede creada junto con sus cupos. También puede cambiar el perfil de una cuenta y guardarlo, desactivar o activar cuentas, asignar una contraseña nueva, lo que además desbloquea la cuenta, y desbloquear las cuentas bloqueadas por intentos fallidos. Por último, el botón *Descargar respaldo SQL* descarga una copia de la base de datos que termina con su huella SHA-256, con la que puede comprobarse que el archivo no se alteró.
 
-- **Nuevo usuario**: crear cuentas de cualquier perfil. Para las empresas es mejor usar *Alianzas*, porque así la cuenta queda creada junto con sus cupos.
-- Cambiar el **perfil** de una cuenta y pulsar **Guardar**.
-- **Desactivar** o activar una cuenta.
-- **Contraseña**: asignar una contraseña nueva (también desbloquea la cuenta).
-- **Desbloquear** una cuenta bloqueada por intentos fallidos.
-- **Descargar respaldo SQL** de la base de datos (con su huella SHA-256 para verificar que no se alteró).
+**Figura 34**
+
+*Listado de usuarios*
 
 ![Usuarios](img/07-admin-usuarios.png)
 
+**Figura 35**
+
+*Formulario de nuevo usuario*
+
 ![Nuevo usuario](img/08-admin-usuario-formulario.png)
 
-### 9.5 Supervisión
+### Supervisión
 
-El administrador también tiene **Pasantías** (todas), **Convocatorias y empleo** (verificación) y **Reportes y auditoría**, con las mismas funciones descritas para el docente líder.
+El administrador tiene acceso a todas las pasantías, a la verificación de publicaciones en *Convocatorias y empleo* y a *Reportes y auditoría*, con las mismas funciones descritas para el docente líder (ver Figura 36).
+
+**Figura 36**
+
+*Reportes del administrador*
 
 ![Reportes del administrador](img/09-admin-reportes.png)
 
----
+## Reglas del proceso
 
-## 10. Reglas del proceso
+La plataforma aplica de forma automática las reglas de la Tabla 4. Conocerlas ayuda a entender por qué algunas acciones no están disponibles en ciertos momentos.
+
+**Tabla 4**
+
+*Reglas del proceso de pasantías*
 
 | Regla | Detalle |
 |---|---|
-| Alianza obligatoria | Una empresa sin alianza vigente no puede publicar convocatorias ni aceptar pasantes. |
-| Cupos | Cada pasantía activa ocupa un cupo de la alianza. Al finalizar la pasantía, el cupo se libera. |
-| Verificación | Las publicaciones de las empresas solo son visibles para los estudiantes después de que un docente líder o el administrador las verifica. |
-| Hoja de vida | Solo PDF, máximo 5 MB. Obligatoria en ofertas laborales y opcional en convocatorias de pasantía. |
-| Documentos | PDF, imagen u Office, máximo 5 MB. Se descargan solo a través de la plataforma, que revisa los permisos. |
-| Nota de aprobación | Un documento se aprueba con 3.0 o más (escala 0.0 a 5.0). |
-| Veredicto | Solo el docente líder o el administrador lo emiten. Para *aprobada* se necesita un promedio de 3.0 o más. Es irreversible. |
-| Auditoría | Toda acción importante queda en la bitácora con usuario, fecha y detalle. |
+| Alianza obligatoria | Una empresa sin alianza vigente no puede publicar convocatorias ni aceptar pasantes |
+| Cupos | Cada pasantía activa ocupa un cupo de la alianza, que se libera al finalizar la pasantía |
+| Verificación | Las publicaciones de las empresas solo son visibles para los estudiantes después de que un docente líder o el administrador las verifica |
+| Hoja de vida | Solo en PDF y de 5 MB como máximo; obligatoria en las ofertas laborales y opcional en las convocatorias de pasantía |
+| Documentos | PDF, imagen u Office, de 5 MB como máximo; solo se descargan a través de la plataforma, que revisa los permisos |
+| Nota de aprobación | Un documento se aprueba con 3.0 o más, en una escala de 0.0 a 5.0 |
+| Veredicto | Solo lo emiten el docente líder o el administrador; para aprobar se necesita un promedio de 3.0 o más, y es irreversible |
+| Auditoría | Toda acción importante queda en la bitácora con el usuario, la fecha y el detalle |
 
-## 11. Mensajes frecuentes del sistema
+## Mensajes frecuentes del sistema
 
-La plataforma confirma cada acción con un mensaje verde y avisa de los problemas con un mensaje rojo. Estos son los avisos más comunes y qué hacer en cada caso:
+La plataforma confirma cada acción con un mensaje en verde y advierte los problemas con un mensaje en rojo. La Tabla 5 explica los avisos más comunes y qué hacer en cada caso.
 
-| Mensaje | Qué significa | Qué hacer |
+**Tabla 5**
+
+*Mensajes frecuentes y cómo resolverlos*
+
+| Mensaje | Significado | Qué hacer |
 |---|---|---|
-| *Tu empresa necesita una alianza vigente con la FET para publicar.* | La empresa no tiene alianza, o está suspendida o vencida. | Comunícate con el administrador para registrarla o renovarla. |
-| *La alianza de la empresa no tiene cupos disponibles (… en uso).* | Al aceptar o asignar un pasante no queda cupo libre. | El administrador puede ampliar los cupos en **Alianzas**. |
-| *La empresa no tiene una alianza vigente con la FET.* | La alianza está suspendida o vencida, o no existe. | El administrador debe registrarla o renovarla. |
-| *Adjunta tu hoja de vida en PDF para aplicar a la oferta laboral.* | Las ofertas laborales exigen hoja de vida. | Adjunta un PDF de 5 MB como máximo. |
-| *Explica tu interés en al menos 20 caracteres.* | La motivación de la postulación es muy corta. | Escribe por qué te interesa la convocatoria. |
-| *Ya te postulaste a esta convocatoria.* | Ya existe una postulación tuya. | Consulta su estado en **Mis postulaciones**. |
-| *El archivo supera el límite de 5 MB.* | El archivo es muy grande. | Comprime el PDF o reduce las imágenes. |
-| *Con nota menor a 3.0 el documento no se aprueba: devuélvelo con observaciones.* | El docente intentó aprobar con una nota baja. | Elige **Devolver con observaciones**. |
-| *Escribe la observación para que el estudiante sepa qué corregir.* | Se intentó devolver un documento sin observaciones. | Escribe qué debe corregir el estudiante. |
-| *Para aprobar la pasantía, califica primero al menos un documento.* | Se intentó aprobar sin notas. | Califica los documentos antes del veredicto. |
-| *La pasantía ya tiene veredicto final.* | El veredicto es definitivo. | No requiere acción. Ver las reglas del proceso. |
-| *La fecha de cierre no puede estar en el pasado.* | Fecha de cierre inválida en una publicación. | Elige una fecha de hoy en adelante. |
+| *Tu empresa necesita una alianza vigente con la FET para publicar.* | La empresa no tiene alianza, o está suspendida o vencida | Comunicarse con el administrador para registrarla o renovarla |
+| *La alianza de la empresa no tiene cupos disponibles.* | Al aceptar o asignar un pasante no queda cupo libre | El administrador puede ampliar los cupos en *Alianzas* |
+| *La empresa no tiene una alianza vigente con la FET.* | La alianza no existe, está suspendida o venció | El administrador debe registrarla o renovarla |
+| *Adjunta tu hoja de vida en PDF para aplicar a la oferta laboral.* | Las ofertas laborales exigen hoja de vida | Adjuntar un PDF de 5 MB como máximo |
+| *Explica tu interés en al menos 20 caracteres.* | La motivación de la postulación es muy corta | Explicar por qué interesa la convocatoria |
+| *Ya te postulaste a esta convocatoria.* | Ya existe una postulación del estudiante | Consultar su estado en *Mis postulaciones* |
+| *El archivo supera el límite de 5 MB.* | El archivo es demasiado grande | Comprimir el PDF o reducir las imágenes |
+| *Con nota menor a 3.0 el documento no se aprueba: devuélvelo con observaciones.* | Se intentó aprobar con una nota baja | Elegir *Devolver con observaciones* |
+| *Escribe la observación para que el estudiante sepa qué corregir.* | Se intentó devolver un documento sin observaciones | Escribir qué debe corregir el estudiante |
+| *Para aprobar la pasantía, califica primero al menos un documento.* | Se intentó aprobar sin notas | Calificar los documentos antes del veredicto |
+| *La pasantía ya tiene veredicto final.* | El veredicto es definitivo | No requiere acción |
+| *La fecha de cierre no puede estar en el pasado.* | La fecha de cierre de la publicación no es válida | Elegir una fecha a partir de hoy |
 
-## 12. Preguntas frecuentes
+## Preguntas frecuentes
 
-**No veo un módulo que sí ve mi compañero.** Cada perfil ve solo sus módulos. Revisa con qué cuenta entraste (tu nombre y perfil aparecen arriba a la derecha).
+Si un usuario no ve un módulo que sí ve un compañero, la razón suele ser el perfil: cada uno ve solo sus módulos, y el nombre y el perfil de la cuenta con la que se ingresó aparecen en la parte superior derecha. Cuando una empresa no puede aceptar a un estudiante, lo más probable es que su alianza no tenga cupos libres o no esté vigente; en ese caso el administrador puede ampliar los cupos o renovar la alianza.
 
-**La empresa no puede aceptar a un estudiante.** Probablemente la alianza no tiene cupos libres o no está vigente. El administrador puede ampliar los cupos o renovar la alianza en *Alianzas*.
+Si la plataforma rechaza un archivo, hay que revisar su formato y su tamaño, que no puede superar 5 MB; la hoja de vida, además, debe estar en PDF. El veredicto final, en cambio, no puede corregirse dentro de la plataforma: es irreversible por diseño, para proteger la validez del resultado, y cualquier error debe tratarse con la coordinación de pasantías.
 
-**Subí un archivo y me dice que no está permitido.** Revisa el formato y el tamaño (máximo 5 MB). La hoja de vida debe ser PDF.
+La plataforma también funciona desde el celular, donde el menú se abre con el botón de la parte superior. El recorrido de ayuda puede repetirse en cualquier momento con el botón *Tutorial*.
 
-**Me equivoqué en el veredicto.** El veredicto es irreversible por diseño, para proteger la validez del resultado. El caso debe gestionarse con la coordinación de pasantías por fuera de la plataforma.
+## Glosario
 
-**¿Puedo usar la plataforma desde el celular?** Sí. El menú lateral se abre con el botón de menú en la parte superior.
+La Tabla 6 define los términos propios del proceso de pasantías que se usan en la plataforma y en este manual.
 
-**¿Cómo vuelvo a ver el recorrido de ayuda?** Pulsa **Tutorial** en la parte superior de cualquier pantalla.
+**Tabla 6**
 
-
-## 13. Glosario
+*Glosario*
 
 | Término | Significado |
 |---|---|
-| **Alianza** | Convenio entre la FET y una empresa, registrado en la plataforma con su vigencia y sus cupos. |
-| **Cupo** | Plaza para un pasante activo en una empresa aliada. Cada pasantía en curso ocupa un cupo. |
-| **Convocatoria de pasantía** | Publicación de una empresa para recibir pasantes. Usa los cupos de su alianza. |
-| **Oferta laboral** | Publicación opcional de empleo. No usa cupos y exige hoja de vida. |
-| **Postulación** | Solicitud de un estudiante a una convocatoria u oferta. |
-| **Verificación** | Revisión que hace la FET de una publicación antes de mostrarla a los estudiantes. |
-| **Aval** | Visto bueno de la empresa evaluadora sobre un documento del pasante. |
-| **Calificación** | Nota de 0.0 a 5.0 que el docente líder pone a cada documento. |
-| **Veredicto final** | Decisión definitiva del docente: pasantía *aprobada* o *reprobada*. |
-| **Bitácora de auditoría** | Registro de quién hizo qué y cuándo dentro de la plataforma. |
+| Alianza | Convenio entre la FET y una empresa, registrado en la plataforma con su vigencia y sus cupos |
+| Cupo | Plaza para un pasante activo en una empresa aliada; cada pasantía en curso ocupa un cupo |
+| Convocatoria de pasantía | Publicación de una empresa para recibir pasantes; usa los cupos de su alianza |
+| Oferta laboral | Publicación opcional de empleo; no usa cupos y exige hoja de vida |
+| Postulación | Solicitud de un estudiante a una convocatoria u oferta |
+| Verificación | Revisión que hace la FET de una publicación antes de mostrarla a los estudiantes |
+| Aval | Visto bueno de la empresa evaluadora sobre un documento del pasante |
+| Calificación | Nota de 0.0 a 5.0 que el docente líder asigna a cada documento |
+| Veredicto final | Decisión definitiva del docente: pasantía aprobada o reprobada |
+| Bitácora de auditoría | Registro de quién hizo qué y cuándo dentro de la plataforma |
 
-## 14. Soporte
+## Soporte
 
-| Necesitas… | Contacta a |
+Las solicitudes de ayuda se dirigen según la Tabla 7. Además, la *Guía de uso* y el *Tutorial* de la plataforma resuelven la mayoría de las dudas sobre el uso de cada pantalla.
+
+**Tabla 7**
+
+*A quién acudir según la necesidad*
+
+| Necesidad | Contacto |
 |---|---|
-| Una cuenta, una contraseña nueva o desbloquear tu cuenta | Administrador de la plataforma (coordinación de pasantías) |
-| Registrar o ampliar la alianza de tu empresa | Administrador de la plataforma |
-| Resolver dudas sobre tus documentos, notas o veredicto | Tu docente líder de pasantías |
-| Reportar un error de la plataforma | Administrador de la plataforma, con una captura de pantalla, la fecha y hora y los pasos que seguiste |
+| Obtener una cuenta, recuperar la contraseña o desbloquear la cuenta | Administrador de la plataforma, en la coordinación de pasantías |
+| Registrar o ampliar la alianza de una empresa | Administrador de la plataforma |
+| Resolver dudas sobre documentos, notas o el veredicto | Docente líder de pasantías |
+| Reportar un error de la plataforma | Administrador de la plataforma, con una captura de pantalla, la fecha y la hora y los pasos seguidos |
 
-También puedes consultar la **Guía de uso** y el **Tutorial** dentro de la plataforma.
+## Referencias
 
----
-
-*Pasantías FET 2.0.0 · Manual de usuario v1.0 · Fundación Escuela Tecnológica de Neiva.*
+Rojas Narváez, O., Patiño Rico, H. F., & Sabogal García, J. J. (2026). *Manual de despliegue de Pasantías FET 2.0.0* [Manual técnico]. Fundación Escuela Tecnológica de Neiva.

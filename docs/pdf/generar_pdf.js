@@ -12,8 +12,8 @@ const CURSO='Ingeniería de Software II';
 const DOCENTE=''; // Nombre del docente del curso para la portada APA (opcional).
 const FECHA='5 de noviembre de 2026';
 const docs=[
- {md:'docs/manual/MANUAL_USUARIO.md',pdf:'docs/pdf/Manual_de_Usuario_Pasantias_FET_v2.0.0.pdf',title:'Manual de usuario',sub:'Guía de uso por perfil: estudiante, empresa aliada, docente líder de pasantías y administrador'},
- {md:'docs/MANUAL_DESPLIEGUE.md',pdf:'docs/pdf/Manual_de_Despliegue_Pasantias_FET_v2.0.0.pdf',title:'Manual de despliegue',sub:'Instalación, configuración, puesta en marcha, operación y actualización'},
+ {apa:true,md:'docs/manual/MANUAL_USUARIO.md',pdf:'docs/pdf/Manual_de_Usuario_Pasantias_FET_v2.0.0.pdf',title:'Manual de usuario',sub:'Guía de uso por perfil: estudiante, empresa aliada, docente líder de pasantías y administrador'},
+ {apa:true,md:'docs/MANUAL_DESPLIEGUE.md',pdf:'docs/pdf/Manual_de_Despliegue_Pasantias_FET_v2.0.0.pdf',title:'Manual de despliegue',sub:'Instalación, configuración, puesta en marcha, operación y actualización'},
  // Informes en formato APA 7 (portada de estudiante, Times 12, doble espacio, tablas y figuras numeradas, referencias).
  {apa:true,md:'docs/pruebas-despliegue/INFORME_DESPLIEGUE.md',pdf:'docs/pdf/Informe_Prueba_Despliegue_Pasantias_FET_v2.0.0.pdf'},
  {apa:true,md:'docs/pruebas-usuario/resultados-ejecucion-produccion.md',pdf:'docs/pdf/Informe_Pruebas_por_Perfil_Produccion_Pasantias_FET_v2.0.0.pdf'},
@@ -71,6 +71,7 @@ pre code{font-size:9.5pt}
 p.fig{text-indent:0;text-align:center;break-inside:avoid}
 p.fig img{max-width:100%;max-height:105mm;border:1px solid #888}
 td:first-child,th:first-child{white-space:nowrap}
+table.wrap1 td:first-child{white-space:normal;width:30%}
 p.ref{text-indent:-12.7mm;padding-left:12.7mm}
 h2.refs{break-before:page}
 blockquote{margin:0 0 0 12.7mm}
@@ -100,7 +101,7 @@ blockquote{margin:0 0 0 12.7mm}
   await p.goto('file://'+tmp,{waitUntil:'load'});
   await p.waitForFunction(()=>window.__done===true,{timeout:30000});
   // Las tablas largas pueden partirse entre páginas (sin cortar filas) para no dejar páginas en blanco.
-  await p.evaluate(()=>document.querySelectorAll('table').forEach(t=>{if(t.rows.length>14){t.style.breakInside='auto';[...t.rows].forEach(r=>r.style.breakInside='avoid');}}));
+  await p.evaluate(()=>document.querySelectorAll('table').forEach(t=>{if([...t.rows].some(r=>r.cells[0]&&r.cells[0].textContent.trim().length>30))t.classList.add('wrap1');if(t.rows.length>14){t.style.breakInside='auto';[...t.rows].forEach(r=>r.style.breakInside='avoid');}}));
   if(d.apa){
    // Normas APA 7: rótulos de tablas y figuras, notas, figuras centradas y lista de referencias con sangría francesa.
    await p.evaluate(()=>{
