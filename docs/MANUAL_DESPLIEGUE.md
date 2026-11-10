@@ -1,8 +1,8 @@
 # Manual de despliegue de Pasantías FET 2.0.0
 
-Pasantías FET es la plataforma web con la que la Fundación Escuela Tecnológica de Neiva Jesús Oviedo Pérez gestiona los documentos de las pasantías de sus estudiantes, las alianzas con empresas y las convocatorias de práctica y empleo. Este manual describe cómo instalar, configurar, poner en marcha, mantener y actualizar la versión 2.0.0 en un servidor de producción, y cómo preparar un ambiente local de pruebas. El uso funcional de la plataforma por parte de estudiantes, empresas, docentes y administradores se explica en el *Manual de usuario* (Rojas Narváez et al., 2026b).
+Pasantías FET es la plataforma web con la que la Fundación Escuela Tecnológica de Neiva Jesús Oviedo Pérez gestiona los documentos de las pasantías de sus estudiantes, las alianzas con empresas y las convocatorias de práctica y empleo. Este manual describe cómo instalar, configurar, poner en marcha, mantener y actualizar la versión 2.0.0 en un servidor de producción, y cómo preparar un ambiente local de pruebas. El uso funcional de la plataforma por parte de estudiantes, empresas, docentes y administradores se explica en el *Manual de usuario*.
 
-El documento está dirigido al personal de sistemas o de infraestructura que tenga conocimientos básicos de la línea de comandos, del servidor web Apache y de las bases de datos MySQL o MariaDB. El procedimiento se probó en servidores Ubuntu Server 24.04 sin configuración previa; los resultados de esa prueba se presentan en el informe correspondiente (Rojas Narváez et al., 2026a). El código fuente está disponible en https://github.com/OrlandoRojasNa/fet-pasantias.
+El documento está dirigido al personal de sistemas o de infraestructura que tenga conocimientos básicos de la línea de comandos, del servidor web Apache y de las bases de datos MySQL o MariaDB. El procedimiento se probó en servidores Ubuntu Server 24.04 sin configuración previa; los resultados de esa prueba se presentan en el *Informe de prueba de despliegue*. El código fuente está disponible en https://github.com/OrlandoRojasNa/fet-pasantias.
 
 La Tabla 1 reúne los términos técnicos que se usan a lo largo del manual.
 
@@ -52,7 +52,7 @@ El servidor debe cumplir los recursos mínimos de la Tabla 2. Los recursos recom
 | Sistema operativo | Ubuntu Server 22.04 LTS o Windows Server 2019 | Ubuntu Server 24.04 LTS |
 | Red | Dirección IP pública o interna, puertos 80 y 443 | Dominio propio, por ejemplo `pasantias.fet.edu.co` |
 
-El software necesario se indica en la Tabla 3. En Linux todos los componentes se instalan desde los repositorios del sistema operativo; en Windows se usa XAMPP, que reúne Apache, PHP y MariaDB en un solo instalador (Apache Friends, s.f.).
+El software necesario se indica en la Tabla 3. En Linux todos los componentes se instalan desde los repositorios del sistema operativo; en Windows se usa XAMPP, que reúne Apache, PHP y MariaDB en un solo instalador.
 
 **Tabla 3**
 
@@ -64,7 +64,7 @@ El software necesario se indica en la Tabla 3. En Linux todos los componentes se
 | PHP | 8.1 o superior; probado con 8.2 y 8.3 | Con las extensiones `pdo_mysql`, `mbstring`, `fileinfo`, `curl` y `openssl` |
 | MariaDB o MySQL | MariaDB 10.6 o MySQL 8.0 en adelante | Juego de caracteres `utf8mb4` |
 | Git | 2.30 o superior | Para descargar y actualizar el código |
-| Certbot | Versión vigente | Certificado HTTPS gratuito de Let's Encrypt, solo en Linux (Electronic Frontier Foundation, s.f.) |
+| Certbot | Versión vigente | Certificado HTTPS gratuito de Let's Encrypt, solo en Linux |
 
 Los programas que conviene descargar antes de empezar, con su sitio oficial, se listan en la Tabla 4.
 
@@ -95,7 +95,7 @@ La plataforma se usa en dos ambientes, descritos en la Tabla 5. La diferencia pr
 
 ## Instalación en un servidor Linux
 
-Los comandos de este apartado se ejecutan en Ubuntu Server (Canonical, 2024) con un usuario que tenga permisos de `sudo`. En todos ellos, `pasantias.fet.edu.co` debe reemplazarse por el dominio real de la institución.
+Los comandos de este apartado se ejecutan en Ubuntu Server con un usuario que tenga permisos de `sudo`. En todos ellos, `pasantias.fet.edu.co` debe reemplazarse por el dominio real de la institución.
 
 ### Instalación automática
 
@@ -226,7 +226,7 @@ La clave del administrador debe tener al menos 10 caracteres, con letras y núme
 
 ### Publicación del sitio en Apache
 
-El sitio se publica con un archivo de configuración propio, `/etc/apache2/sites-available/pasantias-fet.conf`, que además agrega cabeceras de seguridad y registros separados (Apache Software Foundation, s.f.):
+El sitio se publica con un archivo de configuración propio, `/etc/apache2/sites-available/pasantias-fet.conf`, que además agrega cabeceras de seguridad y registros separados:
 
 ```apache
 <VirtualHost *:80>
@@ -307,7 +307,7 @@ sudo ufw enable
 
 ### Ensayo en una máquina virtual
 
-Antes de instalar en el servidor de la institución, todo el procedimiento puede ensayarse en una máquina virtual del propio computador con VirtualBox (Oracle, s.f.):
+Antes de instalar en el servidor de la institución, todo el procedimiento puede ensayarse en una máquina virtual del propio computador con VirtualBox:
 
 1. Descargar e instalar VirtualBox (https://www.virtualbox.org/wiki/Downloads) y la imagen ISO de Ubuntu Server 24.04 LTS.
 2. Crear una máquina nueva de tipo *Linux, Ubuntu (64-bit)* con 2 GB de RAM, 2 procesadores y un disco de 20 GB, y asignarle la imagen ISO.
@@ -359,7 +359,7 @@ Después del punto 7 conviene suspender la alianza de prueba desde *Alianzas*, c
 
 ## Puesta en marcha
 
-Una vez verificado el servidor, el administrador carga la información inicial desde la propia plataforma, como se explica en el *Manual de usuario* (Rojas Narváez et al., 2026b). En primer lugar crea las cuentas de los docentes líderes de pasantías desde *Usuarios*, con la opción *Nuevo usuario* y el perfil *Docente líder de pasantías*. Después registra las empresas aliadas en *Alianzas*, con la opción *Nueva alianza*, indicando su convenio, su vigencia y sus cupos; este registro crea también la cuenta de la empresa. Luego crea las cuentas de los estudiantes con el perfil *Estudiante*; cuando son muchos, el área de sistemas puede cargarlos directamente en la tabla `users` con una contraseña temporal.
+Una vez verificado el servidor, el administrador carga la información inicial desde la propia plataforma, como se explica en el *Manual de usuario*. En primer lugar crea las cuentas de los docentes líderes de pasantías desde *Usuarios*, con la opción *Nuevo usuario* y el perfil *Docente líder de pasantías*. Después registra las empresas aliadas en *Alianzas*, con la opción *Nueva alianza*, indicando su convenio, su vigencia y sus cupos; este registro crea también la cuenta de la empresa. Luego crea las cuentas de los estudiantes con el perfil *Estudiante*; cuando son muchos, el área de sistemas puede cargarlos directamente en la tabla `users` con una contraseña temporal.
 
 Las credenciales se entregan a cada persona por un canal seguro, como el correo institucional, y se les pide que guarden su contraseña. Por último, se anuncia el lanzamiento con la dirección de la plataforma y el enlace al manual de usuario.
 
@@ -538,18 +538,19 @@ La atención se organiza en los tres niveles de la Tabla 12. Los errores de la a
 | 2. Infraestructura | Área de sistemas de la institución | Servidor, base de datos, respaldos, HTTPS y actualizaciones |
 | 3. Desarrollo | Equipo de Pasantías FET | Errores de la aplicación y nuevas versiones |
 
-## Referencias
+## Documentación relacionada
 
-Apache Friends. (s.f.). *XAMPP* [Software]. Recuperado el 9 de noviembre de 2026, de https://www.apachefriends.org/es/
+**Tabla 13**
 
-Apache Software Foundation. (s.f.). *Apache HTTP Server version 2.4 documentation*. Recuperado el 9 de noviembre de 2026, de https://httpd.apache.org/docs/2.4/
+*Documentos y sitios de referencia*
 
-Canonical. (2024). *Ubuntu Server 24.04 LTS* [Sistema operativo]. https://ubuntu.com/server
-
-Electronic Frontier Foundation. (s.f.). *Certbot* [Software]. Recuperado el 9 de noviembre de 2026, de https://certbot.eff.org/
-
-Oracle. (s.f.). *VirtualBox* [Software]. Recuperado el 9 de noviembre de 2026, de https://www.virtualbox.org/
-
-Rojas Narváez, O., Patiño Rico, H. F., & Sabogal García, J. J. (2026a). *Prueba de despliegue de Pasantías FET 2.0.0 en máquinas virtuales Ubuntu Server* [Informe técnico]. Fundación Escuela Tecnológica de Neiva.
-
-Rojas Narváez, O., Patiño Rico, H. F., & Sabogal García, J. J. (2026b). *Manual de usuario de Pasantías FET 2.0.0* [Manual]. Fundación Escuela Tecnológica de Neiva.
+| Documento o sitio | Uso |
+|---|---|
+| *Manual de usuario de Pasantías FET 2.0.0* | Uso de la plataforma por perfil y puesta en marcha funcional |
+| *Informe de prueba de despliegue de Pasantías FET 2.0.0* | Resultados de la instalación en servidores Ubuntu Server 24.04 |
+| Repositorio del producto | Código fuente, versiones e incidencias en https://github.com/OrlandoRojasNa/fet-pasantias |
+| Documentación de Apache HTTP Server 2.4 | https://httpd.apache.org/docs/2.4/ |
+| Ubuntu Server 24.04 LTS | https://ubuntu.com/server |
+| Certbot (Let's Encrypt) | https://certbot.eff.org/ |
+| XAMPP para Windows | https://www.apachefriends.org/es/ |
+| Oracle VirtualBox | https://www.virtualbox.org/ |

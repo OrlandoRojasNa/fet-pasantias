@@ -2,7 +2,7 @@
 
 Pasantías FET es la plataforma con la que la Fundación Escuela Tecnológica de Neiva Jesús Oviedo Pérez gestiona el proceso de pasantías de sus estudiantes. En ella se registran las alianzas con las empresas y sus cupos de pasantes, se publican las convocatorias de pasantía y las ofertas laborales, se reciben las postulaciones con la hoja de vida de cada estudiante y se lleva la documentación de cada pasantía, desde el plan de práctica hasta el certificado. El docente líder de pasantías revisa, califica y aprueba esos documentos, y cada acción queda registrada para su auditoría.
 
-Este manual explica, perfil por perfil, qué puede hacer cada usuario y cómo hacerlo. Está dirigido a estudiantes, empresas aliadas, docentes líderes de pasantías y administradores. La instalación y el mantenimiento del servidor se tratan en el *Manual de despliegue* (Rojas Narváez et al., 2026). Las capturas de pantalla usan datos de ejemplo, por lo que los nombres, las empresas y las fechas de la plataforma real serán distintos. A lo largo del texto, los nombres de botones, menús y campos aparecen en cursiva, por ejemplo *Nueva publicación*, igual que los estados de los registros, como *En revisión*.
+Este manual explica, perfil por perfil, qué puede hacer cada usuario y cómo hacerlo. Está dirigido a estudiantes, empresas aliadas, docentes líderes de pasantías y administradores. La instalación y el mantenimiento del servidor se tratan en el *Manual de despliegue*. Las capturas de pantalla usan datos de ejemplo, por lo que los nombres, las empresas y las fechas de la plataforma real serán distintos. A lo largo del texto, los nombres de botones, menús y campos aparecen en cursiva, por ejemplo *Nueva publicación*, igual que los estados de los registros, como *En revisión*.
 
 ## Perfiles de usuario
 
@@ -507,6 +507,13 @@ Las solicitudes de ayuda se dirigen según la Tabla 7. Además, la *Guía de uso
 | Resolver dudas sobre documentos, notas o el veredicto | Docente líder de pasantías |
 | Reportar un error de la plataforma | Administrador de la plataforma, con una captura de pantalla, la fecha y la hora y los pasos seguidos |
 
-## Referencias
+## Documentación relacionada
 
-Rojas Narváez, O., Patiño Rico, H. F., & Sabogal García, J. J. (2026). *Manual de despliegue de Pasantías FET 2.0.0* [Manual técnico]. Fundación Escuela Tecnológica de Neiva.
+**Tabla 8**
+
+*Documentos que acompañan a este manual*
+
+| Documento | Contenido |
+|---|---|
+| *Manual de despliegue de Pasantías FET 2.0.0* | Instalación, configuración, operación, respaldo y actualización del servidor |
+| Repositorio del producto | Código fuente y registro de incidencias en https://github.com/OrlandoRojasNa/fet-pasantias |
