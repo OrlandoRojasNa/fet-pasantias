@@ -97,13 +97,13 @@ Se registraron diez hallazgos (ver Tabla 3). Los dos de severidad media se detec
 
 *Postulaciones recibidas con los botones de aceptación (corrección H-03)*
 
-![Postulaciones recibidas con botones](../evidencias/produccion/E3-postulaciones.png)
+![Postulaciones recibidas con botones](../../../pruebas-usuario/evidencias/produccion/E3-postulaciones.png)
 
 **Figura 2**
 
 *Bitácora de auditoría con el nombre de cada elemento (corrección H-06)*
 
-![Bitácora de auditoría](../evidencias/produccion/D7-reportes.png)
+![Bitácora de auditoría](../../../pruebas-usuario/evidencias/produccion/D7-reportes.png)
 
 ## Conclusiones
 

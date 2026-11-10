@@ -15,8 +15,6 @@ const FECHA='5 de noviembre de 2026';
 const docs=[
  // Informes en formato APA 7 (portada de estudiante, Times 12, doble espacio, tablas y figuras numeradas, referencias).
  {apa:true,md:'docs/pruebas-despliegue/INFORME_DESPLIEGUE.md',pdf:'docs/pdf/Informe_Prueba_Despliegue_Pasantias_FET_v2.0.0.pdf'},
- {apa:true,md:'docs/pruebas-usuario/resultados-ejecucion-produccion.md',pdf:'docs/pdf/Informe_Pruebas_por_Perfil_Produccion_Pasantias_FET_v2.0.0.pdf'},
- {apa:true,md:'docs/pruebas-usuario/simulacion/informe-sesion-simulada.md',pdf:'docs/pdf/Informe_Sesion_Simulada_Pruebas_Usuario_Pasantias_FET_v2.0.0.pdf'},
 ];
 const css=`
 @page{size:Letter;margin:22mm 18mm 20mm 18mm}
