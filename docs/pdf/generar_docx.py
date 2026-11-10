@@ -30,6 +30,9 @@ MANUALES = [
     dict(md='docs/MANUAL_DESPLIEGUE.md', docx='docs/word/Manual_de_Despliegue_Pasantias_FET_v2.0.0.docx',
          codigo='PF-MD-200', titulo='Manual de despliegue',
          publico='Personal de sistemas e infraestructura responsable del servidor'),
+    dict(md='docs/pruebas-usuario/INFORME_PRUEBAS_USUARIO.md', docx='docs/word/Informe_de_Pruebas_de_Usuario_Pasantias_FET_v2.0.0.docx',
+         codigo='PF-IP-200', titulo='Informe de pruebas de usuario', intro='Introducción', doc='informe',
+         publico='Docentes evaluadores, equipo de desarrollo y coordinación de pasantías'),
 ]
 FUENTE, MONO = 'Arial', 'Consolas'
 VERDE, VERDE2, ORO, TINTA, GRIS = '143A21', '1F5430', 'C9962B', '24332A', '5F6F66'
@@ -39,7 +42,7 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 
 # ---------------------------------------------------------------- Markdown
 
-def preparar_md(md_path, tmp):
+def preparar_md(md_path, tmp, intro='Acerca de este manual'):
     texto = open(md_path, encoding='utf-8').read()
     n = 0
 
@@ -53,7 +56,7 @@ def preparar_md(md_path, tmp):
 
     texto = re.sub(r'```mermaid\n(.*?)```', diagrama, texto, flags=re.S)
     # El título va en la portada; la introducción queda bajo "Acerca de este manual".
-    texto = re.sub(r'^# .+\n', '## Acerca de este manual\n', texto, count=1, flags=re.M)
+    texto = re.sub(r'^# .+\n', f'## {intro}\n', texto, count=1, flags=re.M)
     # Leyendas de tablas y figuras en una sola línea: "Tabla 1. Título".
     texto = re.sub(r'^\*\*((?:Tabla|Figura) \d+)\*\*\n\n\*(.+?)\*[ \t]*$', r'**\1.** \2', texto, flags=re.M)
     # Numeración de capítulos y secciones, fuera de los bloques de código.
@@ -384,11 +387,11 @@ def ficha(doc, m):
     els.append(tabla_simple(doc, [['Formato', 'Uso'],
                                   [('Cursiva', 'i'), 'Nombres de botones, menús, campos y estados de la plataforma'],
                                   [('Monoespaciado', 'm'), 'Comandos, archivos, rutas y valores que se escriben tal como aparecen'],
-                                  ['Tabla N / Figura N', 'Tablas y capturas de pantalla, numeradas en orden dentro del manual']]))
+                                  ['Tabla N / Figura N', f"Tablas y capturas de pantalla, numeradas en orden dentro del {m.get('doc', 'manual')}"]]))
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(12)
     borde_parrafo(p._p, 'top', 'DBE4DD', sz=4, espacio='6')
-    texto(p, f'La información de este manual corresponde a la versión {VERSION} de {PRODUCTO} y puede cambiar en '
+    texto(p, f"La información de este {m.get('doc', 'manual')} corresponde" f' a la versión {VERSION} de {PRODUCTO} y puede cambiar en '
              'ediciones posteriores. Las capturas de pantalla usan datos de ejemplo; los nombres, las empresas y las '
              f'fechas de una instalación real serán distintos. El logotipo de la {CLIENTE} identifica a la institución '
              'para la cual se desarrolló el producto.', 7.5, GRIS)
@@ -439,7 +442,7 @@ def procesar(m, ref):
     if not (os.path.exists(tapa) and os.path.exists(contra)):
         sys.exit('Faltan las imágenes de portada: ejecute primero node docs/pdf/generar_manuales.js')
     with tempfile.TemporaryDirectory() as tmp:
-        entrada = preparar_md(m['md'], tmp)
+        entrada = preparar_md(m['md'], tmp, m.get('intro', 'Acerca de este manual'))
         subprocess.run(['pandoc', entrada, '-f', 'gfm', '-t', 'docx', '--resource-path',
                         os.path.dirname(os.path.abspath(m['md'])), '--reference-doc', ref, '-o', m['docx']], check=True)
     doc = Document(m['docx'])

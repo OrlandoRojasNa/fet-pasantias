@@ -37,6 +37,13 @@ const MANUALES = [
     publico: 'Personal de sistemas e infraestructura responsable del servidor',
     portada: {tipo: 'terminal'},
   },
+  {
+    md: 'docs/pruebas-usuario/INFORME_PRUEBAS_USUARIO.md', pdf: 'docs/pdf/Informe_de_Pruebas_de_Usuario_Pasantias_FET_v2.0.0.pdf',
+    codigo: 'PF-IP-200', titulo: 'Informe de pruebas de usuario', doc: 'informe', intro: 'Introducción',
+    lema: 'Ejecución de los guiones por perfil y sesión simulada de uso: resultados, hallazgos y correcciones',
+    publico: 'Docentes evaluadores, equipo de desarrollo y coordinación de pasantías',
+    portada: {tipo: 'captura', img: 'docs/pruebas-usuario/evidencias/produccion/D6-finalizada.png', img2: 'docs/pruebas-usuario/evidencias/produccion/E3-postulaciones.png'},
+  },
 ];
 
 const VERDE = '#143a21', VERDE2 = '#1f5430', VERDE3 = '#2f7a47', MENTA = '#e7f2ea', ORO = '#c9962b', TINTA = '#16241b';
@@ -150,8 +157,10 @@ function portadaHtml(m) {
   .tx .c{color:#ffffff}.tx .o{color:#8fb39b}.tx .k{color:${ORO};margin-top:2mm;font-weight:600}
   .pie{position:absolute;left:0;right:0;bottom:0;height:26mm;background:rgba(5,20,11,.55);border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;padding:0 20mm;font-size:7.8pt;color:rgba(255,255,255,.72);line-height:1.6}
   .pie b{color:#fff;font-weight:600}
+  .inf h1{font-size:38pt}.inf .prod{margin-top:10mm}.inf .lema{font-size:11pt}.inf .chip{margin-top:6mm}
+  .inf .disp{width:118mm;bottom:31mm}.inf .disp img{height:92mm;object-fit:cover;object-position:top left}.inf .disp2 img{height:70mm}.inf .disp2{width:88mm;right:70mm;bottom:40mm}
   .pie>div:first-child{flex:none;width:112mm}.pie>div:last-child{flex:none;width:62mm}
-  </style></head><body><div class="cov">
+  </style></head><body><div class="cov ${m.doc==='informe'?'inf':''}">
   <svg class="fondo" viewBox="0 0 216 279" preserveAspectRatio="none">
     <circle cx="200" cy="40" r="70" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="0.4"/>
     <circle cx="200" cy="40" r="95" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="0.4"/>
@@ -189,7 +198,7 @@ function contraportadaHtml(m) {
   <div class="lema">Gestión documental de pasantías, alianzas empresariales y convocatorias</div>
   <div class="raya"></div>
   <div class="cols">
-   <div><b>Documentación</b>Manual de usuario<br>Manual de despliegue</div>
+   <div><b>Documentación</b>Manual de usuario<br>Manual de despliegue<br>Informe de pruebas</div>
    <div><b>Soporte</b>Coordinación de pasantías<br>Área de sistemas de la institución</div>
    <div><b>Producto</b>Versión ${VERSION}<br>${REPO}</div>
   </div></div>
@@ -221,9 +230,9 @@ function fichaHtml(m) {
   <table class="corta"><tr><th>Formato</th><th>Uso</th></tr>
    <tr><td><i>Cursiva</i></td><td>Nombres de botones, menús, campos y estados de la plataforma</td></tr>
    <tr><td><code>Monoespaciado</code></td><td>Comandos, archivos, rutas y valores que se escriben tal como aparecen</td></tr>
-   <tr><td>Tabla N / Figura N</td><td>Tablas y capturas de pantalla, numeradas en orden dentro del manual</td></tr>
+   <tr><td>Tabla N / Figura N</td><td>Tablas y capturas de pantalla, numeradas en orden dentro del ${m.doc || 'manual'}</td></tr>
   </table>
-  <div class="legal">La información de este manual corresponde a la versión ${VERSION} de ${PRODUCTO} y puede cambiar en ediciones posteriores. Las capturas de pantalla usan datos de ejemplo; los nombres, las empresas y las fechas de una instalación real serán distintos. El logotipo de la ${CLIENTE} identifica a la institución para la cual se desarrolló el producto.</div>
+  <div class="legal">La información de este ${m.doc || 'manual'} corresponde a la versión ${VERSION} de ${PRODUCTO} y puede cambiar en ediciones posteriores. Las capturas de pantalla usan datos de ejemplo; los nombres, las empresas y las fechas de una instalación real serán distintos. El logotipo de la ${CLIENTE} identifica a la institución para la cual se desarrolló el producto.</div>
   </section>`;
 }
 
@@ -242,7 +251,7 @@ async function generar(br, m) {
    const main=document.getElementById('main');
    main.querySelector('h1')?.remove();
    // Introducción sin título: se agrupa bajo "Acerca de este manual".
-   const h=document.createElement('h2');h.textContent='Acerca de este manual';main.prepend(h);
+   const h=document.createElement('h2');h.textContent=${JSON.stringify(m.intro || 'Acerca de este manual')};main.prepend(h);
    // Leyendas de tablas y figuras en una sola línea.
    main.querySelectorAll('p').forEach(p=>{
     const t=p.textContent.trim();
@@ -259,7 +268,7 @@ async function generar(br, m) {
    let c=0,s=0,k=0;
    main.querySelectorAll('h2,h3').forEach(e=>{
     const titulo=e.textContent.trim();let num;
-    if(e.tagName==='H2'){c++;s=0;num=String(c);e.innerHTML='<span class="num">Capítulo '+c+'</span>'+e.innerHTML;}
+    if(e.tagName==='H2'){c++;s=0;num=String(c);e.innerHTML='<span class="num">${m.doc==='informe'?'Sección':'Capítulo'} '+c+'</span>'+e.innerHTML;}
     else{s++;num=c+'.'+s;e.innerHTML='<span class="num">'+num+'</span>'+e.innerHTML;}
     const id='h'+(k++);
     ${marcas ? `e.style.position='relative';e.insertAdjacentHTML('afterbegin','<span class="marca">@@'+id+'@@</span>');` : ''}
