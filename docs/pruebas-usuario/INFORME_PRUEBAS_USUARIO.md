@@ -163,43 +163,189 @@ La Tabla 6 reúne los diez hallazgos de los dos ejercicios. Los dos de severidad
 
 ## Evidencias
 
-Las veintinueve capturas de la ejecución se conservan en la carpeta `docs/pruebas-usuario/evidencias/produccion/` del repositorio, nombradas con el código de cada tarea, y corresponden a la versión final. Las figuras 1 a 6 muestran las más representativas.
+Esta sección reúne las veintinueve capturas tomadas durante la corrida final en el servidor de producción, agrupadas por perfil. El código entre paréntesis indica la tarea de la Tabla 3 a la que corresponde cada captura.
+
+### Administrador
 
 **Figura 1**
 
-*Creación de las cuentas del docente y del estudiante por parte del administrador (P0)*
+*Creación de las cuentas del docente y del estudiante (P0)*
 
-![Cuentas creadas por el administrador](evidencias/produccion/P0-cuentas-creadas.png)
+![Creación de las cuentas del docente y del estudiante (P0)](evidencias/produccion/P0-cuentas-creadas.png)
 
 **Figura 2**
 
-*Tutorial del estudiante después de la corrección H-01 (S1)*
+*Formulario de alianza dividido en dos secciones, corrección H-08 (A1)*
 
-![Tutorial del estudiante](evidencias/produccion/S1-tutorial.png)
+![Formulario de alianza dividido en dos secciones, corrección H-08 (A1)](evidencias/produccion/A1-formulario.png)
 
 **Figura 3**
 
-*Postulaciones recibidas con los botones de aceptación, corrección H-03 (E3)*
+*Alianza registrada como vigente con 0 de 2 cupos en uso (A1)*
 
-![Postulaciones recibidas](evidencias/produccion/E3-postulaciones.png)
+![Alianza registrada como vigente con 0 de 2 cupos en uso (A1)](evidencias/produccion/A1-alianza-registrada.png)
 
 **Figura 4**
 
-*Mensaje que impide aprobar con nota 2.5, con el docente en la misma pasantía (D4)*
+*Ampliación de los cupos de la alianza de 2 a 4 (A2)*
 
-![Bloqueo al aprobar con nota baja](evidencias/produccion/D4-bloqueo-aprobar.png)
+![Ampliación de los cupos de la alianza de 2 a 4 (A2)](evidencias/produccion/A2-ampliar.png)
 
 **Figura 5**
 
-*Pasantía finalizada con veredicto e historial de auditoría (D6)*
+*Usuario de prueba desactivado en la pantalla de usuarios y permisos (A3)*
 
-![Pasantía finalizada](evidencias/produccion/D6-finalizada.png)
+![Usuario de prueba desactivado en la pantalla de usuarios y permisos (A3)](evidencias/produccion/A3-usuarios.png)
 
 **Figura 6**
 
-*Bitácora de auditoría con el nombre de cada elemento, corrección H-06 (D7)*
+*Cuenta del estudiante bloqueada tras cinco intentos fallidos, con el botón para desbloquearla (A4)*
 
-![Bitácora de auditoría](evidencias/produccion/D7-reportes.png)
+![Cuenta del estudiante bloqueada tras cinco intentos fallidos, con el botón para desbloquearla (A4)](evidencias/produccion/A4-bloqueada.png)
+
+### Empresa
+
+**Figura 7**
+
+*Inicio de la empresa con la franja de la alianza, corrección H-09 (E1)*
+
+![Inicio de la empresa con la franja de la alianza, corrección H-09 (E1)](evidencias/produccion/E1-alianza.png)
+
+**Figura 8**
+
+*Formulario de publicación de la convocatoria de pasantía (E2)*
+
+![Formulario de publicación de la convocatoria de pasantía (E2)](evidencias/produccion/E2-formulario.png)
+
+**Figura 9**
+
+*Postulaciones recibidas con los botones de aceptación, corrección H-03 (E3)*
+
+![Postulaciones recibidas con los botones de aceptación, corrección H-03 (E3)](evidencias/produccion/E3-postulaciones.png)
+
+**Figura 10**
+
+*Aval del plan de práctica por parte de la empresa (E4)*
+
+![Aval del plan de práctica por parte de la empresa (E4)](evidencias/produccion/E4-avalar.png)
+
+**Figura 11**
+
+*Evaluación del desempeño del estudiante (E5)*
+
+![Evaluación del desempeño del estudiante (E5)](evidencias/produccion/E5-evaluacion.png)
+
+**Figura 12**
+
+*Publicación de la oferta laboral, que no ocupa cupos (E6)*
+
+![Publicación de la oferta laboral, que no ocupa cupos (E6)](evidencias/produccion/E6-oferta.png)
+
+### Docente
+
+**Figura 13**
+
+*Panel del docente con la publicación pendiente y su notificación (D1)*
+
+![Panel del docente con la publicación pendiente y su notificación (D1)](evidencias/produccion/D1-panel.png)
+
+**Figura 14**
+
+*Verificación de la convocatoria (D2)*
+
+![Verificación de la convocatoria (D2)](evidencias/produccion/D2-verificar.png)
+
+**Figura 15**
+
+*Panel del docente con la pasantía nueva en la lista de pasantías sin responsables (D3)*
+
+![Panel del docente con la pasantía nueva en la lista de pasantías sin responsables (D3)](evidencias/produccion/D3-sin-responsables.png)
+
+**Figura 16**
+
+*Asignación de la empresa evaluadora y del docente líder a la pasantía (D3)*
+
+![Asignación de la empresa evaluadora y del docente líder a la pasantía (D3)](evidencias/produccion/D3-asignar.png)
+
+**Figura 17**
+
+*Mensaje que impide aprobar con nota 2.5, con el docente en la misma pasantía (D4)*
+
+![Mensaje que impide aprobar con nota 2.5, con el docente en la misma pasantía (D4)](evidencias/produccion/D4-bloqueo-aprobar.png)
+
+**Figura 18**
+
+*Aprobación del documento corregido con nota 4.2 (D5)*
+
+![Aprobación del documento corregido con nota 4.2 (D5)](evidencias/produccion/D5-aprobar.png)
+
+**Figura 19**
+
+*Formulario del veredicto final (D6)*
+
+![Formulario del veredicto final (D6)](evidencias/produccion/D6-veredicto.png)
+
+**Figura 20**
+
+*Pasantía finalizada con veredicto e historial de auditoría (D6)*
+
+![Pasantía finalizada con veredicto e historial de auditoría (D6)](evidencias/produccion/D6-finalizada.png)
+
+**Figura 21**
+
+*Reportes del periodo y bitácora de auditoría, corrección H-06 (D7)*
+
+![Reportes del periodo y bitácora de auditoría, corrección H-06 (D7)](evidencias/produccion/D7-reportes.png)
+
+### Estudiante
+
+**Figura 22**
+
+*Inicio del estudiante con la convocatoria abierta (S1)*
+
+![Inicio del estudiante con la convocatoria abierta (S1)](evidencias/produccion/S1-inicio.png)
+
+**Figura 23**
+
+*Tutorial del estudiante después de la corrección H-01 (S1)*
+
+![Tutorial del estudiante después de la corrección H-01 (S1)](evidencias/produccion/S1-tutorial.png)
+
+**Figura 24**
+
+*Postulación a la convocatoria con hoja de vida (S2)*
+
+![Postulación a la convocatoria con hoja de vida (S2)](evidencias/produccion/S2-postulacion.png)
+
+**Figura 25**
+
+*Carga del plan de práctica (S3)*
+
+![Carga del plan de práctica (S3)](evidencias/produccion/S3-subir.png)
+
+**Figura 26**
+
+*Documento devuelto con la observación del docente y envío de la corrección (S4)*
+
+![Documento devuelto con la observación del docente y envío de la corrección (S4)](evidencias/produccion/S4-corregir.png)
+
+**Figura 27**
+
+*Avisos recibidos por el estudiante durante el proceso (S5)*
+
+![Avisos recibidos por el estudiante durante el proceso (S5)](evidencias/produccion/S5-notificaciones.png)
+
+**Figura 28**
+
+*Resultado final con la justificación y la evaluación de la empresa (S5)*
+
+![Resultado final con la justificación y la evaluación de la empresa (S5)](evidencias/produccion/S5-resultado.png)
+
+**Figura 29**
+
+*Postulación registrada en la oferta laboral (S6)*
+
+![Postulación registrada en la oferta laboral (S6)](evidencias/produccion/S6-postulado.png)
 
 ## Conclusiones
 
