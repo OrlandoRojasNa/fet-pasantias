@@ -38,7 +38,7 @@ Para usar la plataforma basta con un equipo conectado a internet, un navegador a
 
 ### Obtención de una cuenta
 
-Las cuentas las crea el administrador. A los estudiantes y docentes, la coordinación de pasantías les entrega su usuario y su contraseña inicial. Las empresas reciben su cuenta cuando se registra la alianza con la FET; su usuario es el NIT o el correo de acceso de la empresa.
+Los datos de estudiantes y docentes provienen de la base de datos de la universidad: cuando la plataforma está conectada con ella, cada estudiante con matrícula vigente y cada docente ya tiene su cuenta y entra con su usuario y su contraseña institucionales. Mientras esa conexión no esté activa, las cuentas las crea el administrador y la coordinación de pasantías entrega a cada estudiante y docente su usuario y su contraseña inicial. Si un dato personal, como el nombre o el programa, está equivocado, debe corregirse en la universidad y no en la plataforma. Las empresas reciben su cuenta cuando se registra la alianza con la FET; su usuario es el NIT o el correo de acceso de la empresa.
 
 ### Ingreso
 

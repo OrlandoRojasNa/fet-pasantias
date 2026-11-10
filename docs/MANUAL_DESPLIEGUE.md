@@ -36,6 +36,27 @@ flowchart LR
   B -.-> S
 ```
 
+## Integración con los sistemas de la universidad
+
+En la operación institucional, la información de estudiantes y docentes no se digita en Pasantías FET: proviene de la base de datos académica de la universidad, que es la fuente oficial de esos datos. La plataforma conserva en su tabla `users` una copia local de cada persona, enlazada por el número de identificación, con su nombre, su correo, su programa y su perfil dentro de la plataforma. Esa copia es necesaria porque las postulaciones, las pasantías, los documentos, las notas y la bitácora de auditoría se relacionan con el usuario local. Todo lo que pertenece al proceso de pasantías (alianzas, convocatorias, pasantías, documentos, calificaciones, veredictos y auditoría) sigue guardado en la base propia de la plataforma, como muestra la Figura 2.
+
+La integración tiene dos partes. La primera es la sincronización de personas: un proceso programado, por ejemplo cada noche, o ejecutado en el primer ingreso de cada usuario, consulta a la universidad por medio de una vista o de un servicio de solo lectura, y crea o actualiza las cuentas de estudiantes y docentes, inactivando las de quienes ya no tengan matrícula o vínculo vigente. La segunda es la autenticación: estudiantes y docentes ingresan con sus credenciales institucionales, validadas contra el directorio de la universidad (LDAP o Directorio Activo) o mediante un inicio de sesión único con OAuth 2.0 o SAML. En el código, la validación de credenciales se concentra en la función `authenticate()` de `includes/functions.php`, de modo que el cambio no afecta a los demás módulos. Las empresas aliadas no están en la base de la universidad y conservan su cuenta local, creada al registrar la alianza.
+
+La versión 2.0.0 se entrega con su propia base de usuarios, que permite operar la plataforma de forma independiente mientras se acuerda con el área de sistemas de la universidad el mecanismo de conexión. En el ambiente de pruebas, la información que llegaría de la universidad se simula con el programa `database/seed_universidad.php`, que carga estudiantes de varios programas, los docentes líderes de pasantías (como máximo tres) y alianzas con empresas de ejemplo.
+
+**Figura 2**
+
+*Integración de Pasantías FET con la base de datos de la universidad*
+
+```mermaid
+flowchart LR
+  UNI[(Base académica<br/>de la universidad)] -- vista o servicio<br/>de solo lectura --> SYNC[Sincronización<br/>de estudiantes y docentes]
+  DIR[Directorio institucional<br/>LDAP o SSO] -- validación<br/>de credenciales --> APP[Pasantías FET]
+  SYNC --> APP
+  APP --> DB[(Base fet_intranet<br/>usuarios locales, alianzas,<br/>pasantías, documentos y auditoría)]
+  EMP[Empresas aliadas<br/>cuenta local] --> APP
+```
+
 ## Requisitos y descargas
 
 El servidor debe cumplir los recursos mínimos de la Tabla 2. Los recursos recomendados dejan margen para el crecimiento de los documentos almacenados, que es el componente que más espacio ocupa con el tiempo.
@@ -359,7 +380,7 @@ Después del punto 7 conviene suspender la alianza de prueba desde *Alianzas*, c
 
 ## Puesta en marcha
 
-Una vez verificado el servidor, el administrador carga la información inicial desde la propia plataforma, como se explica en el *Manual de usuario*. En primer lugar crea las cuentas de los docentes líderes de pasantías desde *Usuarios*, con la opción *Nuevo usuario* y el perfil *Docente líder de pasantías*. Después registra las empresas aliadas en *Alianzas*, con la opción *Nueva alianza*, indicando su convenio, su vigencia y sus cupos; este registro crea también la cuenta de la empresa. Luego crea las cuentas de los estudiantes con el perfil *Estudiante*; cuando son muchos, el área de sistemas puede cargarlos directamente en la tabla `users` con una contraseña temporal.
+Una vez verificado el servidor, el administrador carga la información inicial desde la propia plataforma, como se explica en el *Manual de usuario*. En primer lugar crea las cuentas de los docentes líderes de pasantías desde *Usuarios*, con la opción *Nuevo usuario* y el perfil *Docente líder de pasantías*. Después registra las empresas aliadas en *Alianzas*, con la opción *Nueva alianza*, indicando su convenio, su vigencia y sus cupos; este registro crea también la cuenta de la empresa. Luego crea las cuentas de los estudiantes con el perfil *Estudiante*; cuando son muchos, el área de sistemas puede cargarlos directamente en la tabla `users` con una contraseña temporal. Cuando la plataforma esté conectada con la base de datos de la universidad, las cuentas de estudiantes y docentes se crean y actualizan con la sincronización descrita en el capítulo *Integración con los sistemas de la universidad*, y el administrador solo registra las alianzas y asigna los docentes líderes de pasantías.
 
 Las credenciales se entregan a cada persona por un canal seguro, como el correo institucional, y se les pide que guarden su contraseña. Por último, se anuncia el lanzamiento con la dirección de la plataforma y el enlace al manual de usuario.
 
@@ -477,6 +498,12 @@ El ambiente de pruebas se usa para desarrollar, capacitar a los usuarios y hacer
 
    ```powershell
    C:\xampp\php\php.exe C:\xampp\htdocs\PruebaFet\database\install.php
+   ```
+
+   Para simular la información que llegaría de la universidad, se cargan además los estudiantes, el tercer docente líder y las alianzas de ejemplo:
+
+   ```powershell
+   C:\xampp\php\php.exe C:\xampp\htdocs\PruebaFet\database\seed_universidad.php
    ```
 
 5. Abrir `http://localhost/PruebaFet/` y entrar con una de las cuentas de la Tabla 10. Todas usan la contraseña `FET2026*`.
