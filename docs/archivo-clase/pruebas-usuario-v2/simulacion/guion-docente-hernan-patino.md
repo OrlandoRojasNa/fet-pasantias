@@ -14,7 +14,7 @@
 
 Asumes el papel del docente que revisa, audita, gestiona y aprueba las pasantías de los estudiantes.
 
-**Convenciones:** en *Resultado* escribe *Completó* (sin ayuda), *Con ayuda* o *No completó*. La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](../README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../../manual/MANUAL_USUARIO.md).
+**Convenciones:** en *Resultado* escribe *Completó* (sin ayuda), *Con ayuda* o *No completó*. La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](../../../pruebas-usuario/README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../../../manual/MANUAL_USUARIO.md).
 
 ## D1 · Entrar y revisar el panel
 
@@ -29,7 +29,7 @@ Asumes el papel del docente que revisa, audita, gestiona y aprueba las pasantía
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 1 (estimado) | 1 | [`D1-panel.png`](../evidencias/produccion/D1-panel.png) |
+| Completó | 1 (estimado) | 1 | [`D1-panel.png`](../../../pruebas-usuario/evidencias/produccion/D1-panel.png) |
 
 **Observaciones:** El panel resume lo importante: «1 Publicaciones por verificar» con su enlace «Verificar», la cola de revisión y las pasantías sin responsables.
 
@@ -48,7 +48,7 @@ Asumes el papel del docente que revisa, audita, gestiona y aprueba las pasantía
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 1 (estimado) | 2 | [`D2-verificar.png`](../evidencias/produccion/D2-verificar.png) |
+| Completó | 1 (estimado) | 2 | [`D2-verificar.png`](../../../pruebas-usuario/evidencias/produccion/D2-verificar.png) |
 
 **Observaciones:** Para verificar había que elegir «Publicada (verificada)» en el selector y luego pulsar «Verificar». Con el valor que traía el selector por defecto, el botón no publicaba la convocatoria, y eso puede confundir la primera vez.
 
@@ -67,7 +67,7 @@ Asumes el papel del docente que revisa, audita, gestiona y aprueba las pasantía
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 2 (estimado) | 2 | [`D3-asignar.png`](../evidencias/produccion/D3-asignar.png) |
+| Completó | 2 (estimado) | 2 | [`D3-asignar.png`](../../../pruebas-usuario/evidencias/produccion/D3-asignar.png) |
 
 **Observaciones:** El panel la muestra en *Pasantías sin responsables* con el enlace «Asignar». El diálogo pide empresa, docente, fechas y estado; los valores sugeridos son correctos.
 
@@ -87,7 +87,7 @@ Asumes el papel del docente que revisa, audita, gestiona y aprueba las pasantía
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 3 (estimado) | 2 | [`D4-bloqueo-aprobar.png`](../evidencias/produccion/D4-bloqueo-aprobar.png) |
+| Completó | 3 (estimado) | 2 | [`D4-bloqueo-aprobar.png`](../../../pruebas-usuario/evidencias/produccion/D4-bloqueo-aprobar.png) |
 
 **Observaciones:** Al intentar aprobar con 2.5 la plataforma lo impide con un mensaje claro y deja al docente en la misma pasantía (corrección F-02). Luego elige «Devolver», con la nota y la observación, sin problema. La ayuda del campo de nota («con 3.0 o más se aprueba») orienta bien.
 
@@ -106,7 +106,7 @@ Asumes el papel del docente que revisa, audita, gestiona y aprueba las pasantía
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 1 (estimado) | 1 | [`D5-aprobar.png`](../evidencias/produccion/D5-aprobar.png) |
+| Completó | 1 (estimado) | 1 | [`D5-aprobar.png`](../../../pruebas-usuario/evidencias/produccion/D5-aprobar.png) |
 
 **Observaciones:** Mismo diálogo que en D4, ya conocido. El promedio 4.2 / 5.0 se actualiza en el encabezado de la pasantía.
 
@@ -126,7 +126,7 @@ Asumes el papel del docente que revisa, audita, gestiona y aprueba las pasantía
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 2 (estimado) | 1 | [`D6-veredicto.png`](../evidencias/produccion/D6-veredicto.png) |
+| Completó | 2 (estimado) | 1 | [`D6-veredicto.png`](../../../pruebas-usuario/evidencias/produccion/D6-veredicto.png) |
 
 **Observaciones:** El diálogo resume la evaluación de la empresa, los documentos aprobados y el promedio, y sugiere el resultado. Después el botón de veredicto desaparece y el historial muestra todo el recorrido.
 
@@ -147,7 +147,7 @@ Asumes el papel del docente que revisa, audita, gestiona y aprueba las pasantía
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 3 (estimado) | 2 | [`D7-reportes.png`](../evidencias/produccion/D7-reportes.png) |
+| Completó | 3 (estimado) | 2 | [`D7-reportes.png`](../../../pruebas-usuario/evidencias/produccion/D7-reportes.png) |
 
 **Observaciones:** Las cifras y la ocupación por empresa son claras. En la bitácora, la columna *Elemento* muestra «Documento #1» o «Publicación #2» en lugar del nombre, y la corrección subida aparece sin detalle («—»). El CSV abre bien en Excel.
 

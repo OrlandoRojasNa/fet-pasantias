@@ -37,7 +37,7 @@ El servidor de producción no trae cuentas de demostración ni la clave `FET2026
 
 En los guiones, donde dice `FET2026*`, cada participante usa la contraseña que recibió.
 
-El resultado de ejecutar estos guiones en un servidor de producción recién instalado está en [resultados-ejecucion-produccion.md](resultados-ejecucion-produccion.md). Una sesión simulada, con los guiones y el formato ya diligenciados como ejemplo, está en [simulacion/](simulacion/README.md).
+Los resultados de ejecutar estos guiones en un servidor de producción, junto con la sesión simulada, están reunidos en el [informe de pruebas de usuario](INFORME_PRUEBAS_USUARIO.md).
 
 ## Orden de la sesión
 

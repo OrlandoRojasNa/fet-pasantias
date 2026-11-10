@@ -94,37 +94,37 @@ Las veintinueve capturas de la ejecución se encuentran en la carpeta `evidencia
 
 *Creación de las cuentas del docente y del estudiante por parte del administrador (P0)*
 
-![Cuentas creadas por el administrador](evidencias/produccion/P0-cuentas-creadas.png)
+![Cuentas creadas por el administrador](../../pruebas-usuario/evidencias/produccion/P0-cuentas-creadas.png)
 
 **Figura 2**
 
 *Tutorial del estudiante después de la corrección F-01 (S1)*
 
-![Tutorial del estudiante](evidencias/produccion/S1-tutorial.png)
+![Tutorial del estudiante](../../pruebas-usuario/evidencias/produccion/S1-tutorial.png)
 
 **Figura 3**
 
 *Postulación recibida por la empresa con la hoja de vida del estudiante (E3)*
 
-![Postulaciones recibidas](evidencias/produccion/E3-postulaciones.png)
+![Postulaciones recibidas](../../pruebas-usuario/evidencias/produccion/E3-postulaciones.png)
 
 **Figura 4**
 
 *Mensaje que impide aprobar con nota 2.5, con el docente en la misma pasantía (D4)*
 
-![Bloqueo al aprobar con nota baja](evidencias/produccion/D4-bloqueo-aprobar.png)
+![Bloqueo al aprobar con nota baja](../../pruebas-usuario/evidencias/produccion/D4-bloqueo-aprobar.png)
 
 **Figura 5**
 
 *Pasantía finalizada con veredicto e historial de auditoría (D6)*
 
-![Pasantía finalizada](evidencias/produccion/D6-finalizada.png)
+![Pasantía finalizada](../../pruebas-usuario/evidencias/produccion/D6-finalizada.png)
 
 **Figura 6**
 
 *Cuenta bloqueada por intentos fallidos en la pantalla de usuarios (A4)*
 
-![Cuenta bloqueada](evidencias/produccion/A4-bloqueada.png)
+![Cuenta bloqueada](../../pruebas-usuario/evidencias/produccion/A4-bloqueada.png)
 
 ## Conclusiones
 

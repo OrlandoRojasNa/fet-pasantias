@@ -14,7 +14,7 @@
 
 Asumes el papel de una empresa con alianza vigente con la FET, que publica convocatorias de pasantía, selecciona pasantes, avala sus documentos y evalúa su desempeño.
 
-**Convenciones:** en *Resultado* escribe *Completó* (sin ayuda), *Con ayuda* o *No completó*. La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](../README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../../manual/MANUAL_USUARIO.md).
+**Convenciones:** en *Resultado* escribe *Completó* (sin ayuda), *Con ayuda* o *No completó*. La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](../../../pruebas-usuario/README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../../../manual/MANUAL_USUARIO.md).
 
 ## E1 · Entrar como empresa y revisar la alianza
 
@@ -30,7 +30,7 @@ Asumes el papel de una empresa con alianza vigente con la FET, que publica convo
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 1 (estimado) | 1 | [`E1-alianza.png`](../evidencias/produccion/E1-alianza.png) |
+| Completó | 1 (estimado) | 1 | [`E1-alianza.png`](../../../pruebas-usuario/evidencias/produccion/E1-alianza.png) |
 
 **Observaciones:** Entra con el NIT sin problema. La franja de la alianza (convenio, *Vigente*, cupos en uso y vigencia) está arriba de *Convocatorias y empleo*. La empresa no tiene un menú «Alianzas», así que al principio puede buscarla en el menú.
 
@@ -49,7 +49,7 @@ Asumes el papel de una empresa con alianza vigente con la FET, que publica convo
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 3 (estimado) | 2 | [`E2-formulario.png`](../evidencias/produccion/E2-formulario.png) |
+| Completó | 3 (estimado) | 2 | [`E2-formulario.png`](../../../pruebas-usuario/evidencias/produccion/E2-formulario.png) |
 
 **Observaciones:** El formulario es claro y avisa que cada pasante aceptado ocupa un cupo. Queda *En revisión* y el mensaje explica que la FET debe verificarla.
 
@@ -70,7 +70,7 @@ Asumes el papel de una empresa con alianza vigente con la FET, que publica convo
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 3 (estimado) | 3 | [`E3-postulaciones.png`](../evidencias/produccion/E3-postulaciones.png) |
+| Completó | 3 (estimado) | 3 | [`E3-postulaciones.png`](../../../pruebas-usuario/evidencias/produccion/E3-postulaciones.png) |
 
 **Observaciones:** La hoja de vida se descarga desde la tabla *Postulaciones recibidas*. Para aceptar había que elegir «Aceptada» en un selector y pulsar «Guardar», cuando lo esperable es un botón «Aceptar». El mensaje «se creó la pasantía del estudiante» y el cupo 1 de 2 confirman el resultado.
 
@@ -89,7 +89,7 @@ Asumes el papel de una empresa con alianza vigente con la FET, que publica convo
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 2 (estimado) | 2 | [`E4-avalar.png`](../evidencias/produccion/E4-avalar.png) |
+| Completó | 2 (estimado) | 2 | [`E4-avalar.png`](../../../pruebas-usuario/evidencias/produccion/E4-avalar.png) |
 
 **Observaciones:** Desde la pasantía, «Revisar» abre el documento con su descarga y la decisión «Avalar el documento». Es claro.
 
@@ -108,7 +108,7 @@ Asumes el papel de una empresa con alianza vigente con la FET, que publica convo
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 2 (estimado) | 1 | [`E5-evaluacion.png`](../evidencias/produccion/E5-evaluacion.png) |
+| Completó | 2 (estimado) | 1 | [`E5-evaluacion.png`](../../../pruebas-usuario/evidencias/produccion/E5-evaluacion.png) |
 
 **Observaciones:** La evaluación (1 a 5 y comentarios) es simple y se puede editar. Al editarla, el estudiante recibe un segundo aviso igual al primero.
 
@@ -126,7 +126,7 @@ Asumes el papel de una empresa con alianza vigente con la FET, que publica convo
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 2 (estimado) | 1 | [`E6-oferta.png`](../evidencias/produccion/E6-oferta.png) |
+| Completó | 2 (estimado) | 1 | [`E6-oferta.png`](../../../pruebas-usuario/evidencias/produccion/E6-oferta.png) |
 
 **Observaciones:** Igual que la convocatoria; la plataforma recuerda que las ofertas laborales no usan cupos. El cupo del pasante ya aparece liberado (0 de 2).
 

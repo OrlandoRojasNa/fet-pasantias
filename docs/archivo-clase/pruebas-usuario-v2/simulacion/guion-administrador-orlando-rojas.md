@@ -14,7 +14,7 @@
 
 Asumes el papel del administrador de la plataforma, que crea alianzas empresariales (y con ellas cupos de pasantía), gestiona las cuentas y cuida la seguridad y los respaldos.
 
-**Convenciones:** en *Resultado* escribe *Completó* (sin ayuda), *Con ayuda* o *No completó*. La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](../README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../../manual/MANUAL_USUARIO.md).
+**Convenciones:** en *Resultado* escribe *Completó* (sin ayuda), *Con ayuda* o *No completó*. La *Dificultad* va de 1 (muy fácil) a 5 (muy difícil). El orden general de la sesión está en el [plan de pruebas](../../../pruebas-usuario/README.md#orden-de-la-sesión). La ayuda de cada pantalla está en el [manual de usuario](../../../manual/MANUAL_USUARIO.md).
 
 ## A1 · Registrar una alianza con una empresa nueva
 
@@ -31,7 +31,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 4 (estimado) | 3 | [`A1-alianza-registrada.png`](../evidencias/produccion/A1-alianza-registrada.png) |
+| Completó | 4 (estimado) | 3 | [`A1-alianza-registrada.png`](../../../pruebas-usuario/evidencias/produccion/A1-alianza-registrada.png) |
 
 **Observaciones:** El formulario de *Nueva alianza* es largo: hay que bajar para ver la cuenta de la empresa (NIT, correo y contraseña inicial) y el botón de guardar. La opción «Crear una cuenta nueva con los datos de abajo» no es evidente a primera vista. Al guardar, el mensaje «Alianza registrada con 2 cupo(s)» y la fila *Vigente · 0 / 2* confirman bien el resultado.
 
@@ -50,7 +50,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 1 (estimado) | 1 | [`A2-ampliar.png`](../evidencias/produccion/A2-ampliar.png) |
+| Completó | 1 (estimado) | 1 | [`A2-ampliar.png`](../../../pruebas-usuario/evidencias/produccion/A2-ampliar.png) |
 
 **Observaciones:** El botón «Editar o ampliar» está en la misma fila de la alianza. La plataforma no acepta 0 cupos y el mensaje «cupos 2 → 4» deja claro el cambio.
 
@@ -70,7 +70,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 3 (estimado) | 2 | [`A3-usuarios.png`](../evidencias/produccion/A3-usuarios.png) |
+| Completó | 3 (estimado) | 2 | [`A3-usuarios.png`](../../../pruebas-usuario/evidencias/produccion/A3-usuarios.png) |
 
 **Observaciones:** Crear la cuenta es directo. El perfil se cambia con un selector y el botón «Guardar» de cada fila, que es fácil de pasar por alto. Al desactivar, el estado cambia a *Inactivo* y la persona ya no puede entrar.
 
@@ -90,7 +90,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 2 (estimado) | 1 | [`A4-bloqueada.png`](../evidencias/produccion/A4-bloqueada.png) |
+| Completó | 2 (estimado) | 1 | [`A4-bloqueada.png`](../../../pruebas-usuario/evidencias/produccion/A4-bloqueada.png) |
 
 **Observaciones:** La cuenta bloqueada se ve enseguida: hay un aviso arriba («1 cuenta(s) bloqueada(s)»), la etiqueta *Bloqueada* con la hora y un botón verde «Desbloquear». La bitácora registra el desbloqueo.
 
@@ -109,7 +109,7 @@ Asumes el papel del administrador de la plataforma, que crea alianzas empresaria
 
 | Resultado | Tiempo (min) | Dificultad (1-5) | Evidencia |
 |---|---|---|---|
-| Completó | 1 (estimado) | 1 | [`A3-usuarios.png`](../evidencias/produccion/A3-usuarios.png) |
+| Completó | 1 (estimado) | 1 | [`A3-usuarios.png`](../../../pruebas-usuario/evidencias/produccion/A3-usuarios.png) |
 
 **Observaciones:** «Descargar respaldo SQL» está a la vista en *Usuarios*. El archivo trae la huella SHA-256 al final. Falta explicar en pantalla para qué sirve la huella.
 
